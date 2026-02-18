@@ -1,0 +1,306 @@
+[
+    {
+        "name": "BeyAz",
+        "game": "Valorant",
+        "nationality": "FR",
+        "joinDate": "2023-01-08",
+        "previousOrganization": {
+            "name": "Digital Athletics",
+            "logo": "/images/teams/digital_athletics.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "1996-04-11",
+        "image": "/images/players/beyaz.png"
+    },
+    {
+        "name": "logaN",
+        "game": "Valorant",
+        "nationality": "FR",
+        "joinDate": "2023-01-08",
+        "previousOrganization": {
+            "name": "Team BDS",
+            "logo": "/images/teams/team_bds.png"
+        },
+        "lastOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "birthDate": "1998-06-18",
+        "image": "/images/players/logan.png"
+    },
+    {
+        "name": "nataNk",
+        "game": "Valorant",
+        "nationality": "FR",
+        "joinDate": "2023-01-08",
+        "previousOrganization": {
+            "name": "Team Vitality",
+            "logo": "/images/teams/team_vitality.png"
+        },
+        "lastOrganization": {
+            "name": "Mandatory",
+            "logo": "/images/teams/mandatory.png"
+        },
+        "birthDate": "1999-02-25",
+        "image": "/images/players/natank.png"
+    },
+    {
+        "name": "TakaS",
+        "game": "Valorant",
+        "nationality": "FR",
+        "joinDate": "2023-01-08",
+        "previousOrganization": {
+            "name": "Karmine Corp",
+            "logo": "/images/teams/karmine_corp.png"
+        },
+        "lastOrganization": {
+            "name": "Mandatory",
+            "logo": "/images/teams/mandatory.png"
+        },
+        "birthDate": "2001-02-15",
+        "image": "/images/players/takas.png"
+    },
+    {
+        "name": "Wailers",
+        "game": "Valorant",
+        "nationality": "FR",
+        "joinDate": "2023-01-08",
+        "previousOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "lastOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "birthDate": "1997-11-24",
+        "image": "/images/players/wailers.png"
+    },
+    {
+        "name": "APO",
+        "game": "Valorant",
+        "nationality": "FR",
+        "joinDate": "2023-05-04",
+        "previousOrganization": {
+            "name": "Mandatory",
+            "logo": "/images/teams/mandatory.png"
+        },
+        "lastOrganization": {
+            "name": "Retired",
+            "logo": "/images/teams/retired.png"
+        },
+        "birthDate": "1996-09-28",
+        "image": "/images/players/apo.png"
+    },
+    {
+        "name": "kAdavra",
+        "game": "Valorant",
+        "nationality": "FR",
+        "joinDate": "2024-05-31",
+        "previousOrganization": {
+            "name": "DVM",
+            "logo": "/images/teams/dvm.png"
+        },
+        "lastOrganization": {
+            "name": "Mandatory",
+            "logo": "/images/teams/mandatory.png"
+        },
+        "birthDate": "2000-04-05",
+        "image": "/images/players/kadavra.png"
+    },
+    {
+        "name": "RobbieBk",
+        "game": "Valorant",
+        "nationality": "NL",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Joblife",
+            "logo": "/images/teams/joblife.png"
+        },
+        "lastOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "birthDate": "2001-07-11",
+        "image": "/images/players/robbiebk.png"
+    },
+    {
+        "name": "Click",
+        "game": "Valorant",
+        "nationality": "DE",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "SK Gaming",
+            "logo": "/images/teams/sk_gaming.png"
+        },
+        "lastOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "birthDate": "2006-04-03",
+        "image": "/images/players/click.png"
+    },
+    {
+        "name": "Minny",
+        "game": "Valorant",
+        "nationality": "CZ",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "GoNext Esports",
+            "logo": "/images/teams/gonext_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2005-05-14",
+        "image": "/images/players/minny.png"
+    },
+    {
+        "name": "Zyppan",
+        "game": "Valorant",
+        "nationality": "SE",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Natus Vincere",
+            "logo": "/images/teams/natus_vincere.png"
+        },
+        "lastOrganization": {
+            "name": "CGN Esports",
+            "logo": "/images/teams/cgn_esports.png"
+        },
+        "birthDate": "2002-06-17",
+        "image": "/images/players/zyppan.png"
+    },
+    {
+        "name": "Kamyk",
+        "game": "Valorant",
+        "nationality": "PL",
+        "joinDate": "2025-03-19",
+        "previousOrganization": {
+            "name": "Team Liquid",
+            "logo": "/images/teams/team_liquid.png"
+        },
+        "lastOrganization": {
+            "name": "Joblife",
+            "logo": "/images/teams/joblife.png"
+        },
+        "birthDate": "2003-06-02",
+        "image": "/images/players/kamyk.png"
+    },
+    {
+        "name": "Proxh",
+        "game": "Valorant",
+        "nationality": "DE",
+        "joinDate": "2025-05-29",
+        "previousOrganization": {
+            "name": "Eintracht Frankfurt",
+            "logo": "/images/teams/eintracht_frankfurt.png"
+        },
+        "lastOrganization": {
+            "name": "Enterprise Esports",
+            "logo": "/images/teams/enterprise_esports.png"
+        },
+        "birthDate": "2003-04-25",
+        "image": "/images/players/proxh.png"
+    },
+    {
+        "name": "Veqaj",
+        "game": "Valorant",
+        "nationality": "FR",
+        "joinDate": "2025-05-29",
+        "previousOrganization": {
+            "name": "Valiant",
+            "logo": "/images/teams/valiant.png"
+        },
+        "lastOrganization": {
+            "name": "Fnatic",
+            "logo": "/images/teams/fnatic.png"
+        },
+        "birthDate": "2003-10-18",
+        "image": "/images/players/veqaj.png"
+    },
+    {
+        "name": "ComeBack",
+        "game": "Valorant",
+        "nationality": "TR",
+        "joinDate": "2025-06-06",
+        "previousOrganization": {
+            "name": "BBL PCIFIC",
+            "logo": "/images/teams/bbl_pcific.png"
+        },
+        "lastOrganization": {
+            "name": "Team Heretics",
+            "logo": "/images/teams/team_heretics.png"
+        },
+        "birthDate": "2007-06-14",
+        "image": "/images/players/comeback.png"
+    },
+    {
+        "name": "bipo",
+        "game": "Valorant",
+        "nationality": "IT",
+        "joinDate": "2025-11-20",
+        "previousOrganization": {
+            "name": "MOUZ",
+            "logo": "/images/teams/mouz.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2003-08-07",
+        "image": "/images/players/bipo.png"
+    },
+    {
+        "name": "GLYPH",
+        "game": "Valorant",
+        "nationality": "PH",
+        "joinDate": "2025-11-20",
+        "previousOrganization": {
+            "name": "Winthrop University",
+            "logo": "/images/teams/winthrop_university.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2003-12-11",
+        "image": "/images/players/glyph.png"
+    },
+    {
+        "name": "Marteen",
+        "game": "Valorant",
+        "nationality": "CZ",
+        "joinDate": "2025-11-20",
+        "previousOrganization": {
+            "name": "Karmine Corp",
+            "logo": "/images/teams/karmine_corp.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2004-10-21",
+        "image": "/images/players/marteen.png"
+    },
+    {
+        "name": "Starxo",
+        "game": "Valorant",
+        "nationality": "PL",
+        "joinDate": "2025-11-20",
+        "previousOrganization": {
+            "name": "Joblife",
+            "logo": "/images/teams/joblife.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2001-08-28",
+        "image": "/images/players/starxo.png"
+    }
+]
