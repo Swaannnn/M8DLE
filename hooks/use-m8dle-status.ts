@@ -1,0 +1,69 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import playersData from '@/data/players.json'
+import type { Player } from '@/types/player'
+import { getPlayerOfTheDay } from '@/utils/getPlayerOfTheDay'
+import { useAuth } from './use-auth'
+
+const M8DLE_KEY = 'm8dle'
+
+export const useM8dleStatus = () => {
+    const { user } = useAuth()
+    const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
+    const [availablePlayers, setAvailablePlayers] = useState<Player[]>(playersData)
+    const [win, setWin] = useState(false)
+
+    useEffect(() => {
+        const fetchStatus = async () => {
+            if (user) {
+                try {
+                    const res = await fetch('/api/m8dle/status')
+                    const data = await res.json()
+                    setWin(data.hasWin)
+                    const selected = data.attempts
+                        .map((name: string) => playersData.find((p) => p.name === name))
+                        .filter(Boolean) as Player[]
+                    setSelectedPlayers(selected)
+                    setAvailablePlayers(playersData.filter((p) => !data.attempts.includes(p.name)))
+                } catch (err) {
+                    console.error('Error fetching M8DLE status', err)
+                }
+            } else {
+                const saved = JSON.parse(localStorage.getItem(M8DLE_KEY) || '{}')
+                const guestAttempts = saved.attempts || []
+                setWin(saved.hasWin || false)
+                const selected = guestAttempts
+                    .map((name: string) => playersData.find((p) => p.name === name))
+                    .filter(Boolean) as Player[]
+                setSelectedPlayers(selected)
+                setAvailablePlayers(playersData.filter((p) => !guestAttempts.includes(p.name)))
+            }
+        }
+
+        fetchStatus()
+    }, [user])
+
+    const addAttempt = async (player: Player) => {
+        const isWin = player.name === getPlayerOfTheDay().name
+
+        if (user) {
+            await fetch('/api/m8dle/attempt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ playerName: player.name, isWin }),
+            })
+        } else {
+            const saved = JSON.parse(localStorage.getItem(M8DLE_KEY) || '{}')
+            const attempts = [...(saved.attempts || []), player.name]
+            const hasWin = saved.hasWin || isWin
+            localStorage.setItem(M8DLE_KEY, JSON.stringify({ attempts, hasWin }))
+        }
+
+        setSelectedPlayers((prev) => [...prev, player])
+        setAvailablePlayers((prev) => prev.filter((p) => p.name !== player.name))
+        if (isWin) setWin(true)
+    }
+
+    return { selectedPlayers, availablePlayers, win, addAttempt }
+}

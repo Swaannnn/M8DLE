@@ -5,7 +5,10 @@ const getAge = (date: string): number => {
     const today = new Date()
     let age = today.getFullYear() - birthDate.getFullYear()
 
-    if (today.getMonth() < birthDate.getMonth() || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) {
+    if (
+        today.getMonth() < birthDate.getMonth() ||
+        (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())
+    ) {
         age--
     }
 
@@ -18,4 +21,10 @@ const getYear = (date: string): number => {
     return birthDate.getFullYear()
 }
 
-export { getAge, getYear }
+const getGameDate = () => {
+    const now = new Date()
+    now.setHours(now.getHours() - 2) // décalage 2h
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+}
+
+export { getAge, getYear, getGameDate }
