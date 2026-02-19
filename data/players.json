@@ -359,5 +359,158 @@
         },
         "birthDate": "2001-08-28",
         "image": "/images/players/starxo.png"
+    },
+
+    {
+        "name": "itachi",
+        "game": {
+            "name": "Rocket League",
+            "logo": "/images/games/rocket_league.png"
+        },
+        "nationality": "MA",
+        "joinDate": "2024-01-04",
+        "previousOrganization": {
+            "name": "Karmine Corp",
+            "logo": "/images/teams/karmine_corp.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2003-08-13",
+        "image": "/images/players/itachi.png"
+    },
+    {
+        "name": "Radosin",
+        "game": {
+            "name": "Rocket League",
+            "logo": "/images/games/rocket_league.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2004-12-01",
+        "previousOrganization": {
+            "name": "Team Vitality",
+            "logo": "/images/teams/team_vitality.png"
+        },
+        "lastOrganization": {
+            "name": "GentleBench",
+            "logo": "/images/teams/gentlebench.png"
+        },
+        "birthDate": "2001-08-28",
+        "image": "/images/players/radosin.png"
+    },
+    {
+        "name": "yujin",
+        "game": {
+            "name": "Rocket League",
+            "logo": "/images/games/rocket_league.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2025-04-12",
+        "previousOrganization": {
+            "name": "Startpoint",
+            "logo": "/images/teams/startpoint.png"
+        },
+        "lastOrganization": {
+            "name": "GentleBench",
+            "logo": "/images/teams/gentlebench.png"
+        },
+        "birthDate": "2007-11-27",
+        "image": "/images/players/yujin.png"
+    },
+    {
+        "name": "Seikoo",
+        "game": {
+            "name": "Rocket League",
+            "logo": "/images/games/rocket_league.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-01-04",
+        "previousOrganization": {
+            "name": "Team BDS",
+            "logo": "/images/teams/team_bds.png"
+        },
+        "lastOrganization": {
+            "name": "Geekay Esports",
+            "logo": "/images/teams/geekay_esports.png"
+        },
+        "birthDate": "2004-07-06",
+        "image": "/images/players/seikoo.png"
+    },
+    {
+        "name": "juicy",
+        "game": {
+            "name": "Rocket League",
+            "logo": "/images/games/rocket_league.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-01-04",
+        "previousOrganization": {
+            "name": "Moist Esports",
+            "logo": "/images/teams/moist_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Karmine Corp",
+            "logo": "/images/teams/karmine_corp.png"
+        },
+        "birthDate": "2005-05-03",
+        "image": "/images/players/juicy.png"
+    },
+    {
+        "name": "Archie",
+        "game": {
+            "name": "Rocket League",
+            "logo": "/images/games/rocket_league.png"
+        },
+        "nationality": "GB",
+        "joinDate": "2025-10-11",
+        "previousOrganization": {
+            "name": "Geekay Esports",
+            "logo": "/images/teams/geekay_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2005-03-11",
+        "image": "/images/players/archie.png"
+    },
+    {
+        "name": "nass",
+        "game": {
+            "name": "Rocket League",
+            "logo": "/images/games/rocket_league.png"
+        },
+        "nationality": "MA",
+        "joinDate": "2025-10-11",
+        "previousOrganization": {
+            "name": "Ninjas in Pyjamas",
+            "logo": "/images/teams/ninjas_in_pyjamas.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2007-12-01",
+        "image": "/images/players/nass.png"
+    },
+    {
+        "name": "Oski",
+        "game": {
+            "name": "Rocket League",
+            "logo": "/images/games/rocket_league.png"
+        },
+        "nationality": "PL",
+        "joinDate": "2025-10-11",
+        "previousOrganization": {
+            "name": "Ninjas in Pyjamas",
+            "logo": "/images/teams/ninjas_in_pyjamas.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2005-03-11",
+        "image": "/images/players/oski.png"
     }
 ]
