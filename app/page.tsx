@@ -1,31 +1,19 @@
 'use client'
 
-import { useAuth } from '@/hooks/use-auth'
 import { Text, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
-import type { Player } from '@/types/player'
-import { getPlayerOfTheDay } from '@/utils/getPlayerOfTheDay'
+import localFont from 'next/font/local'
 import InputPlayersAutocomplete from '@/components/InputPlayersAutocomplete'
 import TablePlayers from '@/components/TablePlayers'
-import localFont from 'next/font/local'
+import { getPlayerOfTheDay } from '@/utils/getPlayerOfTheDay'
+import { useM8dleStatus } from '@/hooks/use-m8dle-status'
+import { useAuth } from '@/hooks/use-auth'
 
-const tuskerGrotesk = localFont({
-    src: './fonts/TuskerGrotesk-4800Super.woff2',
-})
+const tuskerGrotesk = localFont({ src: './fonts/TuskerGrotesk-4800Super.woff2' })
 
 const Home = () => {
     const { loading } = useAuth()
     const playerOfTheDay = getPlayerOfTheDay()
-
-    const [win, setWin] = useState(false)
-    const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
-
-    const handleAddPlayer = (player: Player) => {
-        setSelectedPlayers((prev) => [...prev, player])
-        if (player.name === playerOfTheDay.name) {
-            setWin(true)
-        }
-    }
+    const { selectedPlayers, availablePlayers, win, addAttempt } = useM8dleStatus()
 
     if (loading) {
         return (
@@ -50,8 +38,9 @@ const Home = () => {
             <Text>Devine le joueur de Gentle Mates du jour !</Text>
 
             <InputPlayersAutocomplete
-                onPlayerSelected={handleAddPlayer}
+                onPlayerSelected={addAttempt}
                 win={win}
+                availablePlayers={availablePlayers}
             />
 
             <Text>
