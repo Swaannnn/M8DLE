@@ -1,7 +1,10 @@
 [
     {
         "name": "BeyAz",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "FR",
         "joinDate": "2023-01-08",
         "previousOrganization": {
@@ -17,7 +20,10 @@
     },
     {
         "name": "logaN",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "FR",
         "joinDate": "2023-01-08",
         "previousOrganization": {
@@ -33,7 +39,10 @@
     },
     {
         "name": "nataNk",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "FR",
         "joinDate": "2023-01-08",
         "previousOrganization": {
@@ -49,7 +58,10 @@
     },
     {
         "name": "TakaS",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "FR",
         "joinDate": "2023-01-08",
         "previousOrganization": {
@@ -65,7 +77,10 @@
     },
     {
         "name": "Wailers",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "FR",
         "joinDate": "2023-01-08",
         "previousOrganization": {
@@ -81,7 +96,10 @@
     },
     {
         "name": "APO",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "FR",
         "joinDate": "2023-05-04",
         "previousOrganization": {
@@ -97,7 +115,10 @@
     },
     {
         "name": "kAdavra",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "FR",
         "joinDate": "2024-05-31",
         "previousOrganization": {
@@ -113,7 +134,10 @@
     },
     {
         "name": "RobbieBk",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "NL",
         "joinDate": "2024-12-04",
         "previousOrganization": {
@@ -129,7 +153,10 @@
     },
     {
         "name": "Click",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "DE",
         "joinDate": "2024-12-04",
         "previousOrganization": {
@@ -145,7 +172,10 @@
     },
     {
         "name": "Minny",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "CZ",
         "joinDate": "2024-12-04",
         "previousOrganization": {
@@ -161,7 +191,10 @@
     },
     {
         "name": "Zyppan",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "SE",
         "joinDate": "2024-12-04",
         "previousOrganization": {
@@ -177,7 +210,10 @@
     },
     {
         "name": "Kamyk",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "PL",
         "joinDate": "2025-03-19",
         "previousOrganization": {
@@ -193,7 +229,10 @@
     },
     {
         "name": "Proxh",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "DE",
         "joinDate": "2025-05-29",
         "previousOrganization": {
@@ -209,7 +248,10 @@
     },
     {
         "name": "Veqaj",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "FR",
         "joinDate": "2025-05-29",
         "previousOrganization": {
@@ -225,7 +267,10 @@
     },
     {
         "name": "ComeBack",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "TR",
         "joinDate": "2025-06-06",
         "previousOrganization": {
@@ -241,7 +286,10 @@
     },
     {
         "name": "bipo",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "IT",
         "joinDate": "2025-11-20",
         "previousOrganization": {
@@ -257,7 +305,10 @@
     },
     {
         "name": "GLYPH",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "PH",
         "joinDate": "2025-11-20",
         "previousOrganization": {
@@ -273,7 +324,10 @@
     },
     {
         "name": "Marteen",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "CZ",
         "joinDate": "2025-11-20",
         "previousOrganization": {
@@ -289,7 +343,10 @@
     },
     {
         "name": "Starxo",
-        "game": "Valorant",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
         "nationality": "PL",
         "joinDate": "2025-11-20",
         "previousOrganization": {

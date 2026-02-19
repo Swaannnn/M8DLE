@@ -1,16 +1,15 @@
 'use client'
 
-import { HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import type { Player } from '@/types/player'
 import { getAge, getYear } from '@/utils/dateUtils'
 import ReactCountryFlag from 'react-country-flag'
 import Image from 'next/image'
 import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu'
 import { motion, type Variants } from 'framer-motion'
-
-const INVALID_GREY = '#7f848e'
-const ARROW_GREY = '#a1a7b4'
-const VALID_PINK = '#efa0e1'
+import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
+import { useColorMode } from './ui/color-mode'
+import { grey, lightGrey, pink } from '@/constants/colors'
 
 const containerVariants: Variants = {
     hidden: {},
@@ -28,7 +27,7 @@ const itemVariants: Variants = {
     },
     visible: {
         opacity: 1,
-        y: 1,
+        y: 0,
         scale: 1,
         transition: {
             duration: 0.2,
@@ -39,18 +38,28 @@ const itemVariants: Variants = {
 
 const MotionDiv = motion.div
 
+const MOTION_DIV_STYLE: React.CSSProperties = {
+    width: '120px',
+    height: '120px',
+    color: '#34242e',
+    borderRadius: '0.2rem',
+    padding: '0.5rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+}
+
 const HeaderItem = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div
-            style={{
-                fontWeight: 'bold',
-                width: '120px',
-                textAlign: 'center',
-                borderBottom: '2px solid #f4baea',
-            }}
+        <Text
+            fontWeight="bold"
+            width="120px"
+            textAlign="center"
+            borderBottom="2px solid #f4baea"
         >
             {children}
-        </div>
+        </Text>
     )
 }
 
@@ -61,30 +70,30 @@ type RowNumberProps = {
     children: React.ReactNode
 }
 
-const ARROW_STYLE: React.CSSProperties = {
-    position: 'absolute',
-    color: ARROW_GREY,
-    fontSize: '6rem',
-    zIndex: 0,
-}
-
 const RowNumber = ({ isValid = false, isMore, isLess, children }: RowNumberProps) => {
+    const { colorMode } = useColorMode()
+    const invalidGrey = colorMode === 'light' ? lightGrey : grey
+    const arrowColor = colorMode === 'light' ? grey : lightGrey
+
     return (
         <MotionDiv
             variants={itemVariants}
             style={{
-                width: '120px',
-                height: '120px',
-                backgroundColor: isValid ? VALID_PINK : INVALID_GREY,
-                color: '#34242e',
-                borderRadius: '0.2rem',
-                padding: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                ...MOTION_DIV_STYLE,
+                backgroundColor: isValid ? pink : invalidGrey,
+                position: 'relative',
             }}
         >
-            {isMore && <LuChevronsUp style={ARROW_STYLE} />}
+            {isMore && (
+                <LuChevronsUp
+                    style={{
+                        position: 'absolute',
+                        fontSize: '6rem',
+                        zIndex: 0,
+                        color: arrowColor,
+                    }}
+                />
+            )}
             <Text
                 zIndex="10"
                 fontSize="3xl"
@@ -92,7 +101,16 @@ const RowNumber = ({ isValid = false, isMore, isLess, children }: RowNumberProps
             >
                 {children}
             </Text>
-            {isLess && <LuChevronsDown style={ARROW_STYLE} />}
+            {isLess && (
+                <LuChevronsDown
+                    style={{
+                        position: 'absolute',
+                        fontSize: '6rem',
+                        zIndex: 0,
+                        color: arrowColor,
+                    }}
+                />
+            )}
         </MotionDiv>
     )
 }
@@ -103,19 +121,14 @@ type RowItemProps = {
 }
 
 const RowItem = ({ isValid = false, children }: RowItemProps) => {
+    const { colorMode } = useColorMode()
+    const invalidGrey = colorMode === 'light' ? lightGrey : grey
     return (
         <MotionDiv
             variants={itemVariants}
             style={{
-                width: '120px',
-                height: '120px',
-                backgroundColor: isValid ? VALID_PINK : INVALID_GREY,
-                color: '#34242e',
-                borderRadius: '0.2rem',
-                padding: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                ...MOTION_DIV_STYLE,
+                backgroundColor: isValid ? pink : invalidGrey,
             }}
         >
             {children}
@@ -130,80 +143,97 @@ type TablePlayersProps = {
 
 const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
     return (
-        <VStack>
-            <HStack>
-                <HeaderItem>Joueur</HeaderItem>
-                <HeaderItem>Jeu</HeaderItem>
-                <HeaderItem>Nationalité</HeaderItem>
-                <HeaderItem>Arrivée</HeaderItem>
-                <HeaderItem>Avant M8</HeaderItem>
-                <HeaderItem>Club actuel</HeaderItem>
-                <HeaderItem>Age</HeaderItem>
-            </HStack>
-            {[...players].reverse().map((player) => {
-                const joinDatePlayer = getYear(player.joinDate)
-                const joinDatePlayerOfTheDay = getYear(playerOfTheDay.joinDate)
+        <Box
+            width="100%"
+            overflowX="auto"
+            overflowY="hidden"
+        >
+            <VStack minWidth={TABLE_PLAYERS_WIDTH}>
+                <HStack>
+                    <HeaderItem>Joueur</HeaderItem>
+                    <HeaderItem>Jeu</HeaderItem>
+                    <HeaderItem>Nationalité</HeaderItem>
+                    <HeaderItem>Arrivée</HeaderItem>
+                    <HeaderItem>Avant M8</HeaderItem>
+                    <HeaderItem>Club actuel</HeaderItem>
+                    <HeaderItem>Age</HeaderItem>
+                </HStack>
+                {[...players].reverse().map((player) => {
+                    const joinDatePlayer = getYear(player.joinDate)
+                    const joinDatePlayerOfTheDay = getYear(playerOfTheDay.joinDate)
 
-                const agePlayer = getAge(player.birthDate)
-                const agePlayerOfTheDay = getAge(playerOfTheDay.birthDate)
+                    const agePlayer = getAge(player.birthDate)
+                    const agePlayerOfTheDay = getAge(playerOfTheDay.birthDate)
 
-                return (
-                    <MotionDiv
-                        key={player.name}
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        <HStack key={player.name}>
-                            <RowItem isValid={playerOfTheDay.name === player.name}>{player.name}</RowItem>
-                            <RowItem isValid={playerOfTheDay.game === player.game}>{player.game}</RowItem>
-                            <RowItem isValid={playerOfTheDay.nationality === player.nationality}>
-                                <ReactCountryFlag
-                                    svg
-                                    style={{
-                                        width: '80%',
-                                        height: '80%',
-                                    }}
-                                    countryCode={player.nationality}
-                                />
-                            </RowItem>
-                            <RowNumber
-                                isLess={joinDatePlayer > joinDatePlayerOfTheDay}
-                                isMore={joinDatePlayer < joinDatePlayerOfTheDay}
-                                isValid={joinDatePlayer === joinDatePlayerOfTheDay}
-                            >
-                                {joinDatePlayer}
-                            </RowNumber>
-                            <RowItem
-                                isValid={playerOfTheDay.previousOrganization.name === player.previousOrganization.name}
-                            >
-                                <Image
-                                    src={player.previousOrganization.logo}
-                                    alt={player.previousOrganization.name}
-                                    width={80}
-                                    height={80}
-                                />
-                            </RowItem>
-                            <RowItem isValid={playerOfTheDay.lastOrganization.name === player.lastOrganization.name}>
-                                <Image
-                                    src={player.lastOrganization.logo}
-                                    alt={player.lastOrganization.name}
-                                    width={80}
-                                    height={80}
-                                />
-                            </RowItem>
-                            <RowNumber
-                                isLess={agePlayer > agePlayerOfTheDay}
-                                isMore={agePlayer < agePlayerOfTheDay}
-                                isValid={agePlayer === agePlayerOfTheDay}
-                            >
-                                {agePlayer}
-                            </RowNumber>
-                        </HStack>
-                    </MotionDiv>
-                )
-            })}
-        </VStack>
+                    return (
+                        <MotionDiv
+                            key={player.name}
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <HStack key={player.name}>
+                                <RowItem isValid={playerOfTheDay.name === player.name}>{player.name}</RowItem>
+                                <RowItem isValid={playerOfTheDay.game.name === player.game.name}>
+                                    <Image
+                                        src={player.game.logo}
+                                        alt={player.game.name}
+                                        width={80}
+                                        height={80}
+                                    />
+                                </RowItem>
+                                <RowItem isValid={playerOfTheDay.nationality === player.nationality}>
+                                    <ReactCountryFlag
+                                        svg
+                                        style={{
+                                            width: '80%',
+                                            height: '80%',
+                                        }}
+                                        countryCode={player.nationality}
+                                    />
+                                </RowItem>
+                                <RowNumber
+                                    isLess={joinDatePlayer > joinDatePlayerOfTheDay}
+                                    isMore={joinDatePlayer < joinDatePlayerOfTheDay}
+                                    isValid={joinDatePlayer === joinDatePlayerOfTheDay}
+                                >
+                                    {joinDatePlayer}
+                                </RowNumber>
+                                <RowItem
+                                    isValid={
+                                        playerOfTheDay.previousOrganization.name === player.previousOrganization.name
+                                    }
+                                >
+                                    <Image
+                                        src={player.previousOrganization.logo}
+                                        alt={player.previousOrganization.name}
+                                        width={80}
+                                        height={80}
+                                    />
+                                </RowItem>
+                                <RowItem
+                                    isValid={playerOfTheDay.lastOrganization.name === player.lastOrganization.name}
+                                >
+                                    <Image
+                                        src={player.lastOrganization.logo}
+                                        alt={player.lastOrganization.name}
+                                        width={80}
+                                        height={80}
+                                    />
+                                </RowItem>
+                                <RowNumber
+                                    isLess={agePlayer > agePlayerOfTheDay}
+                                    isMore={agePlayer < agePlayerOfTheDay}
+                                    isValid={agePlayer === agePlayerOfTheDay}
+                                >
+                                    {agePlayer}
+                                </RowNumber>
+                            </HStack>
+                        </MotionDiv>
+                    )
+                })}
+            </VStack>
+        </Box>
     )
 }
 

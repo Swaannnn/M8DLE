@@ -7,6 +7,11 @@ import type { Player } from '@/types/player'
 import { getPlayerOfTheDay } from '@/utils/getPlayerOfTheDay'
 import InputPlayersAutocomplete from '@/components/InputPlayersAutocomplete'
 import TablePlayers from '@/components/TablePlayers'
+import localFont from 'next/font/local'
+
+const tuskerGrotesk = localFont({
+    src: './fonts/TuskerGrotesk-4800Super.woff2',
+})
 
 const Home = () => {
     const { loading } = useAuth()
@@ -31,8 +36,17 @@ const Home = () => {
     }
 
     return (
-        <VStack>
-            <Text fontSize="6xl">M8DLE</Text>
+        <VStack
+            width="90vw"
+            mx="auto"
+            gap="1rem"
+        >
+            <Text
+                fontSize="7.5rem"
+                className={tuskerGrotesk.className}
+            >
+                M8DLE
+            </Text>
             <Text>Devine le joueur de Gentle Mates du jour !</Text>
 
             <InputPlayersAutocomplete
