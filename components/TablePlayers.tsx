@@ -143,6 +143,10 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
             {[...players].reverse().map((player) => {
                 const joinDatePlayer = getYear(player.joinDate)
                 const joinDatePlayerOfTheDay = getYear(playerOfTheDay.joinDate)
+
+                const agePlayer = getAge(player.birthDate)
+                const agePlayerOfTheDay = getAge(playerOfTheDay.birthDate)
+
                 return (
                     <MotionDiv
                         key={player.name}
@@ -189,11 +193,11 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                 />
                             </RowItem>
                             <RowNumber
-                                isLess={player.birthDate < playerOfTheDay.birthDate}
-                                isMore={player.birthDate > playerOfTheDay.birthDate}
-                                isValid={playerOfTheDay.birthDate === player.birthDate}
+                                isLess={agePlayer < agePlayerOfTheDay}
+                                isMore={agePlayer > agePlayerOfTheDay}
+                                isValid={agePlayer === agePlayerOfTheDay}
                             >
-                                {getAge(player.birthDate)}
+                                {agePlayer}
                             </RowNumber>
                         </HStack>
                     </MotionDiv>
