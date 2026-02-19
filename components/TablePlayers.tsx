@@ -193,8 +193,8 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                 />
                             </RowItem>
                             <RowNumber
-                                isLess={agePlayer < agePlayerOfTheDay}
-                                isMore={agePlayer > agePlayerOfTheDay}
+                                isLess={agePlayer > agePlayerOfTheDay}
+                                isMore={agePlayer < agePlayerOfTheDay}
                                 isValid={agePlayer === agePlayerOfTheDay}
                             >
                                 {agePlayer}
