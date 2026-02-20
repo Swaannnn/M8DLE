@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import NavBar from '@/components/NavBar'
 import { Box } from '@chakra-ui/react'
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,12 +15,20 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <html lang="fr" suppressHydrationWarning>
+        <html
+            lang="fr"
+            suppressHydrationWarning
+        >
             <body className={inter.className}>
                 <Provider>
-                    <Box bg="bg" color="fg" minHeight="100vh">
+                    <Box
+                        bg="bg"
+                        color="fg"
+                        minHeight="calc(100vh)"
+                    >
                         <NavBar />
-                        <main>{children}</main>
+                        <main style={{ paddingBottom: '4rem' }}>{children}</main>
+                        <Footer />
                     </Box>
                 </Provider>
             </body>

@@ -1,28 +1,37 @@
 'use client'
 
-import { useAuth } from '@/hooks/use-auth'
 import { Text, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
-import type { Player } from '@/types/player'
-import { getPlayerOfTheDay } from '@/utils/getPlayerOfTheDay'
+import localFont from 'next/font/local'
 import InputPlayersAutocomplete from '@/components/InputPlayersAutocomplete'
 import TablePlayers from '@/components/TablePlayers'
+import { getPlayerOfTheDay } from '@/utils/getPlayerOfTheDay'
+import { useM8dleStatus } from '@/hooks/use-m8dle-status'
+import { useAuth } from '@/hooks/use-auth'
+import { useEffect, useState } from 'react'
+
+const tuskerGrotesk = localFont({ src: './fonts/TuskerGrotesk-4800Super.woff2' })
 
 const Home = () => {
     const { loading } = useAuth()
+    const { selectedPlayers, availablePlayers, win, addAttempt } = useM8dleStatus()
+
+    const [dailyWinners, setDailyWinners] = useState(0)
+    const [dailyWinnersLoading, setDailyWinnersLoading] = useState(false)
+
     const playerOfTheDay = getPlayerOfTheDay()
 
-    const [win, setWin] = useState(false)
-    const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
-
-    const handleAddPlayer = (player: Player) => {
-        setSelectedPlayers((prev) => [...prev, player])
-        if (player.name === playerOfTheDay.name) {
-            setWin(true)
+    useEffect(() => {
+        const fetchDailyWinners = async () => {
+            setDailyWinnersLoading(true)
+            const res = await fetch('/api/m8dle/dailywinners')
+            const data = await res.json()
+            setDailyWinners(data.successCount)
+            setDailyWinnersLoading(false)
         }
-    }
+        fetchDailyWinners()
+    }, [])
 
-    if (loading) {
+    if (loading || dailyWinnersLoading) {
         return (
             <VStack>
                 <Text>Loading...</Text>
@@ -30,19 +39,33 @@ const Home = () => {
         )
     }
 
+    const dailyWinnerText =
+        dailyWinners === 0
+            ? "Personne n'a encore trouvé le joueur du jour."
+            : dailyWinners === 1
+              ? '1 personne a déjà trouvé le joueur du jour.'
+              : `${dailyWinners} personnes ont déjà trouvé le joueur du jour.`
     return (
-        <VStack>
-            <Text fontSize="6xl">M8DLE</Text>
+        <VStack
+            width="90vw"
+            mx="auto"
+            gap="1rem"
+        >
+            <Text
+                fontSize="7.5rem"
+                className={tuskerGrotesk.className}
+            >
+                M8DLE
+            </Text>
             <Text>Devine le joueur de Gentle Mates du jour !</Text>
 
             <InputPlayersAutocomplete
-                onPlayerSelected={handleAddPlayer}
+                onPlayerSelected={addAttempt}
                 win={win}
+                availablePlayers={availablePlayers}
             />
 
-            <Text>
-                <strong>78</strong> personnes ont déjà trouvé
-            </Text>
+            <Text>{dailyWinnerText}</Text>
 
             <TablePlayers
                 playerOfTheDay={playerOfTheDay}

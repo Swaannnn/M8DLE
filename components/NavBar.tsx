@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/hooks/use-auth'
-import { Button, HStack } from '@chakra-ui/react'
+import { HStack, Link } from '@chakra-ui/react'
 import { ColorModeButton } from './ui/color-mode'
 import { useRouter } from 'next/navigation'
 
@@ -11,21 +11,19 @@ const NavBar = () => {
 
     return (
         !loading && (
-            <HStack justify="space-between" padding="1rem 2rem">
+            <HStack
+                justify="space-between"
+                padding="1rem 2rem"
+            >
                 <HStack gap="1rem">
-                    <Button variant="ghost" onClick={() => router.push('/')}>
-                        Accueil
-                    </Button>
+                    <Link onClick={() => router.push('/')}>Accueil</Link>
                 </HStack>
                 <HStack gap="1rem">
+                    <Link onClick={() => router.push('/leaderboard')}>Classement</Link>
                     {user ? (
-                        <Button variant="ghost" onClick={() => router.push('/account')}>
-                            Mon Compte
-                        </Button>
+                        <Link onClick={() => router.push('/account')}>Mon Compte</Link>
                     ) : (
-                        <Button variant="ghost" onClick={() => router.push('/login')}>
-                            Se connecter
-                        </Button>
+                        <Link onClick={() => router.push('/login')}>Se connecter</Link>
                     )}
                     <ColorModeButton />
                 </HStack>

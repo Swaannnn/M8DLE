@@ -1,37 +1,30 @@
 'use client'
 
 import { Box, Input, VStack } from '@chakra-ui/react'
-import players from '@/data/players.json'
 import type { Player } from '@/types/player'
 import { useState } from 'react'
+import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
 
-type InputPlayersAutocompleteProps = {
+type Props = {
+    availablePlayers: Player[]
     onPlayerSelected: (player: Player) => void
     win: boolean
 }
 
-const InputPlayersAutocomplete = ({ onPlayerSelected, win = false }: InputPlayersAutocompleteProps) => {
+const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected, win }: Props) => {
     const [value, setValue] = useState('')
 
-    const [availablePlayers, setAvailablePlayers] = useState(players)
-
-    const availablePlayersFiltered = availablePlayers.filter((player) =>
-        player.name.toLowerCase().includes(value.toLowerCase())
-    )
+    const filteredPlayers = availablePlayers.filter((p) => p.name.toLowerCase().includes(value.toLowerCase()))
 
     const selectPlayer = (player: Player) => {
         onPlayerSelected(player)
-        const playersFiltered = availablePlayers.filter((p) => p.name !== player.name)
-        setAvailablePlayers(playersFiltered)
         setValue('')
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && value !== '') {
-            if (availablePlayersFiltered.length > 0) {
-                selectPlayer(availablePlayersFiltered[0])
-                e.preventDefault()
-            }
+        if (e.key === 'Enter' && filteredPlayers.length > 0) {
+            selectPlayer(filteredPlayers[0])
+            e.preventDefault()
         }
     }
 
@@ -39,14 +32,15 @@ const InputPlayersAutocomplete = ({ onPlayerSelected, win = false }: InputPlayer
         <Box
             position="relative"
             gap="1rem"
+            width="100%"
+            maxWidth={TABLE_PLAYERS_WIDTH}
         >
             <Input
-                placeholder="Type to search"
+                placeholder="Tapez pour rechercher"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 disabled={win}
-                width="888px"
             />
             {value.length > 0 && (
                 <VStack
@@ -59,7 +53,7 @@ const InputPlayersAutocomplete = ({ onPlayerSelected, win = false }: InputPlayer
                     bg="bg"
                     color="fg"
                 >
-                    {availablePlayersFiltered.length === 0 ? (
+                    {filteredPlayers.length === 0 ? (
                         <Box
                             padding="0.5rem"
                             width="100%"
@@ -67,10 +61,10 @@ const InputPlayersAutocomplete = ({ onPlayerSelected, win = false }: InputPlayer
                             borderRadius="0.2rem"
                             bg="bg"
                         >
-                            No player found
+                            Aucun joueur trouvé.
                         </Box>
                     ) : (
-                        availablePlayersFiltered.map((player) => (
+                        filteredPlayers.map((player) => (
                             <Box
                                 key={player.name}
                                 onClick={() => selectPlayer(player)}

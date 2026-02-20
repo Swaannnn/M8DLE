@@ -1,15 +1,12 @@
 import { createSystem, defaultConfig } from '@chakra-ui/react'
 
-const system = createSystem(defaultConfig, {
+export const system = createSystem(defaultConfig, {
     theme: {
         tokens: {
-            colors: {
-                brand: {
-                    500: { value: '#7c3aed' },
-                },
-            },
+            colors: {},
+        },
+        semanticTokens: {
+            colors: {},
         },
     },
 })
-
-export default system
