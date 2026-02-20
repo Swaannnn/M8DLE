@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import NavBar from '@/components/NavBar'
-import { Box, VStack } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
