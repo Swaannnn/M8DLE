@@ -204,22 +204,30 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                         playerOfTheDay.previousOrganization.name === player.previousOrganization.name
                                     }
                                 >
-                                    <Image
-                                        src={player.previousOrganization.logo}
-                                        alt={player.previousOrganization.name}
-                                        width={80}
-                                        height={80}
-                                    />
+                                    {player.previousOrganization.logo ? (
+                                        <Image
+                                            src={player.previousOrganization.logo}
+                                            alt={player.previousOrganization.name}
+                                            width={80}
+                                            height={80}
+                                        />
+                                    ) : (
+                                        <Text>{player.previousOrganization.name}</Text>
+                                    )}
                                 </RowItem>
                                 <RowItem
                                     isValid={playerOfTheDay.lastOrganization.name === player.lastOrganization.name}
                                 >
-                                    <Image
-                                        src={player.lastOrganization.logo}
-                                        alt={player.lastOrganization.name}
-                                        width={80}
-                                        height={80}
-                                    />
+                                    {player.lastOrganization.logo ? (
+                                        <Image
+                                            src={player.lastOrganization.logo}
+                                            alt={player.lastOrganization.name}
+                                            width={80}
+                                            height={80}
+                                        />
+                                    ) : (
+                                        <Text>{player.lastOrganization.name}</Text>
+                                    )}
                                 </RowItem>
                                 <RowNumber
                                     isLess={agePlayer > agePlayerOfTheDay}

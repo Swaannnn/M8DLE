@@ -1,6 +1,17 @@
 'use client'
 
-import { Text, VStack } from '@chakra-ui/react'
+import {
+    AbsoluteCenter,
+    Button,
+    CloseButton,
+    Dialog,
+    Heading,
+    Portal,
+    Spinner,
+    Stack,
+    Text,
+    VStack,
+} from '@chakra-ui/react'
 import localFont from 'next/font/local'
 import InputPlayersAutocomplete from '@/components/InputPlayersAutocomplete'
 import TablePlayers from '@/components/TablePlayers'
@@ -16,26 +27,23 @@ const Home = () => {
     const { selectedPlayers, availablePlayers, win, addAttempt } = useM8dleStatus()
 
     const [dailyWinners, setDailyWinners] = useState(0)
-    const [dailyWinnersLoading, setDailyWinnersLoading] = useState(false)
 
     const playerOfTheDay = getPlayerOfTheDay()
 
     useEffect(() => {
         const fetchDailyWinners = async () => {
-            setDailyWinnersLoading(true)
             const res = await fetch('/api/m8dle/dailywinners')
             const data = await res.json()
             setDailyWinners(data.successCount)
-            setDailyWinnersLoading(false)
         }
         fetchDailyWinners()
-    }, [])
+    }, [win])
 
-    if (loading || dailyWinnersLoading) {
+    if (loading) {
         return (
-            <VStack>
-                <Text>Loading...</Text>
-            </VStack>
+            <AbsoluteCenter>
+                <Spinner size="xl" />
+            </AbsoluteCenter>
         )
     }
 
@@ -57,13 +65,73 @@ const Home = () => {
             >
                 M8DLE
             </Text>
-            <Text>Devine le joueur de Gentle Mates du jour !</Text>
 
-            <InputPlayersAutocomplete
-                onPlayerSelected={addAttempt}
-                win={win}
-                availablePlayers={availablePlayers}
-            />
+            <Dialog.Root>
+                <Dialog.Trigger asChild>
+                    <Button variant="outline">Précisions</Button>
+                </Dialog.Trigger>
+                <Portal>
+                    <Dialog.Backdrop />
+                    <Dialog.Positioner>
+                        <Dialog.Content>
+                            <Dialog.Header>
+                                <Dialog.Title>Précisions</Dialog.Title>
+                            </Dialog.Header>
+                            <Dialog.Body>
+                                <Stack gap="2rem">
+                                    <Stack>
+                                        <Heading size="md">1. Mise à jour des données</Heading>
+                                        <Text>
+                                            La dernière mise à jour des données a été effectuée le 20 février 2026. Nous
+                                            vous invitons à nous faire part de tout retour si vous constatez une
+                                            information erronée ou incohérente, afin que nous puissions la corriger dans
+                                            les plus brefs délais.
+                                        </Text>
+                                    </Stack>
+                                    <Stack>
+                                        <Heading size="md">2. Affichage des équipes</Heading>
+                                        <Text>
+                                            Les équipes affichées correspondent aux structures principales. Par exemple,
+                                            G2 Minnesota, Twisted Minds Orchid ou Karmine Corp Blue seront
+                                            respectivement présentées sous les noms G2 Esports, Twisted Minds et Karmine
+                                            Corp.
+                                        </Text>
+                                    </Stack>
+                                    <Stack>
+                                        <Heading size="md">3. A vous de jouer !</Heading>
+                                        <Text>
+                                            Entrez le nom d&apos;un joueur et laissez chaque erreur vous rapprocher de
+                                            la bonne réponse.
+                                        </Text>
+                                    </Stack>
+                                </Stack>
+                            </Dialog.Body>
+                            <Dialog.Footer>
+                                <Dialog.ActionTrigger asChild>
+                                    <Button size="sm">Fermer</Button>
+                                </Dialog.ActionTrigger>
+                            </Dialog.Footer>
+                            <Dialog.CloseTrigger asChild>
+                                <CloseButton size="sm" />
+                            </Dialog.CloseTrigger>
+                        </Dialog.Content>
+                    </Dialog.Positioner>
+                </Portal>
+            </Dialog.Root>
+
+            {win ? (
+                <Text
+                    fontSize="2xl"
+                    textAlign="center"
+                >
+                    Bravo ! Revenez demain pour le prochain joueur.
+                </Text>
+            ) : (
+                <InputPlayersAutocomplete
+                    onPlayerSelected={addAttempt}
+                    availablePlayers={availablePlayers}
+                />
+            )}
 
             <Text>{dailyWinnerText}</Text>
 

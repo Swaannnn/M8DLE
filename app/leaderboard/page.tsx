@@ -45,30 +45,32 @@ const Leaderboard = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {leaderboardData.map((item, index) => (
-                        <Table.Row key={item.id}>
-                            <Table.Cell>{index + 1}</Table.Cell>
-                            <Table.Cell
-                                display="flex"
-                                gap={2}
-                            >
-                                <Image
-                                    src={
-                                        item.avatar
-                                            ? `https://cdn.discordapp.com/avatars/${item.discordId}/${item.avatar}.png`
-                                            : defaultAvatar.src
-                                    }
-                                    alt="user avatar"
-                                    width={10}
-                                    height={10}
-                                    borderRadius="999px"
-                                />
-                                {item.username}
-                            </Table.Cell>
-                            <Table.Cell>{item.wins}</Table.Cell>
-                            <Table.Cell>{item.averageAttempts}</Table.Cell>
-                        </Table.Row>
-                    ))}
+                    {leaderboardData.map((item, index) => {
+                        const avatarUrl = item.avatar
+                            ? `https://cdn.discordapp.com/avatars/${item.discordId}/${item.avatar}.png`
+                            : defaultAvatar.src
+
+                        return (
+                            <Table.Row key={item.id}>
+                                <Table.Cell>{index + 1}</Table.Cell>
+                                <Table.Cell
+                                    display="flex"
+                                    gap={2}
+                                >
+                                    <Image
+                                        src={avatarUrl}
+                                        alt="user avatar"
+                                        width={10}
+                                        height={10}
+                                        borderRadius="999px"
+                                    />
+                                    {item.username}
+                                </Table.Cell>
+                                <Table.Cell>{item.wins}</Table.Cell>
+                                <Table.Cell>{item.averageAttempts}</Table.Cell>
+                            </Table.Row>
+                        )
+                    })}
                 </Table.Body>
             </Table.Root>
         </VStack>

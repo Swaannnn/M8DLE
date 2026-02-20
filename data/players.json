@@ -108,7 +108,7 @@
         },
         "lastOrganization": {
             "name": "Retired",
-            "logo": "/images/teams/retired.png"
+            "logo": null
         },
         "birthDate": "1996-09-28",
         "image": "/images/players/apo.png"
@@ -394,7 +394,7 @@
         },
         "lastOrganization": {
             "name": "GentleBench",
-            "logo": "/images/teams/gentlebench.png"
+            "logo": null
         },
         "birthDate": "2001-08-28",
         "image": "/images/players/radosin.png"
@@ -413,7 +413,7 @@
         },
         "lastOrganization": {
             "name": "GentleBench",
-            "logo": "/images/teams/gentlebench.png"
+            "logo": null
         },
         "birthDate": "2007-11-27",
         "image": "/images/players/yujin.png"
@@ -619,7 +619,7 @@
         "joinDate": "2024-03-22",
         "previousOrganization": {
             "name": "IziDream",
-            "logo": "/images/teams/izidream.png"
+            "logo": null
         },
         "lastOrganization": {
             "name": "Gentle Mates",
@@ -1345,7 +1345,7 @@
         },
         "lastOrganization": {
             "name": "Retired",
-            "logo": "/images/teams/retired.png"
+            "logo": null
         },
         "birthDate": "1998-06-27",
         "image": "/images/players/priestahh.png"
