@@ -8,10 +8,9 @@ import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
 type Props = {
     availablePlayers: Player[]
     onPlayerSelected: (player: Player) => void
-    win: boolean
 }
 
-const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected, win }: Props) => {
+const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected }: Props) => {
     const [value, setValue] = useState('')
 
     const filteredPlayers = availablePlayers.filter((p) => p.name.toLowerCase().includes(value.toLowerCase()))
@@ -40,7 +39,6 @@ const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected, win }: P
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                disabled={win}
             />
             {value.length > 0 && (
                 <VStack

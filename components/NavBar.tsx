@@ -12,8 +12,15 @@ const NavBar = () => {
     return (
         !loading && (
             <HStack
+                width="100%"
+                position="fixed"
+                top="0"
                 justify="space-between"
+                bg="bg"
                 padding="1rem 2rem"
+                borderBottomWidth="1px"
+                borderColor="fg"
+                zIndex="100"
             >
                 <HStack gap="1rem">
                     <Link onClick={() => router.push('/')}>Accueil</Link>

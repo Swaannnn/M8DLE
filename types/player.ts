@@ -8,11 +8,11 @@ export interface Player {
     joinDate: string
     previousOrganization: {
         name: string
-        logo: string
+        logo: string | null
     }
     lastOrganization: {
         name: string
-        logo: string
+        logo: string | null
     }
     birthDate: string
     image: string

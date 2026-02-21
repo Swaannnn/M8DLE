@@ -108,7 +108,7 @@
         },
         "lastOrganization": {
             "name": "Retired",
-            "logo": "/images/teams/retired.png"
+            "logo": null
         },
         "birthDate": "1996-09-28",
         "image": "/images/players/apo.png"
@@ -394,7 +394,7 @@
         },
         "lastOrganization": {
             "name": "GentleBench",
-            "logo": "/images/teams/gentlebench.png"
+            "logo": null
         },
         "birthDate": "2001-08-28",
         "image": "/images/players/radosin.png"
@@ -413,7 +413,7 @@
         },
         "lastOrganization": {
             "name": "GentleBench",
-            "logo": "/images/teams/gentlebench.png"
+            "logo": null
         },
         "birthDate": "2007-11-27",
         "image": "/images/players/yujin.png"
@@ -512,5 +512,956 @@
         },
         "birthDate": "2005-03-11",
         "image": "/images/players/oski.png"
+    },
+
+    {
+        "name": "berryx",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
+        "nationality": "TR",
+        "joinDate": "2026-01-24",
+        "previousOrganization": {
+            "name": "BLVKHVND",
+            "logo": "/images/teams/blvkhvnd.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2008-06-17",
+        "image": "/images/players/berryx.png"
+    },
+    {
+        "name": "wens",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
+        "nationality": "TR",
+        "joinDate": "2026-01-24",
+        "previousOrganization": {
+            "name": "BLVKHVND",
+            "logo": "/images/teams/blvkhvnd.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2006-01-31",
+        "image": "/images/players/wens.png"
+    },
+    {
+        "name": "tokameite",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
+        "nationality": "RU",
+        "joinDate": "2026-01-24",
+        "previousOrganization": {
+            "name": "Twisted Minds",
+            "logo": "/images/teams/twisted_minds.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2002-08-02",
+        "image": "/images/players/tokameite.png"
+    },
+    {
+        "name": "Nami",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2026-01-24",
+        "previousOrganization": {
+            "name": "ZERANCE",
+            "logo": "/images/teams/zerance.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2001-11-21",
+        "image": "/images/players/nami.png"
+    },
+    {
+        "name": "Marti",
+        "game": {
+            "name": "Valorant",
+            "logo": "/images/games/valorant.png"
+        },
+        "nationality": "PL",
+        "joinDate": "2026-01-24",
+        "previousOrganization": {
+            "name": "Twisted Minds",
+            "logo": "/images/teams/twisted_minds.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2005-03-28",
+        "image": "/images/players/marti.png"
+    },
+    {
+        "name": "MarineLorD",
+        "game": {
+            "name": "Age of Empires",
+            "logo": "/images/games/aoe.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-03-22",
+        "previousOrganization": {
+            "name": "IziDream",
+            "logo": null
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "1995-06-01",
+        "image": "/images/players/marinelord.png"
+    },
+    {
+        "name": "Wawa",
+        "game": {
+            "name": "2XKO",
+            "logo": "/images/games/2xko.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2025-11-26",
+        "previousOrganization": {
+            "name": "BMS ESPORTS",
+            "logo": "/images/teams/bms_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "????-??-??",
+        "image": "/images/players/wawa.png"
+    },
+    {
+        "name": "Martinez",
+        "game": {
+            "name": "CS2",
+            "logo": "/images/games/cs2.png"
+        },
+        "nationality": "ES",
+        "joinDate": "2025-08-25",
+        "previousOrganization": {
+            "name": "Iberian Soul",
+            "logo": "/images/teams/iberian_soul.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2001-01-29",
+        "image": "/images/players/martinez.png"
+    },
+    {
+        "name": "alex",
+        "game": {
+            "name": "CS2",
+            "logo": "/images/games/cs2.png"
+        },
+        "nationality": "ES",
+        "joinDate": "2025-08-25",
+        "previousOrganization": {
+            "name": "Iberian Soul",
+            "logo": "/images/teams/iberian_soul.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "1995-12-15",
+        "image": "/images/players/alex.png"
+    },
+    {
+        "name": "sausol",
+        "game": {
+            "name": "CS2",
+            "logo": "/images/games/cs2.png"
+        },
+        "nationality": "ES",
+        "joinDate": "2025-08-25",
+        "previousOrganization": {
+            "name": "Iberian Soul",
+            "logo": "/images/teams/iberian_soul.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2000-05-31",
+        "image": "/images/players/sausol.png"
+    },
+    {
+        "name": "dav1g",
+        "game": {
+            "name": "CS2",
+            "logo": "/images/games/cs2.png"
+        },
+        "nationality": "ES",
+        "joinDate": "2025-08-25",
+        "previousOrganization": {
+            "name": "Iberian Soul",
+            "logo": "/images/teams/iberian_soul.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2001-06-06",
+        "image": "/images/players/dav1g.png"
+    },
+    {
+        "name": "mopoz",
+        "game": {
+            "name": "CS2",
+            "logo": "/images/games/cs2.png"
+        },
+        "nationality": "ES",
+        "joinDate": "2025-08-25",
+        "previousOrganization": {
+            "name": "Iberian Soul",
+            "logo": "/images/teams/iberian_soul.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "1996-08-07",
+        "image": "/images/players/mopoz.png"
+    },
+    {
+        "name": "Enzosx",
+        "game": {
+            "name": "TFT",
+            "logo": "/images/games/tft.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2023-09-03",
+        "previousOrganization": {
+            "name": "Mihos eSport",
+            "logo": "/images/teams/mihos_esport.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2000-11-14",
+        "image": "/images/players/enzosx.png"
+    },
+    {
+        "name": "Jedusor",
+        "game": {
+            "name": "TFT",
+            "logo": "/images/games/tft.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2025-02-11",
+        "previousOrganization": {
+            "name": "Dignity Esports",
+            "logo": "/images/teams/dignity_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2002-10-03",
+        "image": "/images/players/jedusor.png"
+    },
+    {
+        "name": "L3SCoco",
+        "game": {
+            "name": "TFT",
+            "logo": "/images/games/tft.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2023-09-03",
+        "previousOrganization": {
+            "name": "Solary",
+            "logo": "/images/teams/solary.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2001-10-03",
+        "image": "/images/players/l3scoco.png"
+    },
+    {
+        "name": "Enkeo",
+        "game": {
+            "name": "Warzone",
+            "logo": "/images/games/warzone.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2025-04-05",
+        "previousOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2005-07-12",
+        "image": "/images/players/enkeo.png"
+    },
+    {
+        "name": "HalloW",
+        "game": {
+            "name": "Warzone",
+            "logo": "/images/games/warzone.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2025-04-05",
+        "previousOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "1999-07-27",
+        "image": "/images/players/hallow.png"
+    },
+    {
+        "name": "Gromalok",
+        "game": {
+            "name": "Warzone",
+            "logo": "/images/games/warzone.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2025-04-05",
+        "previousOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "1999-03-12",
+        "image": "/images/players/gromalok.png"
+    },
+    {
+        "name": "MariusCOW",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "DK",
+        "joinDate": "2025-04-08",
+        "previousOrganization": {
+            "name": "Exceed",
+            "logo": "/images/teams/exceed.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2006-11-14",
+        "image": "/images/players/mariuscow.png"
+    },
+    {
+        "name": "Merstach",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "LV",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Karmine Corp",
+            "logo": "/images/teams/karmine_corp.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2007-03-27",
+        "image": "/images/players/merstach.png"
+    },
+    {
+        "name": "Akiira",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Reality Zone",
+            "logo": "/images/teams/reality_zone.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2008-05-30",
+        "image": "/images/players/akiira.png"
+    },
+    {
+        "name": "Vanyak3kk",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "UA",
+        "joinDate": "2024-06-13",
+        "previousOrganization": {
+            "name": "LND Esports",
+            "logo": "/images/teams/lnd_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2005-03-02",
+        "image": "/images/players/vanyak3kk.png"
+    },
+    {
+        "name": "Snayzy",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2023-04-14",
+        "previousOrganization": {
+            "name": "Team Vitality",
+            "logo": "/images/teams/team_vitality.png"
+        },
+        "lastOrganization": {
+            "name": "Team Havok",
+            "logo": "/images/teams/team_havok.png"
+        },
+        "birthDate": "2003-04-25",
+        "image": "/images/players/snayzy.png"
+    },
+    {
+        "name": "xsweeze",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "R8 Esports",
+            "logo": "/images/teams/r8_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "birthDate": "2005-08-03",
+        "image": "/images/players/xsweeze.png"
+    },
+    {
+        "name": "SwizzY",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "RU",
+        "joinDate": "2025-04-08",
+        "previousOrganization": {
+            "name": "Karmine Corp",
+            "logo": "/images/teams/karmine_corp.png"
+        },
+        "lastOrganization": {
+            "name": "Team Vitality",
+            "logo": "/images/teams/team_vitality.png"
+        },
+        "birthDate": "2006-04-17",
+        "image": "/images/players/swizzy.png"
+    },
+    {
+        "name": "PodaSai",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2023-04-14",
+        "previousOrganization": {
+            "name": "Team Vitality",
+            "logo": "/images/teams/team_vitality.png"
+        },
+        "lastOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "birthDate": "2005-07-29",
+        "image": "/images/players/podasai.png"
+    },
+    {
+        "name": "P1ng",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "UA",
+        "joinDate": "2025-07-15",
+        "previousOrganization": {
+            "name": "AIGHT",
+            "logo": "/images/teams/aight.png"
+        },
+        "lastOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "birthDate": "2004-08-25",
+        "image": "/images/players/p1ng.png"
+    },
+    {
+        "name": "Malibuca",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "RU",
+        "joinDate": "2025-07-15",
+        "previousOrganization": {
+            "name": "Karmine Corp",
+            "logo": "/images/teams/karmine_corp.png"
+        },
+        "lastOrganization": {
+            "name": "BIG",
+            "logo": "/images/teams/big.png"
+        },
+        "birthDate": "2005-10-14",
+        "image": "/images/players/malibuca.png"
+    },
+    {
+        "name": "Pollo",
+        "game": {
+            "name": "Fortnite",
+            "logo": "/images/games/fortnite.png"
+        },
+        "nationality": "MX",
+        "joinDate": "2025-04-08",
+        "previousOrganization": {
+            "name": "Exceed",
+            "logo": "/images/teams/exceed.png"
+        },
+        "lastOrganization": {
+            "name": "Team Falcons",
+            "logo": "/images/teams/team_falcons.png"
+        },
+        "birthDate": "2008-05-08",
+        "image": "/images/players/pollo.png"
+    },
+    {
+        "name": "Zicssi",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "GameWard",
+            "logo": "/images/teams/gameward.png"
+        },
+        "lastOrganization": {
+            "name": "Solary",
+            "logo": "/images/teams/solary.png"
+        },
+        "birthDate": "2002-05-16",
+        "image": "/images/players/zicssi.png"
+    },
+    {
+        "name": "Erdote",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "PL",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Zero Tenacity",
+            "logo": "/images/teams/zero_tenacity.png"
+        },
+        "lastOrganization": {
+            "name": "Partizan Sangal",
+            "logo": "/images/teams/partizan_sangal.png"
+        },
+        "birthDate": "1999-07-19",
+        "image": "/images/players/erdote.png"
+    },
+    {
+        "name": "Empyros",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "GR",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Dsyre",
+            "logo": "/images/teams/dsyre.png"
+        },
+        "lastOrganization": {
+            "name": "Fnatic",
+            "logo": "/images/teams/fnatic.png"
+        },
+        "birthDate": "2004-04-01",
+        "image": "/images/players/empyros.png"
+    },
+    {
+        "name": "Eika",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-01-04",
+        "previousOrganization": {
+            "name": "AEGIS",
+            "logo": "/images/teams/aegis.png"
+        },
+        "lastOrganization": {
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
+        },
+        "birthDate": "1996-07-19",
+        "image": "/images/players/eika.png"
+    },
+    {
+        "name": "Comp",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "GR",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Rogue",
+            "logo": "/images/teams/rogue.png"
+        },
+        "lastOrganization": {
+            "name": "Joblife",
+            "logo": "/images/teams/joblife.png"
+        },
+        "birthDate": "2001-12-20",
+        "image": "/images/players/comp.png"
+    },
+    {
+        "name": "Kamilius",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "SK",
+        "joinDate": "2024-01-04",
+        "previousOrganization": {
+            "name": "Team GO",
+            "logo": "/images/teams/team_go.png"
+        },
+        "lastOrganization": {
+            "name": "CITA Kaizen",
+            "logo": "/images/teams/cita_kaizen.png"
+        },
+        "birthDate": "2000-07-06",
+        "image": "/images/players/kamilius.png"
+    },
+    {
+        "name": "White",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-01-04",
+        "previousOrganization": {
+            "name": "LDLC OL",
+            "logo": "/images/teams/ldlc_ol.png"
+        },
+        "lastOrganization": {
+            "name": "UoL Sexy Edition",
+            "logo": "/images/teams/uol_sexy_edition.png"
+        },
+        "birthDate": "2002-07-11",
+        "image": "/images/players/white.png"
+    },
+    {
+        "name": "Ragner",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "TR",
+        "joinDate": "2024-01-04",
+        "previousOrganization": {
+            "name": "Team GO",
+            "logo": "/images/teams/team_go.png"
+        },
+        "lastOrganization": {
+            "name": "Misa Esports",
+            "logo": "/images/teams/misa_esports.png"
+        },
+        "birthDate": "2000-12-19",
+        "image": "/images/players/ragner.png"
+    },
+    {
+        "name": "Mireu",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "KR",
+        "joinDate": "2024-05-14",
+        "previousOrganization": {
+            "name": "Beşiktaş Esports",
+            "logo": "/images/teams/besiktas_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Keyd Stars",
+            "logo": "/images/teams/keyd_stars.png"
+        },
+        "birthDate": "2001-09-20",
+        "image": "/images/players/mireu.png"
+    },
+    {
+        "name": "BAO",
+        "game": {
+            "name": "League of Legends",
+            "logo": "/images/games/lol.png"
+        },
+        "nationality": "KR",
+        "joinDate": "2024-01-04",
+        "previousOrganization": {
+            "name": "İstanbul Wildcats",
+            "logo": "/images/teams/istanbul_wildcats.png"
+        },
+        "lastOrganization": {
+            "name": "Fluxo W7M",
+            "logo": "/images/teams/fluxo_w7m.png"
+        },
+        "birthDate": "2001-09-20",
+        "image": "/images/players/bao.png"
+    },
+    {
+        "name": "Sib",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2025-11-26",
+        "previousOrganization": {
+            "name": "Cloud9",
+            "logo": "/images/teams/cloud9.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2002-02-03",
+        "image": "/images/players/sib.png"
+    },
+    {
+        "name": "Neptune",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2025-11-26",
+        "previousOrganization": {
+            "name": "Vancouver Surge",
+            "logo": "/images/teams/vancouver_surge.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2002-04-09",
+        "image": "/images/players/neptune.png"
+    },
+    {
+        "name": "Ghosty",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2025-11-26",
+        "previousOrganization": {
+            "name": "100 Thieves",
+            "logo": "/images/teams/100_thieves.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2002-04-24",
+        "image": "/images/players/ghosty.png"
+    },
+    {
+        "name": "Envoy",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2025-11-26",
+        "previousOrganization": {
+            "name": "100 Thieves",
+            "logo": "/images/teams/100_thieves.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2000-01-19",
+        "image": "/images/players/envoy.png"
+    },
+    {
+        "name": "Priestahh",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Boston Breach",
+            "logo": "/images/teams/boston_breach.png"
+        },
+        "lastOrganization": {
+            "name": "Retired",
+            "logo": null
+        },
+        "birthDate": "1998-06-27",
+        "image": "/images/players/priestahh.png"
+    },
+    {
+        "name": "Skyz",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Cloud9",
+            "logo": "/images/teams/cloud9.png"
+        },
+        "lastOrganization": {
+            "name": "G2 Esports",
+            "logo": "/images/teams/g2_esports.png"
+        },
+        "birthDate": "1999-07-08",
+        "image": "/images/players/skyz.png"
+    },
+    {
+        "name": "Lynz",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "G2 Esports",
+            "logo": "/images/teams/g2_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Clutch Rayn Esport",
+            "logo": "/images/teams/clutch_rayn_esport.png"
+        },
+        "birthDate": "2004-08-06",
+        "image": "/images/players/lynz.png"
+    },
+    {
+        "name": "Felo",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2025-04-02",
+        "previousOrganization": {
+            "name": "Carolina Royal Ravens",
+            "logo": "/images/teams/carolina_royal_ravens.png"
+        },
+        "lastOrganization": {
+            "name": "OMiT",
+            "logo": "/images/teams/omit.png"
+        },
+        "birthDate": "1997-05-15",
+        "image": "/images/players/felo.png"
+    },
+    {
+        "name": "oJohnny",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2025-04-02",
+        "previousOrganization": {
+            "name": "OMiT",
+            "logo": "/images/teams/omit.png"
+        },
+        "lastOrganization": {
+            "name": "Huntsmen",
+            "logo": "/images/teams/huntsmen.png"
+        },
+        "birthDate": "2003-09-24",
+        "image": "/images/players/ojohnny.png"
+    },
+    {
+        "name": "Lunarz",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2025-02-18",
+        "previousOrganization": {
+            "name": "OMiT",
+            "logo": "/images/teams/omit.png"
+        },
+        "lastOrganization": {
+            "name": "Vancouver Surge",
+            "logo": "/images/teams/vancouver_surge.png"
+        },
+        "birthDate": "2003-08-22",
+        "image": "/images/players/lunarz.png"
+    },
+    {
+        "name": "KiSMET",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2024-12-04",
+        "previousOrganization": {
+            "name": "Cloud9",
+            "logo": "/images/teams/cloud9.png"
+        },
+        "lastOrganization": {
+            "name": "Team Falcons",
+            "logo": "/images/teams/team_falcons.png"
+        },
+        "birthDate": "1999-11-11",
+        "image": "/images/players/kismet.png"
     }
 ]
