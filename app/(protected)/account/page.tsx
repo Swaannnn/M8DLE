@@ -36,6 +36,7 @@ const AccountPage = () => {
     return (
         <VStack>
             <Text
+                as="h1"
                 fontSize="4rem"
                 className={tuskerGrotesk.className}
             >

@@ -60,12 +60,12 @@ const Home = () => {
             gap="1rem"
         >
             <Text
+                as="h1"
                 fontSize="7.5rem"
                 className={tuskerGrotesk.className}
             >
                 M8DLE
             </Text>
-
             <Dialog.Root>
                 <Dialog.Trigger asChild>
                     <Button variant="outline">Précisions</Button>
