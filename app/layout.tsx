@@ -5,12 +5,44 @@ import './globals.css'
 import NavBar from '@/components/NavBar'
 import { Box } from '@chakra-ui/react'
 import Footer from '@/components/Footer'
+import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-    title: 'M8DLE',
-    description: 'M8DLE',
+    metadataBase: new URL('https://m8dle.com'),
+
+    title: {
+        default: 'M8DLE - Devine le joueur Gentle Mates du jour',
+        template: '%s | M8DLE',
+    },
+
+    description:
+        "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
+
+    keywords: ['gentlemates', 'm8dle', 'jeu gentlemates', 'gentlemates game', 'gentlemates wordle', 'dle'],
+
+    openGraph: {
+        title: 'M8DLE - Devine le joueur Gentle Mates du jour',
+        description:
+            "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
+        url: 'https://m8dle.com',
+        siteName: 'M8DLE',
+        type: 'website',
+        images: [
+            {
+                url: '/og-image.png',
+                width: 686, // 1200
+                height: 360, // 630
+                alt: 'M8DLE - Devine le joueur Gentle Mates du jour',
+            },
+        ],
+    },
+
+    robots: {
+        index: true,
+        follow: true,
+    },
 }
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
@@ -20,6 +52,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             suppressHydrationWarning
         >
             <body className={inter.className}>
+                <Analytics />
                 <Provider>
                     <Box
                         bg="bg"
@@ -27,7 +60,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                         minHeight="calc(100vh)"
                     >
                         <NavBar />
-                        <main style={{ paddingBottom: '4rem', paddingTop: '4rem' }}>{children}</main>
+                        <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>{children}</main>
                         <Footer />
                     </Box>
                 </Provider>

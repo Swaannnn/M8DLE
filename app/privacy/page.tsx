@@ -15,6 +15,7 @@ const Privacy = () => {
             gap="1rem"
         >
             <Text
+                as="h1"
                 fontSize="4rem"
                 className={tuskerGrotesk.className}
             >
