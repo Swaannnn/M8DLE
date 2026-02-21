@@ -5,6 +5,7 @@ import './globals.css'
 import NavBar from '@/components/NavBar'
 import { Box } from '@chakra-ui/react'
 import Footer from '@/components/Footer'
+import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +21,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             suppressHydrationWarning
         >
             <body className={inter.className}>
+                <Analytics />
                 <Provider>
                     <Box
                         bg="bg"
