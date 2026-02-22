@@ -33,7 +33,10 @@ export async function GET() {
             }
         })
 
-        stats.sort((a, b) => b.wins - a.wins)
+        stats.sort((a, b) => {
+            if (b.wins !== a.wins) return b.wins - a.wins
+            return a.averageAttempts - b.averageAttempts
+        })
 
         return NextResponse.json(stats)
     } catch (err) {

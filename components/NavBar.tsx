@@ -44,11 +44,14 @@ const NavBar = () => {
                     open={open}
                     onOpenChange={(details) => setOpen(details.open)}
                 >
-                    <Drawer.Trigger
-                        asChild
-                        onClick={() => setOpen(true)}
-                    >
-                        <LuMenu />
+                    <Drawer.Trigger asChild>
+                        <Button
+                            variant="ghost"
+                            onClick={() => setOpen(true)}
+                            aria-label="Ouvrir le menu"
+                        >
+                            <LuMenu />
+                        </Button>
                     </Drawer.Trigger>
                     <Portal>
                         <Drawer.Backdrop />
