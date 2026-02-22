@@ -34,7 +34,10 @@ const AccountPage = () => {
         : defaultAvatar.src
 
     return (
-        <VStack>
+        <VStack
+            w="90vw"
+            mx="auto"
+        >
             <Text
                 as="h1"
                 fontSize={{ base: '2.5rem', md: '4rem' }}

@@ -2,7 +2,7 @@
 
 import DiscordIcon from '@/components/icons/Discord'
 import { useColorMode } from '@/components/ui/color-mode'
-import { Button, Link, Text, VStack } from '@chakra-ui/react'
+import { Button, Text, VStack } from '@chakra-ui/react'
 import localFont from 'next/font/local'
 import NextLink from 'next/link'
 
@@ -13,7 +13,11 @@ const tuskerGrotesk = localFont({
 const LoginPage = () => {
     const { colorMode } = useColorMode()
     return (
-        <VStack gap="1rem">
+        <VStack
+            gap="1rem"
+            w="90vw"
+            mx="auto"
+        >
             <Text
                 as="h1"
                 fontSize={{ base: '2.5rem', md: '4rem' }}
