@@ -1,12 +1,18 @@
 import players from '@/data/players.json'
+import { getGameDayKey } from '@/utils/dateUtils'
 
-const START_DATE = new Date('2025-01-01T00:00:00Z')
+const START_DAY_UTC = Date.UTC(2025, 0, 1)
+
+const getDayNumberFromKey = (dayKey: string) => {
+    const [year, month, day] = dayKey.split('-').map(Number)
+    const currentDayUtc = Date.UTC(year, month - 1, day)
+    return Math.floor((currentDayUtc - START_DAY_UTC) / (1000 * 60 * 60 * 24))
+}
 
 export function getPlayerOfTheDay() {
-    const now = Date.now()
-    const adjustedTime = now - 2 * 60 * 60 * 1000
-    const diff = adjustedTime - START_DATE.getTime()
-    const dayNumber = Math.floor(diff / (1000 * 60 * 60 * 24))
-    const index = dayNumber % players.length
+    const dayKey = getGameDayKey()
+    const dayNumber = getDayNumberFromKey(dayKey)
+    const index = ((dayNumber % players.length) + players.length) % players.length
+
     return players[index]
 }
