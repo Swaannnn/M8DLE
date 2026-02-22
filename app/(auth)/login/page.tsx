@@ -16,15 +16,12 @@ const LoginPage = () => {
         <VStack gap="1rem">
             <Text
                 as="h1"
-                fontSize="4rem"
+                fontSize={{ base: '2.5rem', md: '4rem' }}
                 className={tuskerGrotesk.className}
             >
                 CONNEXION
             </Text>
             <Text>Connectez-vous pour accéder à votre compte et faire vos prédictions.</Text>
-            <Link asChild>
-                <NextLink href="/">Accueil</NextLink>
-            </Link>
             <Button asChild>
                 <NextLink href="/api/auth/login">
                     <DiscordIcon color={colorMode === 'light' ? 'white' : 'black'} />
