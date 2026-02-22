@@ -11,13 +11,15 @@ export interface ColorModeProviderProps {
     children: React.ReactNode
 }
 
-export function ColorModeProvider(props: ThemeProviderProps) {
+export function ColorModeProvider({ children, ...props }: ThemeProviderProps) {
     return (
         <ThemeProvider
             attribute="class"
             disableTransitionOnChange
             {...props}
-        />
+        >
+            {children}
+        </ThemeProvider>
     )
 }
 
