@@ -22,9 +22,6 @@ const LoginPage = () => {
                 CONNEXION
             </Text>
             <Text>Connectez-vous pour accéder à votre compte et faire vos prédictions.</Text>
-            <Link asChild>
-                <NextLink href="/">Accueil</NextLink>
-            </Link>
             <Button asChild>
                 <NextLink href="/api/auth/login">
                     <DiscordIcon color={colorMode === 'light' ? 'white' : 'black'} />
