@@ -51,7 +51,7 @@ const Home = () => {
         >
             <Text
                 as="h1"
-                fontSize="7.5rem"
+                fontSize={{ base: '4rem', md: '7.5rem' }}
                 className={tuskerGrotesk.className}
             >
                 M8DLE
