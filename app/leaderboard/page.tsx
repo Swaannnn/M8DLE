@@ -63,7 +63,7 @@ const Leaderboard = () => {
         >
             <Text
                 as="h1"
-                fontSize="4rem"
+                fontSize={{ base: '2.5rem', md: '4rem' }}
                 className={tuskerGrotesk.className}
             >
                 CLASSEMENT
