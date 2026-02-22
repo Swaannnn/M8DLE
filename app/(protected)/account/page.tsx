@@ -1,27 +1,48 @@
 'use client'
 
 import { useAuth } from '@/hooks/use-auth'
-import { AbsoluteCenter, Button, Image, Spinner, Text, VStack } from '@chakra-ui/react'
+import {
+    AbsoluteCenter,
+    Button,
+    HStack,
+    Image,
+    Separator,
+    Spinner,
+    Stack,
+    StackSeparator,
+    Text,
+    useBreakpointValue,
+    VStack,
+} from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import defaultAvatar from '@/public/images/default_avatar.jpg'
 import localFont from 'next/font/local'
+import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
+import useSWR from 'swr'
+import { DailyResult } from '@/types/dailyResult'
 
 const tuskerGrotesk = localFont({
     src: '../../fonts/TuskerGrotesk-4800Super.woff2',
 })
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 const AccountPage = () => {
-    const { user, loading, logout, loggedOut } = useAuth()
+    const { user, loading: userLoading, logout, loggedOut } = useAuth()
+    const { data, isLoading } = useSWR('/api/users/me/results', fetcher)
     const router = useRouter()
+    const isMobile = useBreakpointValue({ base: true, md: false })
+
+    const datas: DailyResult[] = data?.results || []
 
     useEffect(() => {
-        if (!loading && loggedOut) {
+        if (!userLoading && loggedOut) {
             router.push('/login')
         }
-    }, [loading, loggedOut, router])
+    }, [userLoading, loggedOut, router])
 
-    if (loading)
+    if (userLoading || isLoading)
         return (
             <AbsoluteCenter>
                 <Spinner size="xl" />
@@ -37,6 +58,7 @@ const AccountPage = () => {
         <VStack
             w="90vw"
             mx="auto"
+            gap="2rem"
         >
             <Text
                 as="h1"
@@ -45,22 +67,40 @@ const AccountPage = () => {
             >
                 MON COMPTE
             </Text>
-            <Text>
-                Membre depuis le{' '}
-                {new Date(user.createdAt).toLocaleDateString('fr-FR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                })}
-            </Text>
-            <Image
-                src={avatarUrl}
-                alt="user avatar"
-                className="w-24 h-24 rounded-full"
-            />
-            <Text>{user.username}</Text>
-            <Button onClick={logout}>Se déconnecter</Button>
-            <div style={{ height: '200vh' }}></div>
+
+            <Stack
+                gap="2rem"
+                direction={{ base: 'column', md: 'row' }}
+                align="center"
+            >
+                <VStack>
+                    <Image
+                        src={avatarUrl}
+                        alt="user avatar"
+                        className="w-24 h-24 rounded-full"
+                    />
+                    <Text fontSize="lg">{user.username}</Text>
+                    <Text fontSize="sm">
+                        Membre depuis le{' '}
+                        {new Date(user.createdAt).toLocaleDateString('fr-FR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        })}
+                    </Text>
+                </VStack>
+                <Separator />
+                <CurrentMonthCalendar datas={datas} />
+            </Stack>
+
+            <Button
+                size="sm"
+                onClick={logout}
+                position={{ base: 'relative', md: 'absolute' }}
+                right={{ md: '4rem' }}
+            >
+                Se déconnecter
+            </Button>
         </VStack>
     )
 }
