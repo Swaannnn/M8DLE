@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import playersData from '@/data/players.json'
 import type { Player } from '@/types/player'
 import { getPlayerOfTheDay } from '@/utils/getPlayerOfTheDay'
+import { getGameDayKey } from '@/utils/dateUtils'
 import { useAuth } from './use-auth'
 
 const M8DLE_KEY = 'm8dle'
@@ -13,11 +14,42 @@ export const useM8dleStatus = () => {
     const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
     const [availablePlayers, setAvailablePlayers] = useState<Player[]>(playersData)
     const [win, setWin] = useState(false)
+    const [statusLoading, setStatusLoading] = useState(true)
+
+    const getGuestState = () => {
+        const saved = JSON.parse(localStorage.getItem(M8DLE_KEY) || '{}')
+        const currentDateKey = getGameDayKey()
+
+        if (saved.date && saved.date !== currentDateKey) {
+            localStorage.removeItem(M8DLE_KEY)
+            return { attempts: [], hasWin: false }
+        }
+
+        const attempts = Array.isArray(saved.attempts) ? saved.attempts : []
+        const hasWin = saved.hasWin === true
+
+        return { attempts, hasWin, date: saved.date ?? currentDateKey }
+    }
 
     useEffect(() => {
         const fetchStatus = async () => {
+            setStatusLoading(true)
             if (user) {
                 try {
+                    const guestState = getGuestState()
+                    if (guestState.attempts.length > 0 || guestState.hasWin) {
+                        const syncRes = await fetch('/api/m8dle/attempt', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                attempts: guestState.attempts,
+                                hasWin: guestState.hasWin,
+                            }),
+                        })
+
+                        if (syncRes.ok) localStorage.removeItem(M8DLE_KEY)
+                    }
+
                     const res = await fetch('/api/m8dle/status')
                     const data = await res.json()
                     setWin(data.hasWin)
@@ -30,15 +62,16 @@ export const useM8dleStatus = () => {
                     console.error('Error fetching M8DLE status', err)
                 }
             } else {
-                const saved = JSON.parse(localStorage.getItem(M8DLE_KEY) || '{}')
-                const guestAttempts = saved.attempts || []
-                setWin(saved.hasWin || false)
+                const guestState = getGuestState()
+                const guestAttempts = guestState.attempts || []
+                setWin(guestState.hasWin || false)
                 const selected = guestAttempts
                     .map((name: string) => playersData.find((p) => p.name === name))
                     .filter(Boolean) as Player[]
                 setSelectedPlayers(selected)
                 setAvailablePlayers(playersData.filter((p) => !guestAttempts.includes(p.name)))
             }
+            setStatusLoading(false)
         }
 
         fetchStatus()
@@ -57,7 +90,7 @@ export const useM8dleStatus = () => {
             const saved = JSON.parse(localStorage.getItem(M8DLE_KEY) || '{}')
             const attempts = [...(saved.attempts || []), player.name]
             const hasWin = saved.hasWin || isWin
-            localStorage.setItem(M8DLE_KEY, JSON.stringify({ attempts, hasWin }))
+            localStorage.setItem(M8DLE_KEY, JSON.stringify({ attempts, hasWin, date: getGameDayKey() }))
         }
 
         setSelectedPlayers((prev) => [...prev, player])
@@ -65,5 +98,5 @@ export const useM8dleStatus = () => {
         if (isWin) setWin(true)
     }
 
-    return { selectedPlayers, availablePlayers, win, addAttempt }
+    return { selectedPlayers, availablePlayers, win, addAttempt, statusLoading }
 }
