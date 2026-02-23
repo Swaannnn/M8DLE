@@ -43,7 +43,6 @@ const MOTION_DIV_STYLE: React.CSSProperties = {
     height: '120px',
     color: '#34242e',
     borderRadius: '0.2rem',
-    padding: '0.5rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -173,7 +172,15 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                             animate="visible"
                         >
                             <HStack key={player.name}>
-                                <RowItem isValid={playerOfTheDay.name === player.name}>{player.name}</RowItem>
+                                {/* <RowItem isValid={playerOfTheDay.name === player.name}>{player.name}</RowItem> */}
+                                <RowItem isValid={playerOfTheDay.name === player.name}>
+                                    <Image
+                                        src={player.image}
+                                        alt={player.name}
+                                        width={120}
+                                        height={120}
+                                    />
+                                </RowItem>
                                 <RowItem isValid={playerOfTheDay.game.name === player.game.name}>
                                     <Image
                                         src={player.game.logo}
