@@ -2,8 +2,7 @@
 
 import useSWR from 'swr'
 import { useRouter } from 'next/navigation'
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+import { fetcher } from '@/utils/fetcher'
 
 export function useAuth() {
     const { data, error, isLoading, mutate } = useSWR('/api/auth/me', fetcher)
