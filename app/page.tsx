@@ -10,8 +10,13 @@ import { useAuth } from '@/hooks/use-auth'
 import PrecisionDialog from '@/components/PrecisionDialog'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { pink } from '@/constants/colors'
 
 const tuskerGrotesk = localFont({ src: './fonts/TuskerGrotesk-4800Super.woff2' })
+
+const DesirableCalligraphy = localFont({
+    src: './fonts/DesirableCalligraphyRegular.woff2',
+})
 
 const Home = () => {
     const { loading } = useAuth()
@@ -46,8 +51,18 @@ const Home = () => {
                 as="h1"
                 fontSize={{ base: '4rem', md: '7.5rem' }}
                 className={tuskerGrotesk.className}
+                paddingBottom="3rem"
             >
                 M8DLE
+            </Text>
+            <Text
+                position="absolute"
+                top="13rem"
+                fontSize={{ base: '4rem', md: '4.5rem' }}
+                className={DesirableCalligraphy.className}
+                color={pink}
+            >
+                M8dle
             </Text>
 
             <PrecisionDialog />

@@ -16,7 +16,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "1996-04-11",
-        "image": "/images/players/beyaz.png"
+        "image": "/images/players/beyaz.jpg"
     },
     {
         "name": "logaN",
@@ -35,7 +35,7 @@
             "logo": "/images/teams/unknown.png"
         },
         "birthDate": "1998-06-18",
-        "image": "/images/players/logan.png"
+        "image": "/images/players/logan.jpg"
     },
     {
         "name": "nataNk",
@@ -54,7 +54,7 @@
             "logo": "/images/teams/mandatory.png"
         },
         "birthDate": "1999-02-25",
-        "image": "/images/players/natank.png"
+        "image": "/images/players/natank.jpg"
     },
     {
         "name": "TakaS",
@@ -73,7 +73,7 @@
             "logo": "/images/teams/mandatory.png"
         },
         "birthDate": "2001-02-15",
-        "image": "/images/players/takas.png"
+        "image": "/images/players/takas.jpg"
     },
     {
         "name": "Wailers",
@@ -92,7 +92,7 @@
             "logo": "/images/teams/unknown.png"
         },
         "birthDate": "1997-11-24",
-        "image": "/images/players/wailers.png"
+        "image": "/images/players/wailers.jpg"
     },
     {
         "name": "APO",
@@ -111,7 +111,7 @@
             "logo": null
         },
         "birthDate": "1996-09-28",
-        "image": "/images/players/apo.png"
+        "image": "/images/players/apo.jpg"
     },
     {
         "name": "kAdavra",
@@ -130,7 +130,7 @@
             "logo": "/images/teams/mandatory.png"
         },
         "birthDate": "2000-04-05",
-        "image": "/images/players/kadavra.png"
+        "image": "/images/players/kadavra.jpg"
     },
     {
         "name": "RobbieBk",
@@ -149,7 +149,7 @@
             "logo": "/images/teams/unknown.png"
         },
         "birthDate": "2001-07-11",
-        "image": "/images/players/robbiebk.png"
+        "image": "/images/players/robbiebk.jpg"
     },
     {
         "name": "Click",
@@ -168,7 +168,7 @@
             "logo": "/images/teams/unknown.png"
         },
         "birthDate": "2006-04-03",
-        "image": "/images/players/click.png"
+        "image": "/images/players/click.jpg"
     },
     {
         "name": "Minny",
@@ -187,7 +187,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2005-05-14",
-        "image": "/images/players/minny.png"
+        "image": "/images/players/minny.jpg"
     },
     {
         "name": "Zyppan",
@@ -206,7 +206,7 @@
             "logo": "/images/teams/cgn_esports.png"
         },
         "birthDate": "2002-06-17",
-        "image": "/images/players/zyppan.png"
+        "image": "/images/players/zyppan.jpg"
     },
     {
         "name": "Kamyk",
@@ -225,7 +225,7 @@
             "logo": "/images/teams/joblife.png"
         },
         "birthDate": "2003-06-02",
-        "image": "/images/players/kamyk.png"
+        "image": "/images/players/kamyk.jpg"
     },
     {
         "name": "Proxh",
@@ -244,7 +244,7 @@
             "logo": "/images/teams/enterprise_esports.png"
         },
         "birthDate": "2003-04-25",
-        "image": "/images/players/proxh.png"
+        "image": "/images/players/proxh.jpg"
     },
     {
         "name": "Veqaj",
@@ -263,7 +263,7 @@
             "logo": "/images/teams/fnatic.png"
         },
         "birthDate": "2003-10-18",
-        "image": "/images/players/veqaj.png"
+        "image": "/images/players/veqaj.jpg"
     },
     {
         "name": "ComeBack",
@@ -282,7 +282,7 @@
             "logo": "/images/teams/team_heretics.png"
         },
         "birthDate": "2007-06-14",
-        "image": "/images/players/comeback.png"
+        "image": "/images/players/comeback.jpg"
     },
     {
         "name": "bipo",
@@ -301,7 +301,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2003-08-07",
-        "image": "/images/players/bipo.png"
+        "image": "/images/players/bipo.jpg"
     },
     {
         "name": "GLYPH",
@@ -320,7 +320,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2003-12-11",
-        "image": "/images/players/glyph.png"
+        "image": "/images/players/glyph.jpg"
     },
     {
         "name": "Marteen",
@@ -339,7 +339,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2004-10-21",
-        "image": "/images/players/marteen.png"
+        "image": "/images/players/marteen.jpg"
     },
     {
         "name": "Starxo",
@@ -358,9 +358,8 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2001-08-28",
-        "image": "/images/players/starxo.png"
+        "image": "/images/players/starxo.jpg"
     },
-
     {
         "name": "itachi",
         "game": {
@@ -378,7 +377,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2003-08-13",
-        "image": "/images/players/itachi.png"
+        "image": "/images/players/itachi.jpg"
     },
     {
         "name": "Radosin",
@@ -416,7 +415,7 @@
             "logo": null
         },
         "birthDate": "2007-11-27",
-        "image": "/images/players/yujin.png"
+        "image": "/images/players/yujin.jpg"
     },
     {
         "name": "Seikoo",
@@ -435,7 +434,7 @@
             "logo": "/images/teams/geekay_esports.png"
         },
         "birthDate": "2004-07-06",
-        "image": "/images/players/seikoo.png"
+        "image": "/images/players/seikoo.jpg"
     },
     {
         "name": "juicy",
@@ -454,7 +453,7 @@
             "logo": "/images/teams/karmine_corp.png"
         },
         "birthDate": "2005-05-03",
-        "image": "/images/players/juicy.png"
+        "image": "/images/players/juicy.jpg"
     },
     {
         "name": "Archie",
@@ -473,7 +472,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2005-03-11",
-        "image": "/images/players/archie.png"
+        "image": "/images/players/archie.jpg"
     },
     {
         "name": "nass",
@@ -492,7 +491,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2007-12-01",
-        "image": "/images/players/nass.png"
+        "image": "/images/players/nass.jpg"
     },
     {
         "name": "Oski",
@@ -511,9 +510,8 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2005-03-11",
-        "image": "/images/players/oski.png"
+        "image": "/images/players/oski.jpg"
     },
-
     {
         "name": "berryx",
         "game": {
@@ -531,7 +529,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2008-06-17",
-        "image": "/images/players/berryx.png"
+        "image": "/images/players/berryx.jpg"
     },
     {
         "name": "wens",
@@ -550,7 +548,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2006-01-31",
-        "image": "/images/players/wens.png"
+        "image": "/images/players/wens.jpg"
     },
     {
         "name": "tokameite",
@@ -569,7 +567,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2002-08-02",
-        "image": "/images/players/tokameite.png"
+        "image": "/images/players/tokameite.jpg"
     },
     {
         "name": "Nami",
@@ -588,7 +586,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2001-11-21",
-        "image": "/images/players/nami.png"
+        "image": "/images/players/nami.jpg"
     },
     {
         "name": "Marti",
@@ -607,7 +605,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2005-03-28",
-        "image": "/images/players/marti.png"
+        "image": "/images/players/marti.jpg"
     },
     {
         "name": "MarineLorD",
@@ -626,7 +624,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "1995-06-01",
-        "image": "/images/players/marinelord.png"
+        "image": "/images/players/marinelord.jpg"
     },
     {
         "name": "Wawa",
@@ -664,7 +662,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2001-01-29",
-        "image": "/images/players/martinez.png"
+        "image": "/images/players/martinez.jpg"
     },
     {
         "name": "alex",
@@ -683,7 +681,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "1995-12-15",
-        "image": "/images/players/alex.png"
+        "image": "/images/players/alex.jpg"
     },
     {
         "name": "sausol",
@@ -702,7 +700,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2000-05-31",
-        "image": "/images/players/sausol.png"
+        "image": "/images/players/sausol.jpg"
     },
     {
         "name": "dav1g",
@@ -721,7 +719,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2001-06-06",
-        "image": "/images/players/dav1g.png"
+        "image": "/images/players/dav1g.jpg"
     },
     {
         "name": "mopoz",
@@ -740,7 +738,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "1996-08-07",
-        "image": "/images/players/mopoz.png"
+        "image": "/images/players/mopoz.jpg"
     },
     {
         "name": "Enzosx",
@@ -759,7 +757,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2000-11-14",
-        "image": "/images/players/enzosx.png"
+        "image": "/images/players/enzosx.jpg"
     },
     {
         "name": "Jedusor",
@@ -797,7 +795,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2001-10-03",
-        "image": "/images/players/l3scoco.png"
+        "image": "/images/players/l3scoco.jpg"
     },
     {
         "name": "Enkeo",
@@ -816,7 +814,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2005-07-12",
-        "image": "/images/players/enkeo.png"
+        "image": "/images/players/enkeo.jpg"
     },
     {
         "name": "HalloW",
@@ -835,7 +833,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "1999-07-27",
-        "image": "/images/players/hallow.png"
+        "image": "/images/players/hallow.jpg"
     },
     {
         "name": "Gromalok",
@@ -854,7 +852,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "1999-03-12",
-        "image": "/images/players/gromalok.png"
+        "image": "/images/players/gromalok.jpg"
     },
     {
         "name": "MariusCOW",
@@ -873,7 +871,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2006-11-14",
-        "image": "/images/players/mariuscow.png"
+        "image": "/images/players/mariuscow.jpg"
     },
     {
         "name": "Merstach",
@@ -892,7 +890,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2007-03-27",
-        "image": "/images/players/merstach.png"
+        "image": "/images/players/merstach.jpg"
     },
     {
         "name": "Akiira",
@@ -911,7 +909,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2008-05-30",
-        "image": "/images/players/akiira.png"
+        "image": "/images/players/akiira.jpg"
     },
     {
         "name": "Vanyak3kk",
@@ -930,7 +928,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2005-03-02",
-        "image": "/images/players/vanyak3kk.png"
+        "image": "/images/players/vanyak3kk.jpg"
     },
     {
         "name": "Snayzy",
@@ -949,7 +947,7 @@
             "logo": "/images/teams/team_havok.png"
         },
         "birthDate": "2003-04-25",
-        "image": "/images/players/snayzy.png"
+        "image": "/images/players/snayzy.jpg"
     },
     {
         "name": "xsweeze",
@@ -968,7 +966,7 @@
             "logo": "/images/teams/unknown.png"
         },
         "birthDate": "2005-08-03",
-        "image": "/images/players/xsweeze.png"
+        "image": "/images/players/xsweeze.jpg"
     },
     {
         "name": "SwizzY",
@@ -987,7 +985,7 @@
             "logo": "/images/teams/team_vitality.png"
         },
         "birthDate": "2006-04-17",
-        "image": "/images/players/swizzy.png"
+        "image": "/images/players/swizzy.jpg"
     },
     {
         "name": "PodaSai",
@@ -1006,7 +1004,7 @@
             "logo": "/images/teams/unknown.png"
         },
         "birthDate": "2005-07-29",
-        "image": "/images/players/podasai.png"
+        "image": "/images/players/podasai.jpg"
     },
     {
         "name": "P1ng",
@@ -1025,7 +1023,7 @@
             "logo": "/images/teams/unknown.png"
         },
         "birthDate": "2004-08-25",
-        "image": "/images/players/p1ng.png"
+        "image": "/images/players/p1ng.jpg"
     },
     {
         "name": "Malibuca",
@@ -1044,7 +1042,7 @@
             "logo": "/images/teams/big.png"
         },
         "birthDate": "2005-10-14",
-        "image": "/images/players/malibuca.png"
+        "image": "/images/players/malibuca.jpg"
     },
     {
         "name": "Pollo",
@@ -1063,7 +1061,7 @@
             "logo": "/images/teams/team_falcons.png"
         },
         "birthDate": "2008-05-08",
-        "image": "/images/players/pollo.png"
+        "image": "/images/players/pollo.jpg"
     },
     {
         "name": "Zicssi",
@@ -1082,7 +1080,7 @@
             "logo": "/images/teams/solary.png"
         },
         "birthDate": "2002-05-16",
-        "image": "/images/players/zicssi.png"
+        "image": "/images/players/zicssi.jpg"
     },
     {
         "name": "Erdote",
@@ -1101,7 +1099,7 @@
             "logo": "/images/teams/partizan_sangal.png"
         },
         "birthDate": "1999-07-19",
-        "image": "/images/players/erdote.png"
+        "image": "/images/players/erdote.jpg"
     },
     {
         "name": "Empyros",
@@ -1120,7 +1118,7 @@
             "logo": "/images/teams/fnatic.png"
         },
         "birthDate": "2004-04-01",
-        "image": "/images/players/empyros.png"
+        "image": "/images/players/empyros.jpg"
     },
     {
         "name": "Eika",
@@ -1139,7 +1137,7 @@
             "logo": "/images/teams/unknown.png"
         },
         "birthDate": "1996-07-19",
-        "image": "/images/players/eika.png"
+        "image": "/images/players/eika.jpg"
     },
     {
         "name": "Comp",
@@ -1158,7 +1156,7 @@
             "logo": "/images/teams/joblife.png"
         },
         "birthDate": "2001-12-20",
-        "image": "/images/players/comp.png"
+        "image": "/images/players/comp.jpg"
     },
     {
         "name": "Kamilius",
@@ -1196,7 +1194,7 @@
             "logo": "/images/teams/uol_sexy_edition.png"
         },
         "birthDate": "2002-07-11",
-        "image": "/images/players/white.png"
+        "image": "/images/players/white.jpg"
     },
     {
         "name": "Ragner",
@@ -1215,7 +1213,7 @@
             "logo": "/images/teams/misa_esports.png"
         },
         "birthDate": "2000-12-19",
-        "image": "/images/players/ragner.png"
+        "image": "/images/players/ragner.jpg"
     },
     {
         "name": "Mireu",
@@ -1253,7 +1251,7 @@
             "logo": "/images/teams/fluxo_w7m.png"
         },
         "birthDate": "2001-09-20",
-        "image": "/images/players/bao.png"
+        "image": "/images/players/bao.jpg"
     },
     {
         "name": "Sib",
@@ -1272,7 +1270,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2002-02-03",
-        "image": "/images/players/sib.png"
+        "image": "/images/players/sib.jpg"
     },
     {
         "name": "Neptune",
@@ -1291,7 +1289,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2002-04-09",
-        "image": "/images/players/neptune.png"
+        "image": "/images/players/neptune.jpg"
     },
     {
         "name": "Ghosty",
@@ -1310,7 +1308,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2002-04-24",
-        "image": "/images/players/ghosty.png"
+        "image": "/images/players/ghosty.jpg"
     },
     {
         "name": "Envoy",
@@ -1329,7 +1327,7 @@
             "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2000-01-19",
-        "image": "/images/players/envoy.png"
+        "image": "/images/players/envoy.jpg"
     },
     {
         "name": "Priestahh",
@@ -1386,7 +1384,7 @@
             "logo": "/images/teams/clutch_rayn_esport.png"
         },
         "birthDate": "2004-08-06",
-        "image": "/images/players/lynz.png"
+        "image": "/images/players/lynz.jpg"
     },
     {
         "name": "Felo",
@@ -1424,7 +1422,7 @@
             "logo": "/images/teams/huntsmen.png"
         },
         "birthDate": "2003-09-24",
-        "image": "/images/players/ojohnny.png"
+        "image": "/images/players/ojohnny.jpg"
     },
     {
         "name": "Lunarz",
@@ -1443,7 +1441,7 @@
             "logo": "/images/teams/vancouver_surge.png"
         },
         "birthDate": "2003-08-22",
-        "image": "/images/players/lunarz.png"
+        "image": "/images/players/lunarz.jpg"
     },
     {
         "name": "KiSMET",
@@ -1462,6 +1460,6 @@
             "logo": "/images/teams/team_falcons.png"
         },
         "birthDate": "1999-11-11",
-        "image": "/images/players/kismet.png"
+        "image": "/images/players/kismet.jpg"
     }
 ]
