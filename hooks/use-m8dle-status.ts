@@ -14,6 +14,7 @@ export const useM8dleStatus = () => {
     const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
     const [availablePlayers, setAvailablePlayers] = useState<Player[]>(playersData)
     const [win, setWin] = useState(false)
+    const [statusLoading, setStatusLoading] = useState(true)
 
     const getGuestState = () => {
         const saved = JSON.parse(localStorage.getItem(M8DLE_KEY) || '{}')
@@ -32,6 +33,7 @@ export const useM8dleStatus = () => {
 
     useEffect(() => {
         const fetchStatus = async () => {
+            setStatusLoading(true)
             if (user) {
                 try {
                     const guestState = getGuestState()
@@ -69,6 +71,7 @@ export const useM8dleStatus = () => {
                 setSelectedPlayers(selected)
                 setAvailablePlayers(playersData.filter((p) => !guestAttempts.includes(p.name)))
             }
+            setStatusLoading(false)
         }
 
         fetchStatus()
@@ -95,5 +98,5 @@ export const useM8dleStatus = () => {
         if (isWin) setWin(true)
     }
 
-    return { selectedPlayers, availablePlayers, win, addAttempt }
+    return { selectedPlayers, availablePlayers, win, addAttempt, statusLoading }
 }

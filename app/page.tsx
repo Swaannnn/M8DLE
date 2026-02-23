@@ -7,29 +7,22 @@ import TablePlayers from '@/components/TablePlayers'
 import { getPlayerOfTheDay } from '@/utils/getPlayerOfTheDay'
 import { useM8dleStatus } from '@/hooks/use-m8dle-status'
 import { useAuth } from '@/hooks/use-auth'
-import { useEffect, useState } from 'react'
 import PrecisionDialog from '@/components/PrecisionDialog'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 const tuskerGrotesk = localFont({ src: './fonts/TuskerGrotesk-4800Super.woff2' })
 
 const Home = () => {
     const { loading } = useAuth()
-    const { selectedPlayers, availablePlayers, win, addAttempt } = useM8dleStatus()
-
-    const [dailyWinners, setDailyWinners] = useState(0)
+    const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
+    const { data = 0, isLoading } = useSWR('/api/m8dle/dailywinners', fetcher)
 
     const playerOfTheDay = getPlayerOfTheDay()
 
-    useEffect(() => {
-        const fetchDailyWinners = async () => {
-            const res = await fetch('/api/m8dle/dailywinners')
-            const data = await res.json()
-            setDailyWinners(data.successCount)
-        }
-        fetchDailyWinners()
-    }, [win])
+    const dailyWinners = data.successCount || 0
 
-    if (loading) {
+    if (loading || statusLoading || isLoading) {
         return (
             <AbsoluteCenter>
                 <Spinner size="xl" />

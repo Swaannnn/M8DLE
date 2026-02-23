@@ -1,6 +1,5 @@
 'use client'
 
-import { LeaderboardData } from '@/types/leaderboard'
 import {
     AbsoluteCenter,
     ButtonGroup,
@@ -14,36 +13,26 @@ import {
     useBreakpointValue,
     VStack,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import defaultAvatar from '@/public/images/default_avatar.jpg'
 import localFont from 'next/font/local'
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
+import { fetcher } from '@/utils/fetcher'
+import useSWR from 'swr'
+import { LeaderboardData } from '@/types/leaderboard'
 
 const tuskerGrotesk = localFont({
     src: '../fonts/TuskerGrotesk-4800Super.woff2',
 })
 
 const Leaderboard = () => {
-    const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([])
+    const { data: leaderboardData = [], isLoading } = useSWR<LeaderboardData[]>('/api/m8dle/leaderboard', fetcher)
     const isMobile = useBreakpointValue({ base: true, md: false })
-
-    const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(1)
-
-    useEffect(() => {
-        const fetchLeaderboard = async () => {
-            setLoading(true)
-            const res = await fetch('/api/m8dle/leaderboard')
-            const data = await res.json()
-            setLeaderboardData(data)
-            setLoading(false)
-        }
-        fetchLeaderboard()
-    }, [])
 
     const leaderboardDataLength = leaderboardData.length
 
-    if (loading) {
+    if (isLoading) {
         return (
             <AbsoluteCenter>
                 <Spinner

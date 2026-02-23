@@ -1,19 +1,7 @@
 'use client'
 
 import { useAuth } from '@/hooks/use-auth'
-import {
-    AbsoluteCenter,
-    Button,
-    HStack,
-    Image,
-    Separator,
-    Spinner,
-    Stack,
-    StackSeparator,
-    Text,
-    useBreakpointValue,
-    VStack,
-} from '@chakra-ui/react'
+import { AbsoluteCenter, Button, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import defaultAvatar from '@/public/images/default_avatar.jpg'
@@ -21,18 +9,16 @@ import localFont from 'next/font/local'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
 import { DailyResult } from '@/types/dailyResult'
+import { fetcher } from '@/utils/fetcher'
 
 const tuskerGrotesk = localFont({
     src: '../../fonts/TuskerGrotesk-4800Super.woff2',
 })
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
     const { data, isLoading } = useSWR('/api/users/me/results', fetcher)
     const router = useRouter()
-    const isMobile = useBreakpointValue({ base: true, md: false })
 
     const datas: DailyResult[] = data?.results || []
 
