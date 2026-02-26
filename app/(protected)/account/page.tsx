@@ -3,13 +3,16 @@
 import { useAuth } from '@/hooks/use-auth'
 import { AbsoluteCenter, Button, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 import defaultAvatar from '@/public/images/default_avatar.jpg'
 import localFont from 'next/font/local'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
 import { DailyResult } from '@/types/dailyResult'
 import { fetcher } from '@/utils/fetcher'
+import { ApiError } from 'next/dist/server/api-utils'
+import { ApiErrorContainer } from '@/components/ApiErrorContainer'
+import constantsApi from '@/constants/constantsApi'
+import { useEffect } from 'react'
 
 const tuskerGrotesk = localFont({
     src: '../../fonts/TuskerGrotesk-4800Super.woff2',
@@ -17,28 +20,40 @@ const tuskerGrotesk = localFont({
 
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
-    const { data, isLoading } = useSWR('/api/users/me/results', fetcher)
+    const { data, error, isLoading } = useSWR<any, ApiError>(
+        !userLoading && user && !loggedOut ? '/api/users/me/results' : null,
+        fetcher
+    )
     const router = useRouter()
 
-    const datas: DailyResult[] = data?.results || []
-
     useEffect(() => {
-        if (!userLoading && loggedOut) {
+        if (!userLoading || loggedOut) {
             router.push('/login')
         }
     }, [userLoading, loggedOut, router])
 
-    if (userLoading || isLoading)
+    if (userLoading || isLoading) {
         return (
             <AbsoluteCenter>
                 <Spinner size="xl" />
             </AbsoluteCenter>
         )
-    if (!user) return null
+    }
 
-    const avatarUrl = user.avatar
-        ? `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.png`
-        : defaultAvatar.src
+    const datas: DailyResult[] = data?.results || []
+
+    if (error && error.statusCode >= 500) {
+        return <ApiErrorContainer error={error} />
+    }
+
+    if (!user || loggedOut) return null
+
+    let avatarUrl: string
+    if (user.avatar != '') {
+        avatarUrl = `${constantsApi.AVATAR}/${user.discordId}/${user.avatar}.png`
+    } else {
+        avatarUrl = defaultAvatar.src
+    }
 
     return (
         <VStack

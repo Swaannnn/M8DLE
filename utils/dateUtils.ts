@@ -34,9 +34,10 @@ const getGameDayKey = (baseDate: Date = new Date()) => {
         ).padStart(2, '0')}`
     }
 
-    return `${currentParts.year}-${String(currentParts.month).padStart(2, '0')}-${String(
-        currentParts.day
-    ).padStart(2, '0')}`
+    return `${currentParts.year}-${String(currentParts.month).padStart(2, '0')}-${String(currentParts.day).padStart(
+        2,
+        '0'
+    )}`
 }
 
 const getAge = (date: string): number => {

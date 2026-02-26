@@ -5,7 +5,6 @@ import { getGameDate } from '@/utils/dateUtils'
 export async function GET() {
     try {
         const startOfDay = getGameDate()
-
         const endOfDay = new Date(startOfDay)
         endOfDay.setDate(endOfDay.getDate() + 1)
 

@@ -3,10 +3,8 @@ import { createSession } from '@/lib/auth/session'
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
-    const { searchParams } = new URL(request.url)
-    const code = searchParams.get('code')
-
+export async function GET(request: NextRequest, { params }: { params: Promise<{ code: string | null }> }) {
+    const code = (await params).code
     if (!code) {
         return NextResponse.json({ error: 'No code provided' }, { status: 400 })
     }
