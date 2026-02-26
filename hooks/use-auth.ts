@@ -10,13 +10,13 @@ export function useAuth() {
     const { data, error, isLoading, mutate } = useSWR<UserProfile | null, ApiError>('/api/auth/me', fetcher)
     const router = useRouter()
 
-    const user = data
+    const user = data ?? null
     const loading = isLoading
     const loggedOut = error || !user
 
     const logout = async () => {
         await fetch('/api/auth/logout', { method: 'POST' })
-        await mutate(null, false)
+        mutate(null, false)
         router.push('/')
         router.refresh()
     }

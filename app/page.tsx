@@ -39,7 +39,6 @@ const Home = () => {
     }
 
     const dailyWinners = data?.successCount ?? 0
-
     let dailyWinnerText = ''
     if (dailyWinners == 0) {
         dailyWinnerText = "Personne n'a encore trouvé le joueur du jour."

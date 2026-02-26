@@ -1,9 +1,8 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { LeaderboardData } from '@/types/leaderboard'
-
-// Nombre d'élément dans une page pour la pagination
-const MAX_PER_PAGE = 20
+import { LeaderboardData, LeaderboardUser } from '@/types/leaderboard'
+import { getNumberParamFromRequest } from '@/utils/requestUtils'
+import constantsParams from '@/constants/constantsParams'
 
 /**
  * Fonction utilitaire pour trier la liste des
@@ -13,7 +12,7 @@ const MAX_PER_PAGE = 20
  * @param userB Utilisateur B
  * @returns Valeur pour le trie
  */
-function sortFunction(userA: LeaderboardData, userB: LeaderboardData) {
+function sortFunction(userA: LeaderboardUser, userB: LeaderboardUser) {
     if (userB.wins !== userA.wins) return userB.wins - userA.wins
 
     return userA.averageAttempts - userB.averageAttempts
@@ -29,11 +28,13 @@ function sortFunction(userA: LeaderboardData, userB: LeaderboardData) {
  *
  * @returns Liste de profile utilisateur
  */
-export async function GET({ params }: { params: Promise<{ page: number }> }) {
+export async function GET(request: NextRequest) {
     try {
-        let page = (await params).page
+        let page = getNumberParamFromRequest(request, 'page', 1)
+        if (page < 1) page = 1
 
-        const users = await prisma.user.findMany({
+        const total = await prisma.user.count({})
+        const rawUsers = await prisma.user.findMany({
             select: {
                 id: true,
                 username: true,
@@ -50,11 +51,11 @@ export async function GET({ params }: { params: Promise<{ page: number }> }) {
                     },
                 },
             },
-            skip: MAX_PER_PAGE * page,
-            take: MAX_PER_PAGE,
+            skip: constantsParams.LEADERBOARD_PAGE_SIZE * (page - 1),
+            take: constantsParams.LEADERBOARD_PAGE_SIZE,
         })
 
-        const stats: LeaderboardData[] = users.map((user) => {
+        const users: LeaderboardUser[] = rawUsers.map((user) => {
             const wins = user._count.dailyResults
             const totalAttempts = user.dailyResults.reduce((acc, dr) => {
                 let len = Array.isArray(dr.attempts) ? dr.attempts.length : 0
@@ -74,9 +75,8 @@ export async function GET({ params }: { params: Promise<{ page: number }> }) {
             }
         })
 
-        stats.sort(sortFunction)
-
-        return NextResponse.json(stats)
+        users.sort(sortFunction)
+        return NextResponse.json({ total, users })
     } catch (err) {
         console.error(err)
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

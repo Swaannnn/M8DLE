@@ -7,7 +7,7 @@ export async function GET() {
     const session = await getSession()
 
     if (!session?.userId) {
-        return NextResponse.json({ user: null })
+        return NextResponse.json(null)
     }
 
     // Récupérer les infos complètes de l'utilisateur depuis la base
@@ -29,5 +29,5 @@ export async function GET() {
         return NextResponse.json({ message: 'User not found' }, { status: 404 })
     }
 
-    return NextResponse.json({ user })
+    return NextResponse.json(user)
 }

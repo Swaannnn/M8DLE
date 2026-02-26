@@ -21,13 +21,13 @@ const tuskerGrotesk = localFont({
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
     const { data, error, isLoading } = useSWR<any, ApiError>(
-        !userLoading && user && !loggedOut ? '/api/users/me/results' : null,
+        !userLoading && !loggedOut ? '/api/users/me/results' : null,
         fetcher
     )
     const router = useRouter()
 
     useEffect(() => {
-        if (!userLoading || loggedOut) {
+        if (!userLoading && loggedOut) {
             router.push('/login')
         }
     }, [userLoading, loggedOut, router])

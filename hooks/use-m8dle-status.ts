@@ -3,49 +3,20 @@
 import { useEffect, useState } from 'react'
 import playersData from '@/data/players.json'
 import type { Player } from '@/types/player'
-import { filterPlayersByAttempts, getPlayerOfTheDay } from '@/utils/playersUtils'
+import { filterPlayersByAttempts, filterPlayersNotInAttempts, getPlayerOfTheDay } from '@/utils/playersUtils'
 import { getGameDate, getGameDayKey } from '@/utils/dateUtils'
 import { useAuth } from './use-auth'
 import { M8dleStatus } from '@/types/M8dleStatus'
 import { fetcher } from '@/utils/fetcher'
-import { Attempt } from '@/types/attempt'
 
 const M8DLE_KEY = 'm8dle'
 
 export const useM8dleStatus = () => {
-    const { user } = useAuth()
+    const { loading, loggedOut } = useAuth()
     const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
     const [availablePlayers, setAvailablePlayers] = useState<Player[]>(playersData)
     const [win, setWin] = useState(false)
     const [statusLoading, setStatusLoading] = useState(true)
-
-    /**
-     * Lit le local storage du navigateur
-     * et récupère les données de jeu de
-     * l'utilisateur.
-     *
-     * @returns Status
-     */
-    const getGuestState = (): M8dleStatus => {
-        const storage = localStorage.getItem(M8DLE_KEY)
-        const currentDateKey = getGameDayKey()
-
-        if (!storage) {
-            return { attempts: [], hasWin: false, date: getGameDate() }
-        } else {
-            const json = JSON.parse(storage)
-            if (json.date && json.date !== currentDateKey) {
-                localStorage.removeItem(M8DLE_KEY)
-                return { attempts: [], hasWin: false, date: getGameDate() }
-            }
-
-            const attempts = Array.isArray(json.attempts) ? json.attempts : []
-            const hasWin = json.hasWin === true
-            const date = json.date ? new Date(json.date) : getGameDate()
-
-            return { attempts, hasWin, date }
-        }
-    }
 
     /**
      * Mets à jour les données stocké dans le local
@@ -55,13 +26,14 @@ export const useM8dleStatus = () => {
      * @param state status
      */
     const syncLocalToUser = async (state: M8dleStatus) => {
-        if (state.attempts.length > 0 || state.hasWin) {
-            await fetcher<Attempt>('/api/m8dle/attempt', {
+        console.log(state)
+        if (state.attempts.length > 0 || state.isWin) {
+            await fetcher('/api/m8dle/attempt', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     attempts: state.attempts,
-                    hasWin: state.hasWin,
+                    isWin: state.isWin,
                 }),
             })
 
@@ -70,34 +42,70 @@ export const useM8dleStatus = () => {
     }
 
     /**
+     * Vérifie si dans le local storage on
+     * retrouve bien le status M8DLE
+     *
+     * @returns status s'il existe
+     */
+    const getLocalStatus = (): M8dleStatus | null => {
+        const storage = localStorage.getItem(M8DLE_KEY)
+        if (storage) {
+            const json = JSON.parse(storage)
+            const status: M8dleStatus = {
+                date: new Date(json.date),
+                isWin: json.isWin,
+                attempts: json.attempts,
+            }
+
+            return status
+        }
+
+        return null
+    }
+
+    /**
+     * Créer et stocker un M8dleStatus vide
+     * dans le local storage du navigateur.
+     *
+     * @returns status
+     */
+    const createLocalStatus = (): M8dleStatus => {
+        let status: M8dleStatus = { attempts: [], isWin: false, date: getGameDate() }
+        localStorage.setItem(M8DLE_KEY, JSON.stringify(status))
+
+        return status
+    }
+
+    /**
      * Mets à jour l'état actuel de la partie
      * de l'utilisateur.
      */
     const fetchStatus = async () => {
         setStatusLoading(true)
-        const guestState = getGuestState()
-        let hasWin: boolean
+        const guestState = getLocalStatus()
+        let isWin: boolean
         let attempts: string[]
-        if (user) {
-            // Handle if logged
-            syncLocalToUser(guestState)
+
+        if (!loggedOut) {
+            if (guestState) await syncLocalToUser(guestState)
+
             const data = await fetcher<M8dleStatus>('/api/m8dle/status')
             attempts = data.attempts
-            hasWin = data.hasWin
+            isWin = data.isWin
         } else {
-            // Handle if guest
-            attempts = guestState.attempts
-            hasWin = guestState.hasWin
-
-            if ((attempts = [])) {
-                // Ajoute dans local storage
-                localStorage.setItem(M8DLE_KEY, JSON.stringify({ attempts, hasWin, date: getGameDayKey() }))
+            if (!guestState) {
+                const status = createLocalStatus()
+                isWin = status.isWin
+                attempts = status.attempts
+            } else {
+                attempts = guestState.attempts
+                isWin = guestState.isWin
             }
         }
 
-        setWin(hasWin)
+        setWin(isWin)
         setSelectedPlayers(filterPlayersByAttempts(attempts))
-        setAvailablePlayers(playersData.filter((p) => attempts.includes(p.name)))
+        setAvailablePlayers((prev) => filterPlayersNotInAttempts(prev, attempts))
         setStatusLoading(false)
     }
 
@@ -109,27 +117,29 @@ export const useM8dleStatus = () => {
     const addAttempt = async (player: Player) => {
         const isWin = player.name === getPlayerOfTheDay().name
 
-        if (user) {
-            await fetch('/api/m8dle/attempt', {
+        if (!loggedOut) {
+            await fetcher('/api/m8dle/attempt', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ playerName: player.name, isWin }),
+                body: JSON.stringify({ attempts: [player.name], isWin }),
             })
         } else {
-            const saved = JSON.parse(localStorage.getItem(M8DLE_KEY) || '{}')
-            const attempts = [...(saved.attempts || []), player.name]
-            const hasWin = saved.hasWin || isWin
-            localStorage.setItem(M8DLE_KEY, JSON.stringify({ attempts, hasWin, date: getGameDayKey() }))
+            const storage = getLocalStatus() ?? createLocalStatus()
+            const attempts = [...storage.attempts, player.name]
+
+            localStorage.setItem(M8DLE_KEY, JSON.stringify({ attempts, isWin, date: getGameDate() }))
         }
 
+        setWin(isWin)
         setSelectedPlayers((prev) => [...prev, player])
-        setAvailablePlayers((prev) => prev.filter((p) => p.name !== player.name))
-        if (isWin) setWin(true)
+        setAvailablePlayers((prev) => filterPlayersNotInAttempts(prev, [player.name]))
     }
 
     useEffect(() => {
-        fetchStatus()
-    }, [user])
+        if (!loading) {
+            fetchStatus()
+        }
+    }, [loading])
 
     return { selectedPlayers, availablePlayers, win, addAttempt, statusLoading }
 }

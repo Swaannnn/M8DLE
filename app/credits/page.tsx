@@ -29,6 +29,7 @@ const Credits = () => (
                     <List.Item>
                         Swann Gillé - Conception, développement, design graphique, interface utilisateur.
                     </List.Item>
+                    <List.Item>Thomas Ambroise - Conception, développement.</List.Item>
                     <List.Item>
                         Front-end / React / Next.js - Création de l&apos;interface et de la logique du site.
                     </List.Item>

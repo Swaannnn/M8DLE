@@ -1,5 +1,4 @@
 import players from '@/data/players.json'
-import { Attempt } from '@/types/attempt'
 import { Player } from '@/types/player'
 import { getGameDayKey } from '@/utils/dateUtils'
 
@@ -21,8 +20,8 @@ export function filterPlayersByAttempts(attempts: string[]): Player[] {
     return attempts.map((name) => players.find((p) => p.name === name)) as Player[]
 }
 
-export function filterPlayersNotInAttempts(attempts: string[]): Player[] {
-    return players.filter((p) => !attempts.includes(p.name))
+export function filterPlayersNotInAttempts(playersList: Player[], attempts: string[]): Player[] {
+    return playersList.filter((p) => !attempts.includes(p.name))
 }
 
 export function getPlayerOfTheDay() {

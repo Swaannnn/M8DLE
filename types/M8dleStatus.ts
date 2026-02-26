@@ -1,5 +1,5 @@
 export type M8dleStatus = {
     attempts: string[]
-    hasWin: boolean
+    isWin: boolean
     date?: Date
 }

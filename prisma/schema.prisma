@@ -10,27 +10,27 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  discordId     String    @unique
+  id            String   @id @default(cuid())
+  discordId     String   @unique
   username      String
   discriminator String
   avatar        String?
   email         String?
-  role          String    @default("USER") // ADMIN, USER
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          String   @default("USER") // ADMIN, USER
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  dailyResults  DailyM8DLEResult[]
+  dailyResults DailyM8DLEResult[]
 }
 
 model DailyM8DLEResult {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  date      DateTime
-  attempts  Json     @default("[]")
-  success   Boolean  @default(false)
+  date     DateTime
+  attempts Json     @default("[]")
+  success  Boolean  @default(false)
 
   createdAt DateTime @default(now())
 
