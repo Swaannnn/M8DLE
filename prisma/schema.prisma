@@ -10,15 +10,20 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  discordId     String   @unique
+  id            String  @id @default(cuid())
+  discordId     String  @unique
   username      String
   discriminator String
   avatar        String?
   email         String?
-  role          String   @default("USER") // ADMIN, USER
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  role          String  @default("USER") // ADMIN, USER
+
+  totalWins       Int   @default(0)
+  totalAttempts   Int   @default(0)
+  averageAttempts Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   dailyResults DailyM8DLEResult[]
 }

@@ -43,39 +43,35 @@ export async function GET(request: NextRequest) {
                 dailyResults: {
                     select: { attempts: true, success: true },
                 },
-                _count: {
-                    select: {
-                        dailyResults: {
-                            where: { success: true },
-                        },
-                    },
-                },
+                totalWins: true,
+                totalAttempts: true,
+                averageAttempts: true,
             },
+            orderBy: [
+                {
+                    totalWins: "desc",
+                },
+                {
+                    averageAttempts: "asc",
+                },
+            ],
             skip: constantsParams.LEADERBOARD_PAGE_SIZE * (page - 1),
             take: constantsParams.LEADERBOARD_PAGE_SIZE,
         })
 
         const users: LeaderboardUser[] = rawUsers.map((user) => {
-            const wins = user._count.dailyResults
-            const totalAttempts = user.dailyResults.reduce((acc, dr) => {
-                let len = Array.isArray(dr.attempts) ? dr.attempts.length : 0
-
-                return acc + len
-            }, 0)
-            const averageAttempts = user.dailyResults.length > 0 ? totalAttempts / user.dailyResults.length : 0
-
             // Création du profile de leaderboard
             return {
                 id: user.id,
                 username: user.username,
                 discordId: user.discordId,
                 avatar: user.avatar ?? '',
-                wins,
-                averageAttempts: Number(averageAttempts.toFixed(2)),
+                wins: user.totalWins,
+                averageAttempts: user.averageAttempts,
             }
         })
 
-        users.sort(sortFunction)
+        // users.sort(sortFunction)
         return NextResponse.json({ total, users })
     } catch (err) {
         console.error(err)
