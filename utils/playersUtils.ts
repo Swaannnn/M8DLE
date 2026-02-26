@@ -3,12 +3,18 @@ import { Attempt } from '@/types/attempt'
 import { Player } from '@/types/player'
 import { getGameDayKey } from '@/utils/dateUtils'
 
-const START_DAY_UTC = Date.UTC(2025, 0, 1)
+const hashString = (str: string) => {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i)
+        hash |= 0
+    }
+    return Math.abs(hash)
+}
 
-const getDayNumberFromKey = (dayKey: string) => {
-    const [year, month, day] = dayKey.split('-').map(Number)
-    const currentDayUtc = Date.UTC(year, month - 1, day)
-    return Math.floor((currentDayUtc - START_DAY_UTC) / (1000 * 60 * 60 * 24))
+const seededRandom = (seed: number) => {
+    const x = Math.sin(seed) * 10000
+    return x - Math.floor(x)
 }
 
 export function filterPlayersByAttempts(attempts: string[]): Player[] {
@@ -21,8 +27,9 @@ export function filterPlayersNotInAttempts(attempts: string[]): Player[] {
 
 export function getPlayerOfTheDay() {
     const dayKey = getGameDayKey()
-    const dayNumber = getDayNumberFromKey(dayKey)
-    const index = ((dayNumber % players.length) + players.length) % players.length
+    const seed = hashString(dayKey)
+    const random = seededRandom(seed)
+    const index = Math.floor(random * players.length)
 
     return players[index]
 }
