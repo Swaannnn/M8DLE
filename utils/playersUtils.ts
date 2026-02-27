@@ -1,4 +1,5 @@
 import players from '@/data/players.json'
+import { Player } from '@/types/player'
 import { getGameDayKey } from '@/utils/dateUtils'
 
 const hashString = (str: string) => {
@@ -13,6 +14,14 @@ const hashString = (str: string) => {
 const seededRandom = (seed: number) => {
     const x = Math.sin(seed) * 10000
     return x - Math.floor(x)
+}
+
+export function filterPlayersByAttempts(attempts: string[]): Player[] {
+    return attempts.map((name) => players.find((p) => p.name === name)) as Player[]
+}
+
+export function filterPlayersNotInAttempts(playersList: Player[], attempts: string[]): Player[] {
+    return playersList.filter((p) => !attempts.includes(p.name))
 }
 
 export function getPlayerOfTheDay() {

@@ -1,16 +1,17 @@
 import { getSession } from '@/lib/auth/session'
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { UserProfile } from '@/types/userProfile'
 
 export async function GET() {
     const session = await getSession()
 
     if (!session?.userId) {
-        return NextResponse.json({ user: null })
+        return NextResponse.json(null)
     }
 
     // Récupérer les infos complètes de l'utilisateur depuis la base
-    const user = await prisma.user.findUnique({
+    const user: UserProfile | null = await prisma.user.findUnique({
         where: { id: session.userId },
         select: {
             id: true,
@@ -24,5 +25,9 @@ export async function GET() {
         },
     })
 
-    return NextResponse.json({ user })
+    if (!user) {
+        return NextResponse.json({ message: 'User not found' }, { status: 404 })
+    }
+
+    return NextResponse.json(user)
 }

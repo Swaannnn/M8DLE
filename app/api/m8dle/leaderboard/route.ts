@@ -1,9 +1,40 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { LeaderboardData, LeaderboardUser } from '@/types/leaderboard'
+import { getNumberParamFromRequest } from '@/utils/requestUtils'
+import constantsParams from '@/constants/constantsParams'
 
-export async function GET() {
+/**
+ * Fonction utilitaire pour trier la liste des
+ * profile utilisateur du leaderboard.
+ *
+ * @param userA Utilisateur A
+ * @param userB Utilisateur B
+ * @returns Valeur pour le trie
+ */
+function sortFunction(userA: LeaderboardUser, userB: LeaderboardUser) {
+    if (userB.wins !== userA.wins) return userB.wins - userA.wins
+
+    return userA.averageAttempts - userB.averageAttempts
+}
+
+/**
+ * Récupère la liste des utiliateurs dans le BDD.
+ * Traite les informations de la liste pour en faire
+ * une liste de profile utilisateur pour le leaderboard.
+ * Les informations traîtées dans cette fonction seront
+ * le nombre total d'essai, la moyenne d'essai et pour
+ * finir, le trie des profiles du leaderboard.
+ *
+ * @returns Liste de profile utilisateur
+ */
+export async function GET(request: NextRequest) {
     try {
-        const users = await prisma.user.findMany({
+        let page = getNumberParamFromRequest(request, 'page', 1)
+        if (page < 1) page = 1
+
+        const total = await prisma.user.count({})
+        const rawUsers = await prisma.user.findMany({
             select: {
                 id: true,
                 username: true,
@@ -12,33 +43,36 @@ export async function GET() {
                 dailyResults: {
                     select: { attempts: true, success: true },
                 },
+                totalWins: true,
+                totalAttempts: true,
+                averageAttempts: true,
             },
+            orderBy: [
+                {
+                    totalWins: "desc",
+                },
+                {
+                    averageAttempts: "asc",
+                },
+            ],
+            skip: constantsParams.LEADERBOARD_PAGE_SIZE * (page - 1),
+            take: constantsParams.LEADERBOARD_PAGE_SIZE,
         })
 
-        const stats = users.map((u) => {
-            const wins = u.dailyResults.filter((dr) => dr.success).length
-            const totalAttempts = u.dailyResults.reduce(
-                (acc, dr) => acc + (Array.isArray(dr.attempts) ? dr.attempts.length : 0),
-                0
-            )
-            const averageAttempts = u.dailyResults.length > 0 ? totalAttempts / u.dailyResults.length : 0
-
+        const users: LeaderboardUser[] = rawUsers.map((user) => {
+            // Création du profile de leaderboard
             return {
-                id: u.id,
-                username: u.username,
-                discordId: u.discordId,
-                avatar: u.avatar,
-                wins,
-                averageAttempts: Number(averageAttempts.toFixed(2)),
+                id: user.id,
+                username: user.username,
+                discordId: user.discordId,
+                avatar: user.avatar ?? '',
+                wins: user.totalWins,
+                averageAttempts: user.averageAttempts,
             }
         })
 
-        stats.sort((a, b) => {
-            if (b.wins !== a.wins) return b.wins - a.wins
-            return a.averageAttempts - b.averageAttempts
-        })
-
-        return NextResponse.json(stats)
+        // users.sort(sortFunction)
+        return NextResponse.json({ total, users })
     } catch (err) {
         console.error(err)
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
