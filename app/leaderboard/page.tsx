@@ -23,8 +23,6 @@ import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
 import constantsParams from '@/constants/constantsParams'
 import { getProfileAvatar } from '@/utils/userUtils'
-import { useSearchParams } from 'next/navigation'
-import { getNumberParamFromUrl } from '@/utils/requestUtils'
 
 const tuskerGrotesk = localFont({
     src: '../fonts/TuskerGrotesk-4800Super.woff2',
