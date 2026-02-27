@@ -1,28 +1,30 @@
+import constantsApi from '@/constants/constantsApi'
 import 'server-only'
 
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID!
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/api/auth/callback'
+const GRANT_TYPE = 'authorization_code'
+const CONTENT_TYPE = 'application/x-www-form-urlencoded'
 
 export async function exchangeCodeForToken(code: string) {
     const params = new URLSearchParams({
         client_id: CLIENT_ID,
         client_secret: CLIENT_SECRET,
-        grant_type: 'authorization_code',
+        grant_type: GRANT_TYPE,
         code,
         redirect_uri: REDIRECT_URI,
     })
 
-    const response = await fetch('https://discord.com/api/oauth2/token', {
+    const response = await fetch(constantsApi.DISCORD_TOKEN, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        headers: { 'Content-Type': CONTENT_TYPE },
         body: params,
     })
 
     if (!response.ok) {
         const error = await response.text()
+
         throw new Error(`Failed to exchange code: ${error}`)
     }
 
@@ -36,7 +38,7 @@ export async function exchangeCodeForToken(code: string) {
 }
 
 export async function getDiscordUser(accessToken: string) {
-    const response = await fetch('https://discord.com/api/users/@me', {
+    const response = await fetch(constantsApi.DISCORD_USER, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
@@ -63,5 +65,5 @@ export function getAuthorizationUrl() {
         scope: 'identify email',
     })
 
-    return `https://discord.com/api/oauth2/authorize?${params.toString()}`
+    return `${constantsApi.DISCORD_AUTH}?${params.toString()}`
 }
