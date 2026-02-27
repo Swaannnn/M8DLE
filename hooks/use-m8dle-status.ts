@@ -26,7 +26,6 @@ export const useM8dleStatus = () => {
      * @param state status
      */
     const syncLocalToUser = async (state: M8dleStatus) => {
-        console.log(state)
         if (state.attempts.length > 0 || state.isWin) {
             await fetcher('/api/m8dle/attempt', {
                 method: 'POST',

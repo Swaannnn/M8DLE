@@ -48,7 +48,6 @@ export async function POST(req: Request) {
         return NextResponse.json(created, { status: 201 })
     } catch (err) {
         if (err instanceof ZodError) {
-            console.log(err)
             return NextResponse.json({ error: 'Bad Request' }, { status: 400 })
         } else {
             return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
