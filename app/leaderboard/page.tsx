@@ -14,7 +14,6 @@ import {
     VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import localFont from 'next/font/local'
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
 import { fetcher } from '@/utils/fetcher'
 import useSWR from 'swr'
@@ -23,13 +22,10 @@ import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
 import constantsParams from '@/constants/constantsParams'
 import { getProfileAvatar } from '@/utils/userUtils'
-
-const tuskerGrotesk = localFont({
-    src: '../fonts/TuskerGrotesk-4800Super.woff2',
-})
+import { tuskerGrotesk } from '@/utils/fontUtils'
 
 const LeaderboardRow = ({ item, index, page }: { item: LeaderboardUser; index: number; page: number }) => {
-    let avatarUrl = getProfileAvatar(item)
+    const avatarUrl = getProfileAvatar(item)
 
     return (
         <Table.Row>

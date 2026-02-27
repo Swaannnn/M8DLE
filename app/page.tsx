@@ -1,7 +1,6 @@
 'use client'
 
 import { AbsoluteCenter, Spinner, Text, VStack } from '@chakra-ui/react'
-import localFont from 'next/font/local'
 import InputPlayersAutocomplete from '@/components/InputPlayersAutocomplete'
 import TablePlayers from '@/components/TablePlayers'
 import { getPlayerOfTheDay } from '@/utils/playersUtils'
@@ -13,12 +12,7 @@ import { fetcher } from '@/utils/fetcher'
 import { pink } from '@/constants/colors'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
-
-const tuskerGrotesk = localFont({ src: './fonts/TuskerGrotesk-4800Super.woff2' })
-
-const DesirableCalligraphy = localFont({
-    src: './fonts/DesirableCalligraphyRegular.woff2',
-})
+import { desirableCalligraphy, tuskerGrotesk } from '@/utils/fontUtils'
 
 const Home = () => {
     const { loading } = useAuth()
@@ -65,7 +59,7 @@ const Home = () => {
                 position="absolute"
                 top="13rem"
                 fontSize={{ base: '4rem', md: '4.5rem' }}
-                className={DesirableCalligraphy.className}
+                className={desirableCalligraphy.className}
                 color={pink}
             >
                 M8dle

@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db'
 import { getSession } from '@/lib/auth/session'
 import { getGameDate } from '@/utils/dateUtils'
 import { AttemptDto } from '@/dto/AttemptDto'
-import { z, ZodError } from 'zod'
+import { ZodError } from 'zod'
 
 export async function POST(req: Request) {
     const session = await getSession()

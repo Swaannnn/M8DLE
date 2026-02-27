@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import playersData from '@/data/players.json'
 import type { Player } from '@/types/player'
 import { filterPlayersByAttempts, filterPlayersNotInAttempts, getPlayerOfTheDay } from '@/utils/playersUtils'
-import { getGameDate, getGameDayKey } from '@/utils/dateUtils'
+import { getGameDate } from '@/utils/dateUtils'
 import { useAuth } from './use-auth'
 import { M8dleStatus } from '@/types/M8dleStatus'
 import { fetcher } from '@/utils/fetcher'
@@ -69,7 +69,7 @@ export const useM8dleStatus = () => {
      * @returns status
      */
     const createLocalStatus = (): M8dleStatus => {
-        let status: M8dleStatus = { attempts: [], isWin: false, date: getGameDate() }
+        const status: M8dleStatus = { attempts: [], isWin: false, date: getGameDate() }
         localStorage.setItem(M8DLE_KEY, JSON.stringify(status))
 
         return status

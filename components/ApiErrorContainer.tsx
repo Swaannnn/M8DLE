@@ -1,6 +1,5 @@
 import { Text, VStack } from '@chakra-ui/react'
 import { ApiError } from 'next/dist/server/api-utils'
-import localFont from 'next/font/local'
 
 export const ApiErrorContainer = ({ error }: { error: ApiError }) => {
     return (

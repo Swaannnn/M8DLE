@@ -1,3 +1,12 @@
+function getFirstDayOfMonth(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), 1)
+}
+
+function getDaysOfMonth(date: Date): number[] {
+    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+    return Array.from({ length: daysInMonth }, (_, i) => i + 1)
+}
+
 const getParisParts = (date: Date) => {
     const formatter = new Intl.DateTimeFormat('fr-FR', {
         timeZone: 'Europe/Paris',
@@ -68,4 +77,4 @@ const getGameDate = () => {
     return new Date(Date.UTC(year, month - 1, day))
 }
 
-export { getAge, getYear, getGameDate, getGameDayKey }
+export { getFirstDayOfMonth, getDaysOfMonth, getAge, getYear, getGameDate, getGameDayKey }

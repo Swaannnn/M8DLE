@@ -1,22 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { LeaderboardData, LeaderboardUser } from '@/types/leaderboard'
+import { LeaderboardUser } from '@/types/leaderboard'
 import { getNumberParamFromRequest } from '@/utils/requestUtils'
 import constantsParams from '@/constants/constantsParams'
-
-/**
- * Fonction utilitaire pour trier la liste des
- * profile utilisateur du leaderboard.
- *
- * @param userA Utilisateur A
- * @param userB Utilisateur B
- * @returns Valeur pour le trie
- */
-function sortFunction(userA: LeaderboardUser, userB: LeaderboardUser) {
-    if (userB.wins !== userA.wins) return userB.wins - userA.wins
-
-    return userA.averageAttempts - userB.averageAttempts
-}
 
 /**
  * Récupère la liste des utiliateurs dans le BDD.
@@ -49,10 +35,10 @@ export async function GET(request: NextRequest) {
             },
             orderBy: [
                 {
-                    totalWins: "desc",
+                    totalWins: 'desc',
                 },
                 {
-                    averageAttempts: "asc",
+                    averageAttempts: 'asc',
                 },
             ],
             skip: constantsParams.LEADERBOARD_PAGE_SIZE * (page - 1),
