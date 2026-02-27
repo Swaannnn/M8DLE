@@ -3,7 +3,6 @@
 import { useAuth } from '@/hooks/use-auth'
 import { AbsoluteCenter, Button, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
-import defaultAvatar from '@/public/images/default_avatar.jpg'
 import localFont from 'next/font/local'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
@@ -11,8 +10,8 @@ import { DailyResult } from '@/types/dailyResult'
 import { fetcher } from '@/utils/fetcher'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
-import constantsApi from '@/constants/constantsApi'
 import { useEffect } from 'react'
+import { getProfileAvatar } from '@/utils/userUtils'
 
 const tuskerGrotesk = localFont({
     src: '../../fonts/TuskerGrotesk-4800Super.woff2',
@@ -47,14 +46,8 @@ const AccountPage = () => {
     }
 
     if (!user || loggedOut) return null
-
-    let avatarUrl: string
-    if (user.avatar != '') {
-        avatarUrl = `${constantsApi.AVATAR}/${user.discordId}/${user.avatar}.png`
-    } else {
-        avatarUrl = defaultAvatar.src
-    }
-
+    
+    const avatarUrl = getProfileAvatar(user)
     return (
         <VStack
             w="90vw"

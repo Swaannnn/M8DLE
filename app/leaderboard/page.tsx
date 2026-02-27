@@ -21,21 +21,17 @@ import useSWR from 'swr'
 import { LeaderboardData, LeaderboardUser } from '@/types/leaderboard'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
-import constantsApi from '@/constants/constantsApi'
-import defaultAvatar from '@/public/images/default_avatar.jpg'
 import constantsParams from '@/constants/constantsParams'
+import { getProfileAvatar } from '@/utils/userUtils'
+import { useSearchParams } from 'next/navigation'
+import { getNumberParamFromUrl } from '@/utils/requestUtils'
 
 const tuskerGrotesk = localFont({
     src: '../fonts/TuskerGrotesk-4800Super.woff2',
 })
 
 const LeaderboardRow = ({ item, index, page }: { item: LeaderboardUser; index: number; page: number }) => {
-    let avatarUrl: string
-    if (item.avatar != '') {
-        avatarUrl = `${constantsApi.AVATAR}/${item.discordId}/${item.avatar}.png`
-    } else {
-        avatarUrl = defaultAvatar.src
-    }
+    let avatarUrl = getProfileAvatar(item)
 
     return (
         <Table.Row>
