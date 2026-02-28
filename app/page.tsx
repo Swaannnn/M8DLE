@@ -13,6 +13,7 @@ import { fetcher } from '@/utils/fetcher'
 import { pink } from '@/constants/colors'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
+import { useTranslations } from 'next-intl'
 
 const tuskerGrotesk = localFont({ src: './fonts/TuskerGrotesk-4800Super.woff2' })
 
@@ -24,6 +25,8 @@ const Home = () => {
     const { loading } = useAuth()
     const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
     const { data, error, isLoading } = useSWR<{ successCount: number }, ApiError>('/api/m8dle/dailywinners', fetcher)
+    const t = useTranslations('home')
+
     const playerOfTheDay = getPlayerOfTheDay()
 
     if (loading || statusLoading || isLoading) {
@@ -39,13 +42,8 @@ const Home = () => {
     }
 
     const dailyWinners = data?.successCount ?? 0
-    let dailyWinnerText = ''
-    if (dailyWinners == 0) {
-        dailyWinnerText = "Personne n'a encore trouvé le joueur du jour."
-    } else {
-        dailyWinnerText = dailyWinners == 1 ? '1 personne a' : `${dailyWinners} personnes ont`
-        dailyWinnerText += ' déjà trouvé le joueur du jour.'
-    }
+
+    const dailyWinnerText = dailyWinners === 0 ? t('count0') : t('count', { count: dailyWinners })
 
     return (
         <VStack
@@ -78,7 +76,7 @@ const Home = () => {
                     fontSize="2xl"
                     textAlign="center"
                 >
-                    Bravo ! Revenez demain pour le prochain joueur.
+                    {t('findedMessage')}
                 </Text>
             ) : (
                 <InputPlayersAutocomplete

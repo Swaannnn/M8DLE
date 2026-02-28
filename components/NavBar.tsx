@@ -6,6 +6,7 @@ import { ColorModeButton } from './ui/color-mode'
 import NextLink from 'next/link'
 import { LuMenu } from 'react-icons/lu'
 import { useState } from 'react'
+import LangSwitcher from './LangSwitcher'
 
 const NavBar = () => {
     const { user, loading } = useAuth()
@@ -164,6 +165,7 @@ const NavBar = () => {
                             <NextLink href="/login">Se connecter</NextLink>
                         </Link>
                     )}
+                    <LangSwitcher />
                     <ColorModeButton />
                 </HStack>
             )}

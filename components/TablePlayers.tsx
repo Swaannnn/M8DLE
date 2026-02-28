@@ -10,6 +10,7 @@ import { motion, type Variants } from 'framer-motion'
 import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
 import { useColorMode } from './ui/color-mode'
 import { grey, lightGrey, pink } from '@/constants/colors'
+import { useTranslations } from 'next-intl'
 
 const containerVariants: Variants = {
     hidden: {},
@@ -128,6 +129,7 @@ const RowItem = ({ isValid = false, children }: RowItemProps) => {
             style={{
                 ...MOTION_DIV_STYLE,
                 backgroundColor: isValid ? pink : invalidGrey,
+                position: 'relative',
             }}
         >
             {children}
@@ -141,6 +143,8 @@ type TablePlayersProps = {
 }
 
 const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
+    const t = useTranslations('tablePlayers')
+
     return (
         <Box
             width="100%"
@@ -149,13 +153,13 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
         >
             <VStack minWidth={TABLE_PLAYERS_WIDTH}>
                 <HStack>
-                    <HeaderItem>Joueur</HeaderItem>
-                    <HeaderItem>Jeu</HeaderItem>
-                    <HeaderItem>Nationalité</HeaderItem>
-                    <HeaderItem>Arrivée</HeaderItem>
-                    <HeaderItem>Avant M8</HeaderItem>
-                    <HeaderItem>Club actuel</HeaderItem>
-                    <HeaderItem>Age</HeaderItem>
+                    <HeaderItem>{t('player')}</HeaderItem>
+                    <HeaderItem>{t('game')}</HeaderItem>
+                    <HeaderItem>{t('nationality')}</HeaderItem>
+                    <HeaderItem>{t('arrival')}</HeaderItem>
+                    <HeaderItem>{t('beforeM8')}</HeaderItem>
+                    <HeaderItem>{t('currentClub')}</HeaderItem>
+                    <HeaderItem>{t('age')}</HeaderItem>
                 </HStack>
                 {[...players].reverse().map((player) => {
                     const joinDatePlayer = getYear(player.joinDate)
@@ -172,7 +176,6 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                             animate="visible"
                         >
                             <HStack key={player.name}>
-                                {/* <RowItem isValid={playerOfTheDay.name === player.name}>{player.name}</RowItem> */}
                                 <RowItem isValid={playerOfTheDay.name === player.name}>
                                     <Image
                                         src={player.image}

@@ -1,0 +1,36 @@
+{
+    "home": {
+        "count0": "Personne n'a encore trouvé le joueur du jour",
+        "count": "{count, plural, one {# personne a} other {# personnes ont}} déjà trouvé le joueur du jour.",
+        "findedMessage": "Bravo ! Revenez demain pour le prochain joueur."
+    },
+    "precisions": {
+        "precisions": "Précisions",
+        "responseIndicatorsTitle": "1. Indicateurs de réponses",
+        "responseIndicatorsContent": "Après chaque tentative, des indicateurs apparaissent pour vous aider à vous rapprocher du joueur du jour.",
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "pinkBox": "<strong>Case rose :</strong> l'information est correcte.",
+        "greyBox": "<strong>Case grise :</strong> l'information est incorrecte.",
+        "upArrows": "<strong>Flèches vers le haut :</strong> la valeur recherchée est supérieure à celle proposée.",
+        "downArrows": "<strong>Flèches vers le bas :</strong> la valeur recherchée est inférieure à celle proposée.",
+        "dataUpdateTitle": "2. Mise à jour des données",
+        "dataUpdateContent": "La dernière mise à jour des données a été effectuée le 20 février 2026. Nous vous invitons à nous faire part de tout retour si vous constatez une information erronée ou incohérente, afin que nous puissions la corriger dans les plus brefs délais.",
+        "displayingTeamsTitle": "3. Affichage des équipes",
+        "displayingTeamsContent": "Les équipes affichées correspondent aux structures principales. Par exemple, G2 Minnesota, Twisted Minds Orchid ou Karmine Corp Blue seront respectivement présentées sous les noms G2 Esports, Twisted Minds et Karmine Corp.",
+        "close": "Close"
+    },
+    "input": {
+        "playersPlaceholder": "Tapez pour rechercher",
+        "noPlayerFound": "Aucun joueur trouvé."
+    },
+    "tablePlayers": {
+        "player": "Joueur",
+        "game": "Jeu",
+        "nationality": "Nationalité",
+        "arrival": "Arrivée",
+        "beforeM8": "Avant M8",
+        "currentClub": "Club actuel",
+        "age": "Age"
+    }
+}
