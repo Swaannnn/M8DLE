@@ -1,4 +1,5 @@
 import { Provider } from '@/components/ui/provider'
+import { NextIntlClientProvider } from 'next-intl'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -56,15 +57,17 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 <Analytics />
                 <SpeedInsights />
                 <Provider>
-                    <Box
-                        bg="bg"
-                        color="fg"
-                        minHeight="calc(100vh)"
-                    >
-                        <NavBar />
-                        <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>{children}</main>
-                        <Footer />
-                    </Box>
+                    <NextIntlClientProvider>
+                        <Box
+                            bg="bg"
+                            color="fg"
+                            minHeight="calc(100vh)"
+                        >
+                            <NavBar />
+                            <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>{children}</main>
+                            <Footer />
+                        </Box>
+                    </NextIntlClientProvider>
                 </Provider>
             </body>
         </html>

@@ -1,0 +1,36 @@
+{
+    "home": {
+        "count0": "No one has found the player of the day yet.",
+        "count": "{count, plural, one {# person has} other {# people have}} already found the player of the day.",
+        "findedMessage": "Well done! Come back tomorrow for the next player."
+    },
+    "precisions": {
+        "precisions": "Precisions",
+        "responseIndicatorsTitle": "1. Response indicators",
+        "responseIndicatorsContent": "After each attempt, indicators appear to help you get closer to the player of the day.",
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "pinkBox": "<strong>Pink box:</strong> the information is correct.",
+        "greyBox": "<strong>Grey box:</strong> the information is incorrect.",
+        "upArrows": "<strong>Up arrows:</strong> the desired value is higher than the one suggested.",
+        "downArrows": "<strong>Down arrows:</strong> the value you are looking for is lower than the one suggested.",
+        "dataUpdateTitle": "2. Data update",
+        "dataUpdateContent": "The data was last updated on 20 February 2026. Please let us know if you notice any incorrect or inconsistent information so that we can correct it as soon as possible.",
+        "displayingTeamsTitle": "3. Displaying teams",
+        "displayingTeamsContent": "The teams displayed correspond to the main organisations. For example, G2 Minnesota, Twisted Minds Orchid and Karmine Corp Blue will be listed under the names G2 Esports, Twisted Minds and Karmine Corp respectively.",
+        "close": "Close"
+    },
+    "input": {
+        "playersPlaceholder": "Type to search",
+        "noPlayerFound": "No player found."
+    },
+    "tablePlayers": {
+        "player": "Player",
+        "game": "Game",
+        "nationality": "Nationality",
+        "arrival": "Arrival",
+        "beforeM8": "Before M8",
+        "currentClub": "Current club",
+        "age": "Age"
+    }
+}

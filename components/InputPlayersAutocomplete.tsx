@@ -4,6 +4,7 @@ import { Box, Input, VStack } from '@chakra-ui/react'
 import type { Player } from '@/types/player'
 import { useState } from 'react'
 import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
+import { useTranslations } from 'next-intl'
 
 type Props = {
     availablePlayers: Player[]
@@ -11,6 +12,8 @@ type Props = {
 }
 
 const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected }: Props) => {
+    const t = useTranslations('input')
+
     const [value, setValue] = useState('')
 
     const filteredPlayers = availablePlayers.filter((p) => p.name.toLowerCase().includes(value.toLowerCase()))
@@ -35,7 +38,7 @@ const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected }: Props)
             maxWidth={TABLE_PLAYERS_WIDTH}
         >
             <Input
-                placeholder="Tapez pour rechercher"
+                placeholder={t('playersPlaceholder')}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -59,7 +62,7 @@ const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected }: Props)
                             borderRadius="0.2rem"
                             bg="bg"
                         >
-                            Aucun joueur trouvé.
+                            {t('noPlayerFound')}
                         </Box>
                     ) : (
                         filteredPlayers.map((player) => (
