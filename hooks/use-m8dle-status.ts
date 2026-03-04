@@ -51,8 +51,8 @@ export const useM8dleStatus = () => {
         if (storage) {
             const json = JSON.parse(storage)
             if (json.date !== getGameDate()) {
-                localStorage.removeItem(M8DLE_KEY);
-                return null;
+                localStorage.removeItem(M8DLE_KEY)
+                return null
             }
 
             const status: M8dleStatus = {

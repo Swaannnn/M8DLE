@@ -1,5 +1,5 @@
 import { getLocale, setLocale } from '@/utils/localeUtils'
-import { Button, IconButton } from '@chakra-ui/react'
+import { IconButton } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
