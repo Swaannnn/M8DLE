@@ -14,6 +14,8 @@ import { pink } from '@/constants/colors'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
 import { useTranslations } from 'next-intl'
+import { useEffect, useState } from 'react'
+import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
 
 const tuskerGrotesk = localFont({ src: './fonts/TuskerGrotesk-4800Super.woff2' })
 
@@ -26,8 +28,21 @@ const Home = () => {
     const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
     const { data, error, isLoading } = useSWR<{ successCount: number }, ApiError>('/api/m8dle/dailywinners', fetcher)
     const t = useTranslations('home')
+    const nextGameDateTime = getNextGameDate().getTime()
+    const [timeLeft, setTimeLeft] = useState(getTimeLeft(nextGameDateTime))
 
-    const playerOfTheDay = getPlayerOfTheDay()
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimeLeft(getTimeLeft(nextGameDateTime))
+        }, 1000)
+
+        return () => clearInterval(interval)
+    }, [])
+
+    const timer = new Date(timeLeft)
+    const hours = timer.getUTCHours().toString().padStart(2, '0')
+    const minutes = timer.getUTCMinutes().toString().padStart(2, '0')
+    const seconds = timer.getUTCSeconds().toString().padStart(2, '0')
 
     if (loading || statusLoading || isLoading) {
         return (
@@ -41,8 +56,8 @@ const Home = () => {
         return <ApiErrorContainer error={error} />
     }
 
+    const playerOfTheDay = getPlayerOfTheDay()
     const dailyWinners = data?.successCount ?? 0
-
     const dailyWinnerText = dailyWinners === 0 ? t('count0') : t('count', { count: dailyWinners })
 
     return (
@@ -61,12 +76,18 @@ const Home = () => {
             </Text>
             <Text
                 position="absolute"
-                top="13rem"
-                fontSize={{ base: '4rem', md: '4.5rem' }}
+                top={{ base: '9rem', md: '13rem' }}
+                fontSize={{ base: '2.5rem', md: '4.5rem' }}
                 className={DesirableCalligraphy.className}
                 color={pink}
+                userSelect="none"
             >
                 M8dle
+            </Text>
+
+            <Text>
+                Prochain tirage dans
+                {` ${hours}:${minutes}:${seconds}`}
             </Text>
 
             <PrecisionDialog />

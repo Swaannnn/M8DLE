@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import playersData from '@/data/players.json'
 import type { Player } from '@/types/player'
 import { filterPlayersByAttempts, filterPlayersNotInAttempts, getPlayerOfTheDay } from '@/utils/playersUtils'
-import { getGameDate, getGameDayKey } from '@/utils/dateUtils'
+import { getGameDate } from '@/utils/dateUtils'
 import { useAuth } from './use-auth'
 import { M8dleStatus } from '@/types/M8dleStatus'
 import { fetcher } from '@/utils/fetcher'
@@ -50,9 +50,9 @@ export const useM8dleStatus = () => {
         const storage = localStorage.getItem(M8DLE_KEY)
         if (storage) {
             const json = JSON.parse(storage)
-            if (json.date !== getGameDate()) {
-                localStorage.removeItem(M8DLE_KEY);
-                return null;
+            if (!json.date || new Date(json.date).getTime() !== getGameDate().getTime()) {
+                localStorage.removeItem(M8DLE_KEY)
+                return null
             }
 
             const status: M8dleStatus = {
