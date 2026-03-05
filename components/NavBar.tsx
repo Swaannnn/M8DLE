@@ -45,7 +45,7 @@ const NavBar = () => {
                     open={open}
                     onOpenChange={(details) => setOpen(details.open)}
                 >
-                    <Drawer.Trigger asChild>
+                    <Drawer.Trigger>
                         <Button
                             variant="ghost"
                             onClick={() => setOpen(true)}

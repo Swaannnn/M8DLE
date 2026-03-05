@@ -61,10 +61,11 @@ const Home = () => {
             </Text>
             <Text
                 position="absolute"
-                top="13rem"
-                fontSize={{ base: '4rem', md: '4.5rem' }}
+                top={{ base: '9rem', md: '13rem' }}
+                fontSize={{ base: '2.5rem', md: '4.5rem' }}
                 className={DesirableCalligraphy.className}
                 color={pink}
+                userSelect="none"
             >
                 M8dle
             </Text>
