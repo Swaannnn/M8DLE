@@ -1,55 +1,16 @@
-function getFirstDayOfMonth(date: Date): Date {
-    return new Date(date.getFullYear(), date.getMonth(), 1)
-}
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 
-function getDaysOfMonth(date: Date): number[] {
-    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
-    return Array.from({ length: daysInMonth }, (_, i) => i + 1)
-}
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
-const getParisParts = (date: Date) => {
-    const formatter = new Intl.DateTimeFormat('fr-FR', {
-        timeZone: 'Europe/Paris',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-    })
+const TZ = 'Europe/Paris'
 
-    const parts = formatter.formatToParts(date)
-    const values: Record<string, string> = {}
-    parts.forEach((part) => {
-        if (part.type !== 'literal') values[part.type] = part.value
-    })
-
-    return {
-        year: Number(values.year),
-        month: Number(values.month),
-        day: Number(values.day),
-        hour: Number(values.hour),
-        minute: Number(values.minute),
-    }
-}
-
-const getGameDayKey = (baseDate: Date = new Date()) => {
-    const currentParts = getParisParts(baseDate)
-    if (currentParts.hour < 2) {
-        const previousDate = new Date(baseDate.getTime() - 24 * 60 * 60 * 1000)
-        const previousParts = getParisParts(previousDate)
-        return `${previousParts.year}-${String(previousParts.month).padStart(2, '0')}-${String(
-            previousParts.day
-        ).padStart(2, '0')}`
-    }
-
-    return `${currentParts.year}-${String(currentParts.month).padStart(2, '0')}-${String(currentParts.day).padStart(
-        2,
-        '0'
-    )}`
-}
-
-const getAge = (date: string): number => {
+/**
+ * Calcul et renvoi l'age d'une personne en y passant une date.
+ */
+export function getAge(date: string): number {
     const birthDate = new Date(date)
     if (isNaN(birthDate.getTime())) return -1
 
@@ -66,15 +27,42 @@ const getAge = (date: string): number => {
     return age
 }
 
-const getYear = (date: string): number => {
+/**
+ * Renvoi l'année d'une date.
+ */
+export function getYear(date: string): number {
     const birthDate = new Date(date)
     if (isNaN(birthDate.getTime())) return -1
+
     return birthDate.getFullYear()
 }
 
-const getGameDate = () => {
-    const [year, month, day] = getGameDayKey().split('-').map(Number)
-    return new Date(Date.UTC(year, month - 1, day))
+/**
+ * Renvoi la date de début du tirage actuel
+ */
+export function getGameDate(): Date {
+    const now = dayjs().tz(TZ).hour(2).minute(0).second(0).millisecond(0)
+
+    return now.toDate()
 }
 
-export { getFirstDayOfMonth, getDaysOfMonth, getAge, getYear, getGameDate, getGameDayKey }
+/**
+ * Récupère la date du prochain tirage
+ */
+export function getNextGameDate(): Date {
+    const current = dayjs().tz(TZ)
+    const date = current.add(1, 'day').hour(2).minute(0).second(0).millisecond(0)
+
+    return date.toDate()
+}
+
+/**
+ * Récupère le temps restant entre une timestamp quelconque
+ * et la date actuelle
+ *
+ * @param dateTime
+ * @returns
+ */
+export function getTimeLeft(dateTime: number): number {
+    return Math.max(0, dateTime - Date.now())
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import playersData from '@/data/players.json'
 import type { Player } from '@/types/player'
 import { filterPlayersByAttempts, filterPlayersNotInAttempts, getPlayerOfTheDay } from '@/utils/playersUtils'
@@ -12,7 +12,7 @@ import { fetcher } from '@/utils/fetcher'
 const M8DLE_KEY = 'm8dle'
 
 export const useM8dleStatus = () => {
-    const { loading, loggedOut } = useAuth()
+    const { user, loggedOut } = useAuth()
     const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
     const [availablePlayers, setAvailablePlayers] = useState<Player[]>(playersData)
     const [win, setWin] = useState(false)
@@ -50,7 +50,7 @@ export const useM8dleStatus = () => {
         const storage = localStorage.getItem(M8DLE_KEY)
         if (storage) {
             const json = JSON.parse(storage)
-            if (json.date !== getGameDate()) {
+            if (!json.date || new Date(json.date).getTime() !== getGameDate().getTime()) {
                 localStorage.removeItem(M8DLE_KEY)
                 return null
             }
@@ -84,7 +84,7 @@ export const useM8dleStatus = () => {
      * Mets à jour l'état actuel de la partie
      * de l'utilisateur.
      */
-    const fetchStatus = async () => {
+    const fetchStatus = useCallback(async () => {
         setStatusLoading(true)
         const guestState = getLocalStatus()
         let isWin: boolean
@@ -111,7 +111,7 @@ export const useM8dleStatus = () => {
         setSelectedPlayers(filterPlayersByAttempts(attempts))
         setAvailablePlayers((prev) => filterPlayersNotInAttempts(prev, attempts))
         setStatusLoading(false)
-    }
+    }, [loggedOut])
 
     /**
      * Ajoute un essai à l'utilisateur.
@@ -140,10 +140,12 @@ export const useM8dleStatus = () => {
     }
 
     useEffect(() => {
-        if (!loading) {
-            fetchStatus()
+        const asyncFct = async () => {
+            await fetchStatus()
         }
-    }, [loading])
+
+        asyncFct().catch(console.error)
+    }, [user, fetchStatus])
 
     return { selectedPlayers, availablePlayers, win, addAttempt, statusLoading }
 }
