@@ -32,5 +32,9 @@
         "beforeM8": "Avant M8",
         "currentClub": "Club actuel",
         "age": "Age"
+    },
+    "loginDiscord": {
+        "text": "Connecte toi pour apparaitre dans le classement global et sauvegarder ta progression !",
+        "button": "Se connecter avec Discord"
     }
 }

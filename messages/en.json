@@ -32,5 +32,9 @@
         "beforeM8": "Before M8",
         "currentClub": "Current club",
         "age": "Age"
+    },
+    "loginDiscord": {
+        "text": "Log in to appear in the global rankings and save your progress!",
+        "button": "Log in with Discord"
     }
 }

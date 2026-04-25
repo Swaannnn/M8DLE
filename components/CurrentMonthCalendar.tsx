@@ -32,7 +32,7 @@ const CurrentMonthCalendar = ({ datas }: { datas: DailyResult[] }) => {
         <VStack gap={4}>
             <VStack>
                 <Text>
-                    Tes victoires en {monthName} {year}
+                    Mes victoires en {monthName} {year}
                 </Text>
             </VStack>
 

@@ -1,17 +1,16 @@
 'use client'
 
-import DiscordIcon from '@/components/icons/Discord'
-import { useColorMode } from '@/components/ui/color-mode'
-import { Button, Text, VStack } from '@chakra-ui/react'
+import { Text, VStack } from '@chakra-ui/react'
 import localFont from 'next/font/local'
-import NextLink from 'next/link'
+import accountPreview from '@/public/images/account_preview.png'
+import Image from 'next/image'
+import LoginDiscord from '@/components/LoginDiscord'
 
 const tuskerGrotesk = localFont({
     src: '../../fonts/TuskerGrotesk-4800Super.woff2',
 })
 
 const LoginPage = () => {
-    const { colorMode } = useColorMode()
     return (
         <VStack
             gap="1rem"
@@ -25,13 +24,13 @@ const LoginPage = () => {
             >
                 CONNEXION
             </Text>
-            <Text>Connectez-vous pour accéder à votre compte et faire vos prédictions.</Text>
-            <Button asChild>
-                <NextLink href="/api/auth/login">
-                    <DiscordIcon color={colorMode === 'light' ? 'white' : 'black'} />
-                    Se connecter avec Discord
-                </NextLink>
-            </Button>
+            <LoginDiscord />
+            <Image
+                src={accountPreview}
+                alt="Account preview"
+                width={400}
+                height={300}
+            />
         </VStack>
     )
 }
