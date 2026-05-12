@@ -57,7 +57,6 @@ export async function GET(request: NextRequest) {
             }
         })
 
-        // users.sort(sortFunction)
         return NextResponse.json({ total, users })
     } catch (err) {
         console.error(err)

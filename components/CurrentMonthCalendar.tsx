@@ -19,9 +19,9 @@ const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
     const invalidGrey = colorMode === 'light' ? lightGrey : grey
     const map = new Map<number, DailyM8DLEResult | null>()
 
-    days.forEach((day) => {
-        map.set(day, results.find((r) => new Date(r.date).getDate() === day) ?? null)
-    })
+    for (let i = 0; i < getDaysOfMonth(now); i++) {
+        map.set(i, results.find((r) => new Date(r.date).getDate() === i) ?? null)
+    }
 
     return (
         <VStack gap={4}>
@@ -50,8 +50,10 @@ const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
                     <GridItem key={`empty-${index}`} />
                 ))}
 
-                {days.map((day) => {
+                {Array.from({ length: days }).map((_, index) => {
+                    const day = index + 1
                     const result = map.get(day)
+
                     return (
                         <GridItem key={day}>
                             <Box

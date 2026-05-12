@@ -66,3 +66,13 @@ export function getNextGameDate(): Date {
 export function getTimeLeft(dateTime: number): number {
     return Math.max(0, dateTime - Date.now())
 }
+
+export function getDaysOfMonth(date: Date): number {
+    return dayjs(date).daysInMonth()
+}
+
+export function getFirstDayOfMonth(date: Date): Date {
+    const dateCopy = date
+    dateCopy.setDate(1)
+    return dateCopy
+}
