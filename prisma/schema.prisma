@@ -10,13 +10,12 @@ datasource db {
 }
 
 model User {
-  id            String  @id @default(cuid())
-  discordId     String  @unique
-  username      String
-  discriminator String
-  avatar        String?
-  email         String?
-  role          String  @default("USER") // ADMIN, USER
+  id        String  @id @default(cuid())
+  discordId String  @unique
+  username  String
+  avatar    String?
+  email     String?
+  role      Role    @default(USER)
 
   totalWins       Int   @default(0)
   totalAttempts   Int   @default(0)
@@ -34,10 +33,78 @@ model DailyM8DLEResult {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   date     DateTime
-  attempts Json     @default("[]")
-  success  Boolean  @default(false)
+  attempts Attempt[]
+  success  Boolean   @default(false)
 
   createdAt DateTime @default(now())
 
   @@unique([userId, date])
+}
+
+model Attempt {
+  id            String @id @default(cuid())
+  attemptNumber Int
+
+  dailyResultId String
+  dailyResult   DailyM8DLEResult @relation(fields: [dailyResultId], references: [id], onDelete: Cascade)
+
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([dailyResultId, attemptNumber])
+}
+
+model Nationality {
+  id       String @id @default(cuid())
+  name     String @unique
+  imageUrl String
+
+  players Player[]
+}
+
+model Game {
+  id       String @id @default(cuid())
+  name     String @unique
+  imageUrl String
+}
+
+model Organization {
+  id       String @id @default(cuid())
+  name     String @unique
+  imageUrl String
+
+  organizationPlayers OrganizationPlayer[]
+}
+
+model OrganizationPlayer {
+  id String @id @default(cuid())
+
+  start DateTime
+  end   DateTime?
+
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId String
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+}
+
+model Player {
+  id        String   @id @default(cuid())
+  name      String
+  birthDate DateTime
+  imageUrl  String
+
+  nationality   Nationality @relation(fields: [nationalityId], references: [id])
+  nationalityId String
+
+  organizationPlayers OrganizationPlayer[]
+  attempts            Attempt[]
+}
+
+enum Role {
+  USER
+  ADMIN
 }

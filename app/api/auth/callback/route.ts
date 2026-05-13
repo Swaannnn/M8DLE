@@ -18,14 +18,12 @@ export async function GET(request: NextRequest) {
             where: { discordId: discordUser.id },
             update: {
                 username: discordUser.username,
-                discriminator: discordUser.discriminator,
                 avatar: discordUser.avatar,
                 email: discordUser.email,
             },
             create: {
                 discordId: discordUser.id,
                 username: discordUser.username,
-                discriminator: discordUser.discriminator,
                 avatar: discordUser.avatar,
                 email: discordUser.email,
             },
