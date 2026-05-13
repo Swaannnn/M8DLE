@@ -2,13 +2,9 @@
 
 import DiscordIcon from '@/components/icons/Discord'
 import { useColorMode } from '@/components/ui/color-mode'
+import { tuskerGrotesk } from '@/utils/fontUtils'
 import { Button, Text, VStack } from '@chakra-ui/react'
-import localFont from 'next/font/local'
 import NextLink from 'next/link'
-
-const tuskerGrotesk = localFont({
-    src: '../../fonts/TuskerGrotesk-4800Super.woff2',
-})
 
 const LoginPage = () => {
     const { colorMode } = useColorMode()

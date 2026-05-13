@@ -3,23 +3,19 @@
 import { useAuth } from '@/hooks/use-auth'
 import { AbsoluteCenter, Button, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
-import localFont from 'next/font/local'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
-import { DailyResult } from '@/types/dailyResult'
 import { fetcher } from '@/utils/fetcher'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
 import { useEffect } from 'react'
 import { getProfileAvatar } from '@/utils/userUtils'
-
-const tuskerGrotesk = localFont({
-    src: '../../fonts/TuskerGrotesk-4800Super.woff2',
-})
+import { DailyM8DLEResult } from '@prisma/client'
+import { tuskerGrotesk } from '@/utils/fontUtils'
 
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
-    const { data, error, isLoading } = useSWR<any, ApiError>(
+    const { data, error, isLoading } = useSWR<DailyM8DLEResult[], ApiError>(
         !userLoading && !loggedOut ? '/api/users/me/results' : null,
         fetcher
     )
@@ -39,14 +35,12 @@ const AccountPage = () => {
         )
     }
 
-    const datas: DailyResult[] = data?.results || []
-
     if (error && error.statusCode >= 500) {
         return <ApiErrorContainer error={error} />
     }
 
     if (!user || loggedOut) return null
-    
+
     const avatarUrl = getProfileAvatar(user)
     return (
         <VStack
@@ -84,7 +78,7 @@ const AccountPage = () => {
                     </Text>
                 </VStack>
                 <Separator />
-                <CurrentMonthCalendar datas={datas} />
+                <CurrentMonthCalendar results={data ?? []} />
             </Stack>
 
             <Button
