@@ -1,12 +1,8 @@
 'use client'
 
+import { tuskerGrotesk } from '@/utils/fontUtils'
 import { Heading, List, Stack, Text, VStack } from '@chakra-ui/react'
-import localFont from 'next/font/local'
 import Link from 'next/link'
-
-const tuskerGrotesk = localFont({
-    src: '../fonts/TuskerGrotesk-4800Super.woff2',
-})
 
 const Privacy = () => (
     <VStack

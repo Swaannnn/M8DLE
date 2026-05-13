@@ -59,10 +59,20 @@ export function getNextGameDate(): Date {
 /**
  * Récupère le temps restant entre une timestamp quelconque
  * et la date actuelle
- * 
- * @param dateTime 
- * @returns 
+ *
+ * @param dateTime
+ * @returns
  */
 export function getTimeLeft(dateTime: number): number {
     return Math.max(0, dateTime - Date.now())
+}
+
+export function getDaysOfMonth(date: Date): number {
+    return dayjs(date).daysInMonth()
+}
+
+export function getFirstDayOfMonth(date: Date): Date {
+    const dateCopy = date
+    dateCopy.setDate(1)
+    return dateCopy
 }

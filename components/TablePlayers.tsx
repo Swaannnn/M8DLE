@@ -182,6 +182,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                         alt={player.name}
                                         width={120}
                                         height={120}
+                                        style={{ width: 'auto', height: 'auto' }}
                                     />
                                 </RowItem>
                                 <RowItem isValid={playerOfTheDay.game.name === player.game.name}>
@@ -190,6 +191,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                         alt={player.game.name}
                                         width={80}
                                         height={80}
+                                        style={{ width: 'auto', height: 'auto' }}
                                     />
                                 </RowItem>
                                 <RowItem isValid={playerOfTheDay.nationality === player.nationality}>
@@ -220,6 +222,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                             alt={player.previousOrganization.name}
                                             width={80}
                                             height={80}
+                                            style={{ width: 'auto', height: 'auto' }}
                                         />
                                     ) : (
                                         <Text>{player.previousOrganization.name}</Text>
@@ -234,6 +237,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                             alt={player.lastOrganization.name}
                                             width={80}
                                             height={80}
+                                            style={{ width: 'auto', height: 'auto' }}
                                         />
                                     ) : (
                                         <Text>{player.lastOrganization.name}</Text>

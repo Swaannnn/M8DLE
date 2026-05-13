@@ -1,7 +1,6 @@
 'use client'
 
 import { AbsoluteCenter, Spinner, Text, VStack } from '@chakra-ui/react'
-import localFont from 'next/font/local'
 import InputPlayersAutocomplete from '@/components/InputPlayersAutocomplete'
 import TablePlayers from '@/components/TablePlayers'
 import { getPlayerOfTheDay } from '@/utils/playersUtils'
@@ -13,16 +12,11 @@ import { fetcher } from '@/utils/fetcher'
 import { pink } from '@/constants/colors'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
+import { desirableCalligraphy, tuskerGrotesk } from '@/utils/fontUtils'
 import { useTranslations } from 'next-intl'
 import DialogWin from '@/components/DialogWin'
 import { useEffect, useState } from 'react'
 import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
-
-const tuskerGrotesk = localFont({ src: './fonts/TuskerGrotesk-4800Super.woff2' })
-
-const DesirableCalligraphy = localFont({
-    src: './fonts/DesirableCalligraphyRegular.woff2',
-})
 
 const Home = () => {
     const { loading } = useAuth()
@@ -42,7 +36,7 @@ const Home = () => {
         }, 1000)
 
         return () => clearInterval(interval)
-    }, [])
+    }, [nextGameDateTime])
 
     const timer = new Date(timeLeft)
     const hours = timer.getUTCHours().toString().padStart(2, '0')
@@ -85,9 +79,9 @@ const Home = () => {
             </Text>
             <Text
                 position="absolute"
-                top={{ base: '9rem', md: '13rem' }}
-                fontSize={{ base: '2.5rem', md: '4.5rem' }}
-                className={DesirableCalligraphy.className}
+                top={{ base: '9rem', md: "13rem" }}
+                fontSize={{ base: '4rem', md: '4.5rem' }}
+                className={desirableCalligraphy.className}
                 color={pink}
                 userSelect="none"
             >

@@ -13,7 +13,7 @@ export function getNumberParamFromRequest(request: NextRequest, key: string, rep
     const param = request.nextUrl.searchParams.get(key)
     if (!param) return replace
 
-    let num = +param
+    const num = +param
     if (isNaN(num)) {
         return replace
     }

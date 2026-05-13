@@ -1,14 +1,10 @@
 'use client'
 
-import { Text, VStack } from '@chakra-ui/react'
-import localFont from 'next/font/local'
 import accountPreview from '@/public/images/account_preview.png'
 import Image from 'next/image'
 import LoginDiscord from '@/components/LoginDiscord'
-
-const tuskerGrotesk = localFont({
-    src: '../../fonts/TuskerGrotesk-4800Super.woff2',
-})
+import { tuskerGrotesk } from '@/utils/fontUtils'
+import { Text, VStack } from '@chakra-ui/react'
 
 const LoginPage = () => {
     return (

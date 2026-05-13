@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db'
 import { getSession } from '@/lib/auth/session'
 import { getGameDate } from '@/utils/dateUtils'
 import { AttemptDto } from '@/dto/AttemptDto'
-import { z, ZodError } from 'zod'
+import { ZodError } from 'zod'
 
 export async function POST(req: Request) {
     const session = await getSession()
@@ -19,10 +19,16 @@ export async function POST(req: Request) {
         })
 
         if (dailyResult) {
+            // Dans cette section, on renvoit un status 200 avec aucun body
+            // s'il n'y a pas besoin d'importer des essais
+            if (dailyResult.success) {
+                return NextResponse.json(null, { status: 200 })
+            }
+
             const attempts = dailyResult.attempts as string[]
             const exists = attempts.some((name) => payload.attempts.includes(name))
             if (exists) {
-                return NextResponse.json({ error: 'Player already selected' }, { status: 400 })
+                return NextResponse.json(null, { status: 200 })
             }
 
             const updated = await prisma.dailyM8DLEResult.update({
