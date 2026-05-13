@@ -102,6 +102,16 @@ model Player {
 
   organizationPlayers OrganizationPlayer[]
   attempts            Attempt[]
+
+  playerOtds PlayerOtd[]
+}
+
+model PlayerOtd {
+  id   String   @id @default(cuid())
+  date DateTime
+
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId String
 }
 
 enum Role {
