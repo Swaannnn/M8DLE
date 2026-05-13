@@ -70,7 +70,7 @@ const Home = () => {
             </Text>
             <Text
                 position="absolute"
-                top="13rem"
+                top={{ base: '9rem', md: "13rem" }}
                 fontSize={{ base: '4rem', md: '4.5rem' }}
                 className={desirableCalligraphy.className}
                 color={pink}

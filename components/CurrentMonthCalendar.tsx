@@ -6,7 +6,7 @@ import { useColorMode } from './ui/color-mode'
 import { DailyM8DLEResult } from '@prisma/client'
 import { getDaysOfMonth, getFirstDayOfMonth } from '@/utils/dateUtils'
 
-const daysKeys = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
+const DAYS_KEYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
 
 const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
     const { colorMode } = useColorMode()
@@ -35,7 +35,7 @@ const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
                 templateColumns="repeat(7, 1fr)"
                 gap={2}
             >
-                {daysKeys.map((day, index) => (
+                {DAYS_KEYS.map((day, index) => (
                     <GridItem
                         key={index}
                         borderRadius="md"
