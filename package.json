@@ -8,7 +8,9 @@
         "build": "npx prisma generate && next build",
         "start": "next start",
         "lint": "eslint",
-        "format": "prettier \"**/*.{js,mjs,ts,tsx}\" --write"
+        "format": "prettier \"**/*.{js,mjs,ts,tsx}\" --write",
+        "test": "vitest run",
+        "test:watch": "vitest"
     },
     "dependencies": {
         "@chakra-ui/react": "^3.31.0",
@@ -41,11 +43,14 @@
         "@types/node": "^20.19.33",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "@vitest/coverage-v8": "^4.1.6",
         "eslint": "^9",
         "eslint-config-next": "^16.2.6",
         "prettier": "^3.8.1",
         "prisma": "^7.8.0",
         "tailwindcss": "^4",
-        "typescript": "^5"
+        "typescript": "^5",
+        "vitest": "^4.1.6",
+        "vitest-mock-extended": "^4.0.0"
     }
 }
