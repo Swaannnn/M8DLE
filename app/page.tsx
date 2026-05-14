@@ -21,7 +21,7 @@ import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
 const Home = () => {
     const { loading } = useAuth()
     const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
-    const { data, error, isLoading } = useSWR<{ successCount: number }, ApiError>('/api/m8dle/dailywinners', fetcher)
+    const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>('/api/m8dle/dailywinners', fetcher)
     const t = useTranslations('home')
     const nextGameDateTime = getNextGameDate().getTime()
 
@@ -46,6 +46,12 @@ const Home = () => {
     useEffect(() => {
         setOpenWin(win)
     }, [win])
+
+    useEffect(() => {
+        if (win) {
+            mutate()
+        }
+    }, [win, mutate])
 
     if (loading || statusLoading || isLoading) {
         return (
