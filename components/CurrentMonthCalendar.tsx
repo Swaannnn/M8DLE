@@ -3,36 +3,34 @@
 import { grey, lightGrey, pink } from '@/constants/colors'
 import { Box, Grid, GridItem, Text, VStack } from '@chakra-ui/react'
 import { useColorMode } from './ui/color-mode'
-import { DailyResult } from '@/types/dailyResult'
+import { DailyM8DLEResult } from '@prisma/client'
+import { getDaysOfMonth, getFirstDayOfMonth } from '@/utils/dateUtils'
+import { useTranslations, useLocale } from 'next-intl'
 
-const CurrentMonthCalendar = ({ datas }: { datas: DailyResult[] }) => {
+const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
     const { colorMode } = useColorMode()
+    const t = useTranslations('calendar')
+    const locale = useLocale()
 
     const now = new Date()
+    const monthName = now.toLocaleString(locale, { month: 'long' })
     const year = now.getFullYear()
-    const month = now.getMonth()
-
-    const monthName = now.toLocaleString('fr-FR', { month: 'long' })
-    const daysInMonth = new Date(year, month + 1, 0).getDate()
-    const firstDay = new Date(year, month, 1).getDay()
+    const firstDay = getFirstDayOfMonth(now).getDay()
     const startOffset = (firstDay + 6) % 7
-    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
-
-    const resultsMap = new Map<number, DailyResult>()
-    datas.forEach((data) => {
-        const resultDate = new Date(data.date)
-        if (resultDate.getMonth() === month && resultDate.getFullYear() === year) {
-            resultsMap.set(resultDate.getDate(), data)
-        }
-    })
-
+    const days = getDaysOfMonth(now)
     const invalidGrey = colorMode === 'light' ? lightGrey : grey
+    const daysOfWeek = t.raw('days') as string[]
+    const map = new Map<number, DailyM8DLEResult | null>()
+
+    for (let i = 0; i < getDaysOfMonth(now); i++) {
+        map.set(i, results.find((r) => new Date(r.date).getDate() === i) ?? null)
+    }
 
     return (
         <VStack gap={4}>
             <VStack>
                 <Text>
-                    Tes victoires en {monthName} {year}
+                    {t('myVictories')} {monthName} {year}
                 </Text>
             </VStack>
 
@@ -40,7 +38,7 @@ const CurrentMonthCalendar = ({ datas }: { datas: DailyResult[] }) => {
                 templateColumns="repeat(7, 1fr)"
                 gap={2}
             >
-                {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, index) => (
+                {daysOfWeek.map((day, index) => (
                     <GridItem
                         key={index}
                         borderRadius="md"
@@ -55,8 +53,10 @@ const CurrentMonthCalendar = ({ datas }: { datas: DailyResult[] }) => {
                     <GridItem key={`empty-${index}`} />
                 ))}
 
-                {days.map((day) => {
-                    const result = resultsMap.get(day)
+                {Array.from({ length: days }).map((_, index) => {
+                    const day = index + 1
+                    const result = map.get(day)
+
                     return (
                         <GridItem key={day}>
                             <Box

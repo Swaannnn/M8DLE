@@ -1,8 +1,66 @@
 {
     "home": {
+        "nextDraw": "Prochain tirage dans",
         "count0": "Personne n'a encore trouvé le joueur du jour",
         "count": "{count, plural, one {# personne a} other {# personnes ont}} déjà trouvé le joueur du jour.",
         "findedMessage": "Bravo ! Revenez demain pour le prochain joueur."
+    },
+    "header": {
+        "home": "Accueil",
+        "leaderboard": "Classement",
+        "myAccount": "Mon Compte",
+        "login": "Se connecter",
+        "credits": "Crédits",
+        "privacyPolicy": "Politique de confidentialité",
+        "legalNotice": "Mentions légales"
+    },
+    "leaderboard": {
+        "leaderboardFullCaps": "CLASSEMENT",
+        "leaderboardDescription": "Classement global des joueurs connectés.",
+        "player": "Joueur",
+        "victories": "Victoires",
+        "nbAttempts": "Nombre d'essais moyen",
+        "nbAttemptsShort": "Nb essais"
+    },
+    "account": {
+        "accountFullCaps": "MON COMPTE",
+        "memberSince": "Membre depuis le",
+        "logout": "Se déconnecter"
+    },
+    "login": {
+        "loginFullCaps": "CONNEXION"
+    },
+    "loginDiscord": {
+        "text": "Connecte toi pour apparaitre dans le classement global et sauvegarder ta progression !",
+        "button": "Se connecter avec Discord"
+    },
+    "dialogWin": {
+        "title": "Bravo !",
+        "winnerMessagePrefix": "Bravo ! Le joueur du jour était",
+        "winnerMessageSuffix": "!",
+        "playerImageAlt": "Image du joueur du jour",
+        "attemptsMessage": "Tu l'as trouvé en {nbPlayers} essais.",
+        "share": "Partager :",
+        "copyText": "Copier le texte",
+        "shareOnX": "Poster sur X",
+        "shareText": "J'ai trouvé le joueur du jour en {nbPlayers} essais sur M8DLE (https://m8dle.com) ! #M8WIN #M8DLE"
+    },
+    "calendar": {
+        "myVictories": "Mes victoires en",
+        "days": ["L", "M", "M", "J", "V", "S", "D"]
+    },
+    "input": {
+        "playersPlaceholder": "Tapez pour rechercher",
+        "noPlayerFound": "Aucun joueur trouvé."
+    },
+    "tablePlayers": {
+        "player": "Joueur",
+        "game": "Jeu",
+        "nationality": "Nationalité",
+        "arrival": "Arrivée",
+        "beforeM8": "Avant M8",
+        "currentClub": "Club actuel",
+        "age": "Age"
     },
     "precisions": {
         "precisions": "Précisions",
@@ -20,17 +78,100 @@
         "displayingTeamsContent": "Les équipes affichées correspondent aux structures principales. Par exemple, G2 Minnesota, Twisted Minds Orchid ou Karmine Corp Blue seront respectivement présentées sous les noms G2 Esports, Twisted Minds et Karmine Corp.",
         "close": "Close"
     },
-    "input": {
-        "playersPlaceholder": "Tapez pour rechercher",
-        "noPlayerFound": "Aucun joueur trouvé."
+    "credits": {
+        "title": "CRÉDITS",
+        "developmentTitle": "1. Développement & conception",
+        "developmentItem1": "Swann Gillé - Conception, développement, design graphique, interface utilisateur.",
+        "developmentItem2": "Thomas Ambroise - Conception, développement.",
+        "developmentItem3": "Front-end / React / Next.js - Création de l'interface et de la logique du site.",
+        "developmentItem4": "Back-end / Neon / Vercel - Hébergement et base de données.",
+        "designTitle": "2. Polices & design graphique",
+        "designItem1": "Police utilisée pour le site : Tusker Grotesk pour les titres, Inter pour le reste du texte.",
+        "iconsLabel": "Icônes :",
+        "lucideAriaLabel": "Site des icônes Lucide",
+        "techTitle": "3. Technologies utilisées",
+        "techItem1": "Next.js 16.1 en TypeScript",
+        "techItem2": "Chakra UI pour les composants UI",
+        "techItem3": "Lucide React pour les icônes",
+        "techItem4": "Vercel pour l'hébergement du site",
+        "techItem5": "Neon pour la base de données"
     },
-    "tablePlayers": {
-        "player": "Joueur",
-        "game": "Jeu",
-        "nationality": "Nationalité",
-        "arrival": "Arrivée",
-        "beforeM8": "Avant M8",
-        "currentClub": "Club actuel",
-        "age": "Age"
+    "privacy": {
+        "title": "POLITIQUE DE CONFIDENTIALITÉ",
+        "dataCollectedTitle": "1. Données collectées",
+        "dataCollectedIntro": "M8DLE collecte les informations suivantes lors de l'utilisation du site :",
+        "identityLabel": "Identité et contact :",
+        "identityText": "email et identifiant Discord pour la création et gestion des comptes.",
+        "gameDataLabel": "Données de jeu :",
+        "gameDataText": "réussite des joueurs et tous leurs essais journaliers.",
+        "analyticsLabel": "Analytique :",
+        "analyticsText": "données anonymes pour mesurer l'usage du site via Vercel (statistiques de trafic, erreurs).",
+        "purposeTitle": "2. Finalité des données",
+        "purposeIntro": "Les données collectées sont utilisées exclusivement pour :",
+        "purposeItem1": "Gérer les comptes utilisateurs.",
+        "purposeItem2": "Calculer et afficher les classements des joueurs.",
+        "purposeItem3": "Assurer le fonctionnement et la sécurité du site.",
+        "purposeOutro": "M8DLE ne vend ni ne loue vos données à des tiers.",
+        "sharingTitle": "3. Partage et stockage des données",
+        "sharingItem1": "Les données sont stockées sur les serveurs de la base de données Neon et sur l'hébergement Vercel pour les sessions et fonctionnalités du site.",
+        "sharingItem2": "Elles ne sont partagées avec aucun autre organisme ou société.",
+        "cookiesTitle": "4. Cookies et sessions",
+        "cookiesItem1": "M8DLE utilise des cookies pour gérer les sessions utilisateurs et améliorer la navigation.",
+        "cookiesItem2": "Ces cookies sont valables 7 jours et peuvent être supprimés via les paramètres de votre navigateur.",
+        "cookiesItem3": "Les cookies ne sont utilisés qu'à des fins de sécurité et de fonctionnement du site.",
+        "rightsTitle": "5. Droits des utilisateurs (RGPD)",
+        "rightsIntro": "Conformément au RGPD, vous disposez des droits suivants :",
+        "accessLabel": "Accès :",
+        "accessText": "connaître les données que nous détenons sur vous.",
+        "rectifyLabel": "Modification / rectification :",
+        "rectifyText": "corriger vos données si elles sont incorrectes.",
+        "deleteLabel": "Suppression :",
+        "deleteText": "demander la suppression de vos données personnelles.",
+        "portabilityLabel": "Portabilité :",
+        "portabilityText": "récupérer vos données dans un format structuré.",
+        "contactPrefix": "Pour exercer vos droits, contactez-nous à :",
+        "contactAriaLabel": "Contact email",
+        "securityTitle": "6. Sécurité des données",
+        "securityItem1": "Les données des utilisateurs sont stockées de manière sécurisée et les sessions sont protégées par un chiffrement JWT.",
+        "securityItem2": "Nous mettons en œuvre des mesures pour prévenir tout accès non autorisé ou perte de données.",
+        "minorsTitle": "7. Mineurs",
+        "minorsItem1": "M8DLE est accessible à tous, y compris aux mineurs.",
+        "minorsItem2": "Nous recommandons aux parents ou tuteurs de superviser l'utilisation du site par les plus jeunes.",
+        "changesTitle": "8. Modifications de la politique",
+        "changesItem1": "Cette politique peut être mise à jour à tout moment.",
+        "changesItem2": "La dernière version sera toujours disponible sur le site.",
+        "changesItem3": "Dernière mise à jour : 22 février 2026"
+    },
+    "legal": {
+        "title": "MENTIONS LÉGALES",
+        "editorTitle": "1. Éditeur du site",
+        "editorName": "Swann Gillé",
+        "editorLocation": "Nantes, France",
+        "contactAriaLabel": "Contact email",
+        "hostTitle": "2. Hébergeur du site",
+        "hostName": "Vercel",
+        "websiteLabel": "Site web :",
+        "vercelAriaLabel": "Site web Vercel",
+        "ipTitle": "3. Propriété intellectuelle",
+        "ipText1": "L'ensemble des contenus présents sur le site (textes, images, etc.) est la propriété exclusive de M8DLE, sauf mentions contraires. Toute reproduction, distribution ou modification, partielle ou totale, est strictement interdite sans autorisation écrite préalable.",
+        "importantLabel": "Précision importante :",
+        "ipText2": "M8DLE est un projet de fans. Il n'est pas affilié, sponsorisé ou validé par Gentle Mates ni par aucune autre organisation mentionnée sur le site.",
+        "ipText3": "Les noms des organisations mentionnées sur le site restent la propriété exclusive de leurs détenteurs respectifs.",
+        "dataTitle": "4. Données personnelles",
+        "dataText1": "Pour utiliser certaines fonctionnalités du site (création de compte, suivi des scores), M8DLE collecte les emails et/ou les identifiants Discord.",
+        "dataText2": "Les données sont utilisées uniquement pour la gestion des comptes et des fonctionnalités du jeu.",
+        "dataText3": "Conformément au RGPD, vous disposez d'un droit d'accès, de modification, de rectification et de suppression des données vous concernant. Pour exercer ce droit, veuillez contacter :",
+        "dataText4": "Le site utilise également des cookies pour gérer les sessions utilisateurs et améliorer l'expérience sur le site. Ces cookies ne sont utilisés qu'à des fins de sécurité et de navigation.",
+        "liabilityTitle": "5. Responsabilité",
+        "liabilityText": "M8DLE ne peut être tenu responsable des dommages directs ou indirects pouvant résulter de l'accès ou de l'utilisation du site, ni de l'interprétation des informations qui y sont présentées.",
+        "linksTitle": "6. Liens externes",
+        "linksText": "Le site peut contenir des liens vers d'autres sites. M8DLE n'exerce aucun contrôle sur leur contenu et décline toute responsabilité quant à ces sites tiers.",
+        "lawTitle": "7. Loi applicable",
+        "lawText": "Le présent site est soumis au droit français. En cas de litige, les tribunaux français seront seuls compétents."
+    },
+    "metadata": {
+        "title": "M8DLE - Devine le joueur Gentle Mates du jour",
+        "description": "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
+        "keywords": ["gentlemates", "m8dle", "jeu gentlemates", "gentlemates wordle", "dle"]
     }
 }
