@@ -2,7 +2,6 @@
 
 import { useAuth } from '@/hooks/use-auth'
 import { AbsoluteCenter, Button, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
-import { useRouter } from 'next/navigation'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
@@ -12,14 +11,18 @@ import { useEffect } from 'react'
 import { getProfileAvatar } from '@/utils/userUtils'
 import { DailyM8DLEResult } from '@prisma/client'
 import { tuskerGrotesk } from '@/utils/fontUtils'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
+    const t = useTranslations('account')
+    const locale = useLocale()
+    const router = useRouter()
     const { data, error, isLoading } = useSWR<DailyM8DLEResult[], ApiError>(
         !userLoading && !loggedOut ? '/api/users/me/results' : null,
         fetcher
     )
-    const router = useRouter()
 
     useEffect(() => {
         if (!userLoading && loggedOut) {
@@ -53,7 +56,7 @@ const AccountPage = () => {
                 fontSize={{ base: '2.5rem', md: '4rem' }}
                 className={tuskerGrotesk.className}
             >
-                MON COMPTE
+                {t('accountFullCaps')}
             </Text>
 
             <Stack
@@ -69,8 +72,8 @@ const AccountPage = () => {
                     />
                     <Text fontSize="lg">{user.username}</Text>
                     <Text fontSize="sm">
-                        Membre depuis le{' '}
-                        {new Date(user.createdAt).toLocaleDateString('fr-FR', {
+                        {t('memberSince')}{' '}
+                        {new Date(user.createdAt).toLocaleDateString(locale, {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
@@ -87,7 +90,7 @@ const AccountPage = () => {
                 position={{ base: 'relative', md: 'absolute' }}
                 right={{ md: '4rem' }}
             >
-                Se déconnecter
+                {t('logout')}
             </Button>
         </VStack>
     )

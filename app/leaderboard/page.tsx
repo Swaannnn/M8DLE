@@ -23,6 +23,7 @@ import { ApiErrorContainer } from '@/components/ApiErrorContainer'
 import constantsParams from '@/constants/constantsParams'
 import { getProfileAvatar } from '@/utils/userUtils'
 import { tuskerGrotesk } from '@/utils/fontUtils'
+import { useTranslations } from 'next-intl'
 
 const LeaderboardRow = ({ item, index, page }: { item: LeaderboardUser; index: number; page: number }) => {
     const avatarUrl = getProfileAvatar(item)
@@ -52,6 +53,8 @@ const Leaderboard = () => {
     const [page, setPage] = useState(1)
     const { data, error, isLoading } = useSWR<LeaderboardData, ApiError>(`/api/m8dle/leaderboard?page=${page}`, fetcher)
     const isMobile = useBreakpointValue({ base: true, md: false })
+    const t = useTranslations('leaderboard')
+
     const OnPaginationClick = (page: number) => {
         setPage(page)
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -87,9 +90,9 @@ const Leaderboard = () => {
                 fontSize={{ base: '2.5rem', md: '4rem' }}
                 className={tuskerGrotesk.className}
             >
-                CLASSEMENT
+                {t('leaderboardFullCaps')}
             </Text>
-            <Text>Classement global des joueurs connectés.</Text>
+            <Text>{t('leaderboardDescription')}</Text>
             <Table.Root
                 size="sm"
                 variant="outline"
@@ -98,10 +101,10 @@ const Leaderboard = () => {
                 <Table.Header>
                     <Table.Row>
                         <Table.ColumnHeader></Table.ColumnHeader>
-                        <Table.ColumnHeader>Joueur</Table.ColumnHeader>
-                        <Table.ColumnHeader textAlign="center">Victoire</Table.ColumnHeader>
+                        <Table.ColumnHeader>{t('player')}</Table.ColumnHeader>
+                        <Table.ColumnHeader textAlign="center">{t('victories')}</Table.ColumnHeader>
                         <Table.ColumnHeader textAlign="center">
-                            {isMobile ? 'Nb essais' : "Nombre d'essais moyen"}
+                            {isMobile ? t('nbAttemptsShort') : t('nbAttempts')}
                         </Table.ColumnHeader>
                     </Table.Row>
                 </Table.Header>

@@ -89,7 +89,7 @@ const Home = () => {
             </Text>
 
             <Text>
-                Prochain tirage dans
+                {t('nextDraw')}
                 {` ${hours}:${minutes}:${seconds}`}
             </Text>
 

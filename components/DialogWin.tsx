@@ -18,6 +18,7 @@ const DialogWin = ({ open, setIsOpen, nbPlayers }: DialogWinProps) => {
     const { loading, loggedOut } = useAuth()
 
     const playerOfTheDay = getPlayerOfTheDay()
+    const shareText = t('shareText', { nbPlayers })
 
     return (
         !loading && (
@@ -33,13 +34,14 @@ const DialogWin = ({ open, setIsOpen, nbPlayers }: DialogWinProps) => {
                     <Dialog.Positioner>
                         <Dialog.Content>
                             <Dialog.Header>
-                                <Dialog.Title>Bravo !</Dialog.Title>
+                                <Dialog.Title>{t('title')}</Dialog.Title>
                             </Dialog.Header>
                             <Dialog.Body overflow="auto">
                                 <VStack>
                                     <VStack>
                                         <Text>
-                                            Bravo ! Le joueur du jour était <strong>{playerOfTheDay.name}</strong> !
+                                            {t('winnerMessagePrefix')} <strong>{playerOfTheDay.name}</strong>{' '}
+                                            {t('winnerMessageSuffix')}
                                         </Text>
                                         <Image
                                             src={playerOfTheDay.image}
@@ -48,32 +50,27 @@ const DialogWin = ({ open, setIsOpen, nbPlayers }: DialogWinProps) => {
                                             width={120}
                                         />
                                         <Text>
-                                            tu l&apos;as trouvé en <strong>{nbPlayers} essais.</strong>
+                                            {t('attemptsMessage', { nbPlayers })}
                                         </Text>
                                     </VStack>
-                                    <Text>Partager :</Text>
+                                    <Text>{t('share')}</Text>
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() =>
-                                            navigator.clipboard.writeText(
-                                                `J'ai trouvé le joueur du jour en ${nbPlayers} essais sur M8DLE (https://m8dle.com) ! #M8WIN #M8DLE`
-                                            )
-                                        }
+                                        onClick={() => navigator.clipboard.writeText(shareText)}
                                     >
-                                        copier le texte
+                                        {t('copyText')}
                                     </Button>
                                     <Button
                                         variant="outline"
                                         size="sm"
                                         onClick={() => {
-                                            const text =
-                                                "J'ai trouvé le joueur du jour en 5 essais sur M8DLE (https://m8dle.com) ! #M8WIN #M8DLE"
+                                            const text = shareText
                                             const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
                                             window.open(url, '_blank')
                                         }}
                                     >
-                                        poster sur X
+                                        {t('shareOnX')}
                                     </Button>
                                 </VStack>
                                 {loggedOut && (

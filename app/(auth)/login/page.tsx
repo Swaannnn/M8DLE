@@ -1,12 +1,13 @@
 'use client'
 
-import accountPreview from '@/public/images/account_preview.png'
-import Image from 'next/image'
 import LoginDiscord from '@/components/LoginDiscord'
 import { tuskerGrotesk } from '@/utils/fontUtils'
 import { Text, VStack } from '@chakra-ui/react'
+import { useTranslations } from 'next-intl'
 
 const LoginPage = () => {
+    const t = useTranslations('login')
+
     return (
         <VStack
             gap="1rem"
@@ -18,15 +19,9 @@ const LoginPage = () => {
                 fontSize={{ base: '2.5rem', md: '4rem' }}
                 className={tuskerGrotesk.className}
             >
-                CONNEXION
+                {t('loginFullCaps')}
             </Text>
             <LoginDiscord />
-            <Image
-                src={accountPreview}
-                alt="Account preview"
-                width={400}
-                height={300}
-            />
         </VStack>
     )
 }
