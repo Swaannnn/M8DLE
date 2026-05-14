@@ -5,18 +5,21 @@ import { Box, Grid, GridItem, Text, VStack } from '@chakra-ui/react'
 import { useColorMode } from './ui/color-mode'
 import { DailyM8DLEResult } from '@prisma/client'
 import { getDaysOfMonth, getFirstDayOfMonth } from '@/utils/dateUtils'
-
-const DAYS_KEYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
+import { useTranslations, useLocale } from 'next-intl'
 
 const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
     const { colorMode } = useColorMode()
+    const t = useTranslations('calendar')
+    const locale = useLocale()
+
     const now = new Date()
-    const monthName = now.toLocaleString('fr-FR', { month: 'long' })
+    const monthName = now.toLocaleString(locale, { month: 'long' })
     const year = now.getFullYear()
     const firstDay = getFirstDayOfMonth(now).getDay()
     const startOffset = (firstDay + 6) % 7
     const days = getDaysOfMonth(now)
     const invalidGrey = colorMode === 'light' ? lightGrey : grey
+    const daysOfWeek = t.raw('days') as string[]
     const map = new Map<number, DailyM8DLEResult | null>()
 
     for (let i = 0; i < getDaysOfMonth(now); i++) {
@@ -27,7 +30,7 @@ const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
         <VStack gap={4}>
             <VStack>
                 <Text>
-                    Tes victoires en {monthName} {year}
+                    {t('myVictories')} {monthName} {year}
                 </Text>
             </VStack>
 
@@ -35,7 +38,7 @@ const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
                 templateColumns="repeat(7, 1fr)"
                 gap={2}
             >
-                {DAYS_KEYS.map((day, index) => (
+                {daysOfWeek.map((day, index) => (
                     <GridItem
                         key={index}
                         borderRadius="md"

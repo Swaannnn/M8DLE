@@ -7,10 +7,12 @@ import NextLink from 'next/link'
 import { LuMenu } from 'react-icons/lu'
 import { useState } from 'react'
 import LangSwitcher from './LangSwitcher'
+import { useTranslations } from 'next-intl'
 
 const NavBar = () => {
     const { user, loading } = useAuth()
     const isMobile = useBreakpointValue({ base: true, md: false })
+    const t = useTranslations('header')
 
     const [open, setOpen] = useState(false)
 
@@ -37,7 +39,7 @@ const NavBar = () => {
                     onClick={handleClose}
                     asChild
                 >
-                    <NextLink href="/">Accueil</NextLink>
+                    <NextLink href="/">{t('home')}</NextLink>
                 </Link>
             </HStack>
             {isMobile ? (
@@ -93,27 +95,27 @@ const NavBar = () => {
                                                     onClick={handleClose}
                                                     asChild
                                                 >
-                                                    <NextLink href="/">Accueil</NextLink>
+                                                    <NextLink href="/">{t('home')}</NextLink>
                                                 </Link>
                                                 <Link
                                                     onClick={handleClose}
                                                     asChild
                                                 >
-                                                    <NextLink href="/leaderboard">Classement</NextLink>
+                                                    <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
                                                 </Link>
                                                 {user ? (
                                                     <Link
                                                         onClick={handleClose}
                                                         asChild
                                                     >
-                                                        <NextLink href="/account">Mon Compte</NextLink>
+                                                        <NextLink href="/account">{t('myAccount')}</NextLink>
                                                     </Link>
                                                 ) : (
                                                     <Link
                                                         onClick={handleClose}
                                                         asChild
                                                     >
-                                                        <NextLink href="/login">Se connecter</NextLink>
+                                                        <NextLink href="/login">{t('login')}</NextLink>
                                                     </Link>
                                                 )}
                                             </VStack>
@@ -129,19 +131,19 @@ const NavBar = () => {
                                                 onClick={handleClose}
                                                 asChild
                                             >
-                                                <NextLink href="/credits">Crédits</NextLink>
+                                                <NextLink href="/credits">{t('credits')}</NextLink>
                                             </Link>
                                             <Link
                                                 onClick={handleClose}
                                                 asChild
                                             >
-                                                <NextLink href="/privacy">Politique de confidentialité</NextLink>
+                                                <NextLink href="/privacy">{t('privacyPolicy')}</NextLink>
                                             </Link>
                                             <Link
                                                 onClick={handleClose}
                                                 asChild
                                             >
-                                                <NextLink href="/legal">Mentions légales</NextLink>
+                                                <NextLink href="/legal">{t('legalNotice')}</NextLink>
                                             </Link>
                                             <Text p="1rem 0">© 2026 M8DLE</Text>
                                         </VStack>
@@ -154,15 +156,15 @@ const NavBar = () => {
             ) : (
                 <HStack gap="1rem">
                     <Link asChild>
-                        <NextLink href="/leaderboard">Classement</NextLink>
+                        <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
                     </Link>
                     {user ? (
                         <Link asChild>
-                            <NextLink href="/account">Mon Compte</NextLink>
+                            <NextLink href="/account">{t('myAccount')}</NextLink>
                         </Link>
                     ) : (
                         <Link asChild>
-                            <NextLink href="/login">Se connecter</NextLink>
+                            <NextLink href="/login">{t('login')}</NextLink>
                         </Link>
                     )}
                     <LangSwitcher />

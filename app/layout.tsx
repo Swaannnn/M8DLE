@@ -8,43 +8,56 @@ import { Box } from '@chakra-ui/react'
 import Footer from '@/components/Footer'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { getTranslations } from 'next-intl/server'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-    metadataBase: new URL('https://m8dle.com'),
+type Props = {
+    params: Promise<{ locale: string }>
+}
 
-    title: {
-        default: 'M8DLE - Devine le joueur Gentle Mates du jour',
-        template: '%s | M8DLE',
-    },
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { locale } = await params
 
-    description:
-        "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
+    const t = await getTranslations({
+        locale,
+        namespace: 'metadata',
+    })
 
-    keywords: ['gentlemates', 'm8dle', 'jeu gentlemates', 'gentlemates game', 'gentlemates wordle', 'dle'],
+    return {
+        metadataBase: new URL('https://m8dle.com'),
 
-    openGraph: {
-        title: 'M8DLE - Devine le joueur Gentle Mates du jour',
-        description:
-            "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
-        url: 'https://m8dle.com',
-        siteName: 'M8DLE',
-        type: 'website',
-        images: [
-            {
-                url: '/og-image.png',
-                width: 686, // 1200
-                height: 360, // 630
-                alt: 'M8DLE - Devine le joueur Gentle Mates du jour',
-            },
-        ],
-    },
+        title: {
+            default: t('title'),
+            template: '%s | M8DLE',
+        },
 
-    robots: {
-        index: true,
-        follow: true,
-    },
+        description: t('description'),
+
+        keywords: t.raw('keywords') as string[],
+
+        openGraph: {
+            title: t('title'),
+            description: t('description'),
+            url: 'https://m8dle.com',
+            siteName: 'M8DLE',
+            type: 'website',
+            locale: locale === 'fr' ? 'fr_FR' : 'en_US',
+            images: [
+                {
+                    url: '/og-image.png',
+                    width: 1200,
+                    height: 630,
+                    alt: t('title'),
+                },
+            ],
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+        },
+    }
 }
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
@@ -64,7 +77,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                             minHeight="calc(100vh)"
                         >
                             <NavBar />
-                            <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>{children}</main>
+                            <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>
+                                {children}
+                            </main>
                             <Footer />
                         </Box>
                     </NextIntlClientProvider>
