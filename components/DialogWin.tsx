@@ -4,6 +4,8 @@ import { Button, CloseButton, Dialog, Portal, Text, VStack } from '@chakra-ui/re
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { getPlayerOfTheDay } from '@/utils/playersUtils'
+import LoginDiscord from './LoginDiscord'
+import { useAuth } from '@/hooks/use-auth'
 
 type DialogWinProps = {
     isOpen: boolean
@@ -13,6 +15,7 @@ type DialogWinProps = {
 
 const DialogWin = ({ isOpen, onClose, nbPlayers }: DialogWinProps) => {
     const t = useTranslations('dialogWin')
+    const { loggedOut } = useAuth()
     const playerOfTheDay = getPlayerOfTheDay()
     const shareText = t('shareText', { nbPlayers })
 
@@ -65,6 +68,11 @@ const DialogWin = ({ isOpen, onClose, nbPlayers }: DialogWinProps) => {
                                     {t('shareOnX')}
                                 </Button>
                             </VStack>
+                            {loggedOut && (
+                                <VStack pt="2rem">
+                                    <LoginDiscord />
+                                </VStack>
+                            )}
                         </Dialog.Body>
 
                         <Dialog.CloseTrigger asChild>
