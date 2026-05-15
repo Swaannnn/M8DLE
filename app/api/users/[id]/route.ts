@@ -21,7 +21,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await getSession()
     if (!session || session.role != "ADMIN") {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const id = (await params).id
@@ -48,7 +48,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await getSession()
     if (!session || session.role != "ADMIN") {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const id = (await params).id
@@ -66,6 +66,7 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id:
 
         return NextResponse.json(deleted)
     } catch (error) {
+        console.error(error)
         return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 })
     }
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import playersData from '@/data/players.json'
 import type { Player } from '@/types/player'
 import { filterPlayersByAttempts, filterPlayersNotInAttempts, getPlayerOfTheDay } from '@/utils/playersUtils'
@@ -12,7 +12,7 @@ import { fetcher } from '@/utils/fetcher'
 const M8DLE_KEY = 'm8dle'
 
 export const useM8dleStatus = () => {
-    const { user, loggedOut } = useAuth()
+    const { loggedOut } = useAuth()
     const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
     const [availablePlayers, setAvailablePlayers] = useState<Player[]>(playersData)
     const [win, setWin] = useState(false)
@@ -81,39 +81,6 @@ export const useM8dleStatus = () => {
     }
 
     /**
-     * Mets à jour l'état actuel de la partie
-     * de l'utilisateur.
-     */
-    const fetchStatus = useCallback(async () => {
-        setStatusLoading(true)
-        const guestState = getLocalStatus()
-        let isWin: boolean
-        let attempts: string[]
-
-        if (!loggedOut) {
-            if (guestState) await syncLocalToUser(guestState)
-
-            const data = await fetcher<M8dleStatus>('/api/m8dle/status')
-            attempts = data.attempts
-            isWin = data.isWin
-        } else {
-            if (!guestState) {
-                const status = createLocalStatus()
-                isWin = status.isWin
-                attempts = status.attempts
-            } else {
-                attempts = guestState.attempts
-                isWin = guestState.isWin
-            }
-        }
-
-        setWin(isWin)
-        setSelectedPlayers(filterPlayersByAttempts(attempts))
-        setAvailablePlayers((prev) => filterPlayersNotInAttempts(prev, attempts))
-        setStatusLoading(false)
-    }, [loggedOut])
-
-    /**
      * Ajoute un essai à l'utilisateur.
      *
      * @param player
@@ -140,12 +107,43 @@ export const useM8dleStatus = () => {
     }
 
     useEffect(() => {
-        const asyncFct = async () => {
-            await fetchStatus()
-        }
+        const loadStatus = async () => {
+            setStatusLoading(true)
+            const guestState = getLocalStatus()
+            let isWin: boolean
+            let attempts: string[]
 
-        asyncFct().catch(console.error)
-    }, [user, fetchStatus])
+            if (!loggedOut) {
+                if (guestState) await syncLocalToUser(guestState)
+
+                try {
+                    const data = await fetcher<M8dleStatus>('/api/m8dle/status')
+                    attempts = data.attempts
+                    isWin = data.isWin
+                } catch (error) {
+                    console.error("Erreur lors de la récupération du statut:", error)
+                    attempts = []
+                    isWin = false
+                }
+            } else {
+                if (!guestState) {
+                    const status = createLocalStatus()
+                    isWin = status.isWin
+                    attempts = status.attempts
+                } else {
+                    attempts = guestState.attempts
+                    isWin = guestState.isWin
+                }
+            }
+
+            setWin(isWin)
+            setSelectedPlayers(filterPlayersByAttempts(attempts))
+            setAvailablePlayers(filterPlayersNotInAttempts(playersData, attempts)) 
+            setStatusLoading(false)
+        }
+        loadStatus().catch(console.error)
+
+    }, [loggedOut])
 
     return { selectedPlayers, availablePlayers, win, addAttempt, statusLoading }
 }
