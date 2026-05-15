@@ -121,7 +121,7 @@ export const useM8dleStatus = () => {
                     attempts = data.attempts
                     isWin = data.isWin
                 } catch (error) {
-                    console.error("Erreur lors de la récupération du statut:", error)
+                    console.error('Erreur lors de la récupération du statut:', error)
                     attempts = []
                     isWin = false
                 }
@@ -138,11 +138,10 @@ export const useM8dleStatus = () => {
 
             setWin(isWin)
             setSelectedPlayers(filterPlayersByAttempts(attempts))
-            setAvailablePlayers(filterPlayersNotInAttempts(playersData, attempts)) 
+            setAvailablePlayers(filterPlayersNotInAttempts(playersData, attempts))
             setStatusLoading(false)
         }
         loadStatus().catch(console.error)
-
     }, [loggedOut])
 
     return { selectedPlayers, availablePlayers, win, addAttempt, statusLoading }

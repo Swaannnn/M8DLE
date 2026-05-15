@@ -1,15 +1,15 @@
 import { useState } from 'react'
 
 export const useWinDialog = (win: boolean) => {
-    const [isDismissed, setIsDismissed] = useState(false);
+    const [isDismissed, setIsDismissed] = useState(false)
 
     if (!win && isDismissed) {
-        setIsDismissed(false);
+        setIsDismissed(false)
     }
 
-    const isOpen = win && !isDismissed;
+    const isOpen = win && !isDismissed
     return {
         isOpen,
-        closeDialog: () => setIsDismissed(true)
-    };
+        closeDialog: () => setIsDismissed(true),
+    }
 }

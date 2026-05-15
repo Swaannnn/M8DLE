@@ -22,7 +22,10 @@ import { useWinDialog } from '@/hooks/use-win-dialog'
 const Home = () => {
     const { loading } = useAuth()
     const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
-    const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>('/api/m8dle/dailywinners', fetcher)
+    const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>(
+        '/api/m8dle/dailywinners',
+        fetcher
+    )
     const t = useTranslations('home')
     const nextGameDateTime = getNextGameDate().getTime()
     const [timeLeft, setTimeLeft] = useState(getTimeLeft(nextGameDateTime))
@@ -80,7 +83,7 @@ const Home = () => {
             </Text>
             <Text
                 position="absolute"
-                top={{ base: '9rem', md: "13rem" }}
+                top={{ base: '9rem', md: '13rem' }}
                 fontSize={{ base: '4rem', md: '4.5rem' }}
                 className={desirableCalligraphy.className}
                 color={pink}
