@@ -17,16 +17,19 @@ import { useTranslations } from 'next-intl'
 import DialogWin from '@/components/DialogWin'
 import { useEffect, useState } from 'react'
 import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
+import { useWinDialog } from '@/hooks/use-win-dialog'
 
 const Home = () => {
     const { loading } = useAuth()
     const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
-    const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>('/api/m8dle/dailywinners', fetcher)
+    const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>(
+        '/api/m8dle/dailywinners',
+        fetcher
+    )
     const t = useTranslations('home')
     const nextGameDateTime = getNextGameDate().getTime()
-
-    const [openWin, setOpenWin] = useState(false)
     const [timeLeft, setTimeLeft] = useState(getTimeLeft(nextGameDateTime))
+    const { isOpen, closeDialog } = useWinDialog(win)
 
     const playerOfTheDay = getPlayerOfTheDay()
 
@@ -42,10 +45,6 @@ const Home = () => {
     const hours = timer.getUTCHours().toString().padStart(2, '0')
     const minutes = timer.getUTCMinutes().toString().padStart(2, '0')
     const seconds = timer.getUTCSeconds().toString().padStart(2, '0')
-
-    useEffect(() => {
-        setOpenWin(win)
-    }, [win])
 
     useEffect(() => {
         if (win) {
@@ -66,7 +65,6 @@ const Home = () => {
     }
 
     const dailyWinners = data?.successCount ?? 0
-
     const dailyWinnerText = dailyWinners === 0 ? t('count0') : t('count', { count: dailyWinners })
 
     return (
@@ -85,7 +83,7 @@ const Home = () => {
             </Text>
             <Text
                 position="absolute"
-                top={{ base: '9rem', md: "13rem" }}
+                top={{ base: '9rem', md: '13rem' }}
                 fontSize={{ base: '4rem', md: '4.5rem' }}
                 className={desirableCalligraphy.className}
                 color={pink}
@@ -123,8 +121,8 @@ const Home = () => {
             />
 
             <DialogWin
-                open={openWin}
-                setIsOpen={setOpenWin}
+                isOpen={isOpen}
+                onClose={closeDialog}
                 nbPlayers={selectedPlayers.length}
             />
         </VStack>
