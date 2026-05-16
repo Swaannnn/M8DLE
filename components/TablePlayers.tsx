@@ -2,7 +2,6 @@
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import type { Player } from '@/types/player'
-import { getAge, getYear } from '@/utils/dateUtils'
 import ReactCountryFlag from 'react-country-flag'
 import Image from 'next/image'
 import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu'
@@ -11,6 +10,7 @@ import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
 import { useColorMode } from './ui/color-mode'
 import { grey, lightGrey, pink } from '@/constants/colors'
 import { useTranslations } from 'next-intl'
+import { comparePlayer } from '@/utils/playerCompareUtils'
 
 const containerVariants: Variants = {
     hidden: {},
@@ -162,11 +162,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                     <HeaderItem>{t('age')}</HeaderItem>
                 </HStack>
                 {[...players].reverse().map((player) => {
-                    const joinDatePlayer = getYear(player.joinDate)
-                    const joinDatePlayerOfTheDay = getYear(playerOfTheDay.joinDate)
-
-                    const agePlayer = getAge(player.birthDate)
-                    const agePlayerOfTheDay = getAge(playerOfTheDay.birthDate)
+                    const cmp = comparePlayer(player, playerOfTheDay)
 
                     return (
                         <MotionDiv
@@ -176,7 +172,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                             animate="visible"
                         >
                             <HStack key={player.name}>
-                                <RowItem isValid={playerOfTheDay.name === player.name}>
+                                <RowItem isValid={cmp.player}>
                                     <Image
                                         src={player.image}
                                         alt={player.name}
@@ -185,7 +181,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                         style={{ width: 'auto', height: 'auto' }}
                                     />
                                 </RowItem>
-                                <RowItem isValid={playerOfTheDay.game.name === player.game.name}>
+                                <RowItem isValid={cmp.game}>
                                     <Image
                                         src={player.game.logo}
                                         alt={player.game.name}
@@ -194,7 +190,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                         style={{ width: 'auto', height: 'auto' }}
                                     />
                                 </RowItem>
-                                <RowItem isValid={playerOfTheDay.nationality === player.nationality}>
+                                <RowItem isValid={cmp.nationality}>
                                     <ReactCountryFlag
                                         svg
                                         style={{
@@ -205,17 +201,13 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                     />
                                 </RowItem>
                                 <RowNumber
-                                    isLess={joinDatePlayer > joinDatePlayerOfTheDay}
-                                    isMore={joinDatePlayer < joinDatePlayerOfTheDay}
-                                    isValid={joinDatePlayer === joinDatePlayerOfTheDay}
+                                    isLess={cmp.joinDate > 0}
+                                    isMore={cmp.joinDate < 0}
+                                    isValid={cmp.joinDate === 0}
                                 >
-                                    {joinDatePlayer}
+                                    {cmp.joinDatePlayer}
                                 </RowNumber>
-                                <RowItem
-                                    isValid={
-                                        playerOfTheDay.previousOrganization.name === player.previousOrganization.name
-                                    }
-                                >
+                                <RowItem isValid={cmp.previousOrganization}>
                                     {player.previousOrganization.logo ? (
                                         <Image
                                             src={player.previousOrganization.logo}
@@ -228,9 +220,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                         <Text>{player.previousOrganization.name}</Text>
                                     )}
                                 </RowItem>
-                                <RowItem
-                                    isValid={playerOfTheDay.lastOrganization.name === player.lastOrganization.name}
-                                >
+                                <RowItem isValid={cmp.lastOrganization}>
                                     {player.lastOrganization.logo ? (
                                         <Image
                                             src={player.lastOrganization.logo}
@@ -244,11 +234,11 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                     )}
                                 </RowItem>
                                 <RowNumber
-                                    isLess={agePlayer > agePlayerOfTheDay}
-                                    isMore={agePlayer < agePlayerOfTheDay}
-                                    isValid={agePlayer === agePlayerOfTheDay}
+                                    isLess={cmp.age > 0}
+                                    isMore={cmp.age < 0}
+                                    isValid={cmp.age === 0}
                                 >
-                                    {agePlayer}
+                                    {cmp.agePlayer}
                                 </RowNumber>
                             </HStack>
                         </MotionDiv>

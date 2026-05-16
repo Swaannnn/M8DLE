@@ -18,6 +18,7 @@ import DialogWin from '@/components/DialogWin'
 import { useEffect, useState } from 'react'
 import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
 import { useWinDialog } from '@/hooks/use-win-dialog'
+import { comparePlayer, toEmojiRow } from '@/utils/playerCompareUtils'
 
 const Home = () => {
     const { loading } = useAuth()
@@ -66,6 +67,15 @@ const Home = () => {
 
     const dailyWinners = data?.successCount ?? 0
     const dailyWinnerText = dailyWinners === 0 ? t('count0') : t('count', { count: dailyWinners })
+
+    const comparisons = selectedPlayers.map((player) => comparePlayer(player, playerOfTheDay))
+
+    const result = comparisons
+        // si plus que 12 essais, couper le début pour la limite des posts de twitter
+        .slice(-12)
+        .reverse()
+        .map(toEmojiRow)
+        .join('\n')
 
     return (
         <VStack
@@ -124,6 +134,7 @@ const Home = () => {
                 isOpen={isOpen}
                 onClose={closeDialog}
                 nbPlayers={selectedPlayers.length}
+                result={result}
             />
         </VStack>
     )
