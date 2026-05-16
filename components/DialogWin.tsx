@@ -15,13 +15,14 @@ type DialogWinProps = {
     isOpen: boolean
     onClose: () => void
     nbPlayers: number
+    result: string
 }
 
-const DialogWin = ({ isOpen, onClose, nbPlayers }: DialogWinProps) => {
+const DialogWin = ({ isOpen, onClose, nbPlayers, result }: DialogWinProps) => {
     const t = useTranslations('dialogWin')
     const { loggedOut } = useAuth()
     const playerOfTheDay = getPlayerOfTheDay()
-    const shareText = t('shareText', { nbPlayers, m8dleUrl: constantsUrl.M8DLE_URL })
+    const shareText = t('shareText', { nbPlayers, m8dleUrl: constantsUrl.M8DLE_URL, result: result })
 
     if (!isOpen) return null
 

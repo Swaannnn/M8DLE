@@ -44,7 +44,7 @@
         "copyText": "Copier le texte",
         "copiedText": "Texte copié !",
         "shareOn": "Partager sur",
-        "shareText": "J'ai trouvé le joueur du jour en {nbPlayers} essais sur M8DLE ({m8dleUrl}) ! #M8WIN #M8DLE"
+        "shareText": "J'ai trouvé le joueur du jour en {nbPlayers} essais sur M8DLE ({m8dleUrl}) !\n\nVoici mes résultats :\n{result}\n\n#M8WIN #M8DLE"
     },
     "calendar": {
         "myVictories": "Mes victoires en",

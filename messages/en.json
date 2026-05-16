@@ -43,7 +43,7 @@
         "copyText": "Copy the text",
         "copiedText": "Text copied!",
         "shareOn": "Share on",
-        "shareText": "I found the Player of the Day after {nbPlayers} attempts on M8DLE ({m8dleUrl})! #M8WIN #M8DLE"
+        "shareText": "I found the Player of the Day after {nbPlayers} attempts on M8DLE ({m8dleUrl})\n\nHere are my results :\n{result}\n\n#M8WIN #M8DLE"
     },
     "calendar": {
         "myVictories": "My victories in",
