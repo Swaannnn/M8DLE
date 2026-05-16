@@ -26,7 +26,6 @@ export async function GET() {
 
         return NextResponse.json(results)
     } catch (error) {
-        console.error('Error fetching user results:', error)
         return NextResponse.json({ error: 'Erreur lors de la récupération des résultats' }, { status: 500 })
     }
 }

@@ -41,6 +41,7 @@
         "@types/node": "^20.19.33",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "@vitest/coverage-v8": "^4.1.6",
         "eslint": "^9",
         "eslint-config-next": "^16.2.6",
         "prettier": "^3.8.1",
