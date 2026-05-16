@@ -8,9 +8,7 @@
         "build": "npx prisma generate && next build",
         "start": "next start",
         "lint": "eslint",
-        "format": "prettier \"**/*.{js,mjs,ts,tsx}\" --write",
-        "test": "vitest run",
-        "test:watch": "vitest"
+        "format": "prettier \"**/*.{js,mjs,ts,tsx}\" --write"
     },
     "dependencies": {
         "@chakra-ui/react": "^3.31.0",
