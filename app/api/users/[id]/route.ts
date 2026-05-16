@@ -1,9 +1,10 @@
+import { getSession } from '@/lib/auth/session'
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 
 /** Récupère un utilisateur via son identifiant */
-export async function GET(request: NextRequest) {
-    const id = request.nextUrl.searchParams.get('id')
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const id = (await params).id
     if (!id) {
         return NextResponse.json({ error: 'Paramter "id" is required' }, { status: 400 })
     }
@@ -17,8 +18,13 @@ export async function GET(request: NextRequest) {
 }
 
 /** Modifie un utilisateur via son identifiant,*/
-export async function PATCH(request: NextRequest) {
-    const id = request.nextUrl.searchParams.get('id')
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const session = await getSession()
+    if (!session || session.role != 'ADMIN') {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const id = (await params).id
     if (!id) {
         return NextResponse.json({ error: 'Parameter "id" is required' }, { status: 400 })
     }
@@ -39,18 +45,28 @@ export async function PATCH(request: NextRequest) {
 }
 
 /** Supprime un utilisateur via son identifiant */
-export async function DELETE(request: NextRequest) {
-    const id = request.nextUrl.searchParams.get('id')
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const session = await getSession()
+    if (!session || session.role != 'ADMIN') {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const id = (await params).id
     if (!id) {
         return NextResponse.json({ error: 'Parameter "id" is required' }, { status: 400 })
     }
 
     try {
-        await prisma.user.delete({ where: { id } })
+        const user = await prisma.user.findUnique({ where: { id } })
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 })
+        }
 
-        return NextResponse.json({ success: true })
+        const deleted = await prisma.user.delete({ where: { id }, select: { discordId: true, username: true } })
+
+        return NextResponse.json(deleted)
     } catch (error) {
-        console.error('Error deleting user:', error)
+        console.error(error)
         return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 })
     }
 }

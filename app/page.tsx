@@ -14,16 +14,24 @@ import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
 import { desirableCalligraphy, tuskerGrotesk } from '@/utils/fontUtils'
 import { useTranslations } from 'next-intl'
+import DialogWin from '@/components/DialogWin'
 import { useEffect, useState } from 'react'
 import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
+import { useWinDialog } from '@/hooks/use-win-dialog'
 
 const Home = () => {
     const { loading } = useAuth()
     const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
-    const { data, error, isLoading } = useSWR<{ successCount: number }, ApiError>('/api/m8dle/dailywinners', fetcher)
+    const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>(
+        '/api/m8dle/dailywinners',
+        fetcher
+    )
     const t = useTranslations('home')
     const nextGameDateTime = getNextGameDate().getTime()
     const [timeLeft, setTimeLeft] = useState(getTimeLeft(nextGameDateTime))
+    const { isOpen, closeDialog } = useWinDialog(win)
+
+    const playerOfTheDay = getPlayerOfTheDay()
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -38,6 +46,12 @@ const Home = () => {
     const minutes = timer.getUTCMinutes().toString().padStart(2, '0')
     const seconds = timer.getUTCSeconds().toString().padStart(2, '0')
 
+    useEffect(() => {
+        if (win) {
+            mutate()
+        }
+    }, [win, mutate])
+
     if (loading || statusLoading || isLoading) {
         return (
             <AbsoluteCenter>
@@ -50,7 +64,6 @@ const Home = () => {
         return <ApiErrorContainer error={error} />
     }
 
-    const playerOfTheDay = getPlayerOfTheDay()
     const dailyWinners = data?.successCount ?? 0
     const dailyWinnerText = dailyWinners === 0 ? t('count0') : t('count', { count: dailyWinners })
 
@@ -70,7 +83,7 @@ const Home = () => {
             </Text>
             <Text
                 position="absolute"
-                top={{ base: '9rem', md: "13rem" }}
+                top={{ base: '9rem', md: '13rem' }}
                 fontSize={{ base: '4rem', md: '4.5rem' }}
                 className={desirableCalligraphy.className}
                 color={pink}
@@ -80,7 +93,7 @@ const Home = () => {
             </Text>
 
             <Text>
-                Prochain tirage dans
+                {t('nextDraw')}
                 {` ${hours}:${minutes}:${seconds}`}
             </Text>
 
@@ -105,6 +118,12 @@ const Home = () => {
             <TablePlayers
                 playerOfTheDay={playerOfTheDay}
                 players={selectedPlayers}
+            />
+
+            <DialogWin
+                isOpen={isOpen}
+                onClose={closeDialog}
+                nbPlayers={selectedPlayers.length}
             />
         </VStack>
     )

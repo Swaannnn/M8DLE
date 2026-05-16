@@ -1,10 +1,12 @@
 'use client'
 
 import { HStack, Link, Text, useBreakpointValue } from '@chakra-ui/react'
+import { useTranslations } from 'next-intl'
 import NextLink from 'next/link'
 
 const Footer = () => {
     const isMobile = useBreakpointValue({ base: true, md: false })
+    const t = useTranslations('header')
 
     return (
         !isMobile && (
@@ -21,13 +23,13 @@ const Footer = () => {
             >
                 <Text>© 2026 M8DLE</Text>
                 <Link asChild>
-                    <NextLink href="/credits">Crédits</NextLink>
+                    <NextLink href="/credits">{t('credits')}</NextLink>
                 </Link>
                 <Link asChild>
-                    <NextLink href="/privacy">Politique de confidentialité</NextLink>
+                    <NextLink href="/privacy">{t('privacyPolicy')}</NextLink>
                 </Link>
                 <Link asChild>
-                    <NextLink href="/legal">Mentions légales</NextLink>
+                    <NextLink href="/legal">{t('legalNotice')}</NextLink>
                 </Link>
             </HStack>
         )

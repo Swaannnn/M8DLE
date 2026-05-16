@@ -19,25 +19,46 @@ npm run dev
 
 ## Workflow Git
 
-1. Forkez le repo et clonez votre fork.
-2. Basez votre branche sur develop.
-3. Utilisez un nom de branche explicite.
+1. Forkez et clonez votre fork.
+2. Basez votre branche sur `develop`.
+3. Nommez la branche : `type/ISSUE_NUMBER/nom_court` (ex: `feat/67/ajout-classement-global`).
 
-Exemples :
-
-- feat/nom-feature
-- fix/correction-bug
+`type` peut être `feat`, `fix` ou autre selon le changement.
 
 ## Conventions de commit
 
-Preferez des messages clairs et courts, de style conventionnel :
+Format : `type #ISSUE_NUMBER : courte description`
 
-```
-feat: ajout du classement global
-fix: corrige le calcul des essais
-```
+Exemples :
 
-## Qualite et verification
+`feature #67 : modifs faites`
+`fix #42 : corrige le calcul des essais`
+
+## Issues
+
+Ouvrez une issue pour signaler un `bug` ou proposer une `feature` / `improvement`.
+
+Titre — format : `TYPE: titre` (ex: `feature: ajouter un classement global`).
+
+Description selon le type :
+
+- **bug** :
+	- Etapes pour reproduire
+	- Comportement attendu
+	- Comportement observé
+	- Environnement (OS, Node, navigateur)
+	- (Optionnel) Logs / captures d'écran
+
+- **feature / improvement** :
+	- Situation actuelle
+	- Proposition
+	- Pourquoi (bénéfices)
+	- Impact (DB, API, UI, perf)
+	- (Optionnel) Maquettes / exemples
+
+Référencez le numéro de l'issue dans la branche et les commits lorsque pertinent (ex: `feat/67/nom_court`, `feature #67 : description`).
+
+## Qualité et vérification
 
 Avant d'ouvrir une PR :
 
@@ -62,16 +83,19 @@ Incluez dans la description :
 
 Checklist :
 
-- La branche est a jour avec develop
+- La branche est à jour avec `develop`
 - Lint OK
-- Les changements sont documentes si necessaire
+- Les changements sont documentés si nécessaire
 - Pas de secrets dans le code
 
-## Signaler un probleme
+Cette organisation garde le document concis et facilite le triage.
+	- Proposition : ce que vous proposez de changer ou d'ajouter
+	- Pourquoi : bénéfices attendus et justification
+	- Impact (si connu) : DB, API, UI, perf, migrations
+	- (Optionnel) Maquettes, exemples ou références
 
-Ouvrez une issue avec :
+Lien avec les branches et commits
 
-- Etapes pour reproduire
-- Comportement attendu
-- Comportement observe
-- Environnement (OS, Node, navigateur)
+- Référencez toujours le numéro de l'issue dans la branche et les commits lorsque pertinent (ex: `feat/67/nom_court` et `feature #67 : courte description`).
+
+Cette structure aide à triager et prioriser rapidement les issues.
