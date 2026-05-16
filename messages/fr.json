@@ -36,14 +36,15 @@
     },
     "dialogWin": {
         "title": "Bravo !",
-        "winnerMessagePrefix": "Bravo ! Le joueur du jour était",
+        "winnerMessagePrefix": "Le joueur du jour était",
         "winnerMessageSuffix": "!",
         "playerImageAlt": "Image du joueur du jour",
         "attemptsMessage": "Tu l'as trouvé en {nbPlayers} essais.",
         "share": "Partager :",
         "copyText": "Copier le texte",
-        "shareOnX": "Poster sur X",
-        "shareText": "J'ai trouvé le joueur du jour en {nbPlayers} essais sur M8DLE (https://m8dle.com) ! #M8WIN #M8DLE"
+        "copiedText": "Texte copié !",
+        "shareOn": "Partager sur",
+        "shareText": "J'ai trouvé le joueur du jour en {nbPlayers} essais sur M8DLE ({m8dleUrl}) ! #M8WIN #M8DLE"
     },
     "calendar": {
         "myVictories": "Mes victoires en",
