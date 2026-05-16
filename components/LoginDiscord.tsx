@@ -1,5 +1,5 @@
 import { Button, Text } from '@chakra-ui/react'
-import DiscordIcon from './icons/Discord'
+import DiscordIcon from './icons/DiscordIcon'
 import NextLink from 'next/link'
 import { useColorMode } from './ui/color-mode'
 import { useTranslations } from 'next-intl'

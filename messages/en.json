@@ -35,14 +35,15 @@
         "button": "Log in with Discord"
     },
     "dialogWin": {
-        "title": "Bravo !",
-        "winnerMessagePrefix": "Well done! The player of the day was",
+        "title": "Well done!",
+        "winnerMessagePrefix": "The player of the day was",
         "winnerMessageSuffix": "!",
         "attemptsMessage": "You found it in {nbPlayers} tries.",
         "share": "Share :",
         "copyText": "Copy the text",
-        "shareOnX": "Post on X",
-        "shareText": "I found the Player of the Day after {nbPlayers} attempts on M8DLE (https://m8dle.com)! #M8WIN #M8DLE"
+        "copiedText": "Text copied!",
+        "shareOn": "Share on",
+        "shareText": "I found the Player of the Day after {nbPlayers} attempts on M8DLE ({m8dleUrl})! #M8WIN #M8DLE"
     },
     "calendar": {
         "myVictories": "My victories in",

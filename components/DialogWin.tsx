@@ -1,11 +1,15 @@
 'use client'
 
-import { Button, CloseButton, Dialog, Portal, Text, VStack } from '@chakra-ui/react'
+import { CloseButton, Dialog, HStack, IconButton, Portal, Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { getPlayerOfTheDay } from '@/utils/playersUtils'
 import LoginDiscord from './LoginDiscord'
 import { useAuth } from '@/hooks/use-auth'
+import TwitterIcon from './icons/TwitterIcon'
+import CopyButton from './CopyButton'
+import { Tooltip } from './ui/tooltip'
+import constantsUrl from '@/constants/constantsUrl'
 
 type DialogWinProps = {
     isOpen: boolean
@@ -17,9 +21,8 @@ const DialogWin = ({ isOpen, onClose, nbPlayers }: DialogWinProps) => {
     const t = useTranslations('dialogWin')
     const { loggedOut } = useAuth()
     const playerOfTheDay = getPlayerOfTheDay()
-    const shareText = t('shareText', { nbPlayers })
+    const shareText = t('shareText', { nbPlayers, m8dleUrl: constantsUrl.M8DLE_URL })
 
-    // On ne rend rien si ce n'est pas ouvert (optimisation)
     if (!isOpen) return null
 
     return (
@@ -38,35 +41,40 @@ const DialogWin = ({ isOpen, onClose, nbPlayers }: DialogWinProps) => {
 
                         <Dialog.Body>
                             <VStack gap="4">
-                                <Text>
+                                <Text fontSize="lg">
                                     {t('winnerMessagePrefix')} <strong>{playerOfTheDay.name}</strong>{' '}
                                     {t('winnerMessageSuffix')}
                                 </Text>
                                 <Image
                                     src={playerOfTheDay.image}
                                     alt="player"
-                                    height={120}
-                                    width={120}
+                                    height={160}
+                                    width={160}
                                 />
                                 <Text>{t('attemptsMessage', { nbPlayers })}</Text>
 
-                                <Button
-                                    variant="outline"
-                                    onClick={() => navigator.clipboard.writeText(shareText)}
-                                >
-                                    {t('copyText')}
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => {
-                                        const text = shareText
-                                        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
-                                        window.open(url, '_blank')
-                                    }}
-                                >
-                                    {t('shareOnX')}
-                                </Button>
+                                <VStack>
+                                    <Text>{t('share')}</Text>
+                                    <HStack>
+                                        <CopyButton
+                                            text={shareText}
+                                            variant="icon"
+                                        />
+                                        <Tooltip content={t('shareOn') + ' X'}>
+                                            <IconButton
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => {
+                                                    const url =
+                                                        constantsUrl.TWITTER_SHARE_URL + encodeURIComponent(shareText)
+                                                    window.open(url, '_blank')
+                                                }}
+                                            >
+                                                <TwitterIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </HStack>
+                                </VStack>
                             </VStack>
                             {loggedOut && (
                                 <VStack pt="2rem">
