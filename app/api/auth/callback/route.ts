@@ -33,7 +33,6 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.redirect(redirection)
     } catch (error) {
-        console.error('Auth Error:', error)
         return NextResponse.json({ error: 'Authentication failed' }, { status: 500 })
     }
 }
