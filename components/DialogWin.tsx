@@ -67,7 +67,8 @@ const DialogWin = ({ isOpen, onClose, nbPlayers, result }: DialogWinProps) => {
                                                 size="sm"
                                                 onClick={() => {
                                                     const url =
-                                                        constantsUrl.TWITTER_SHARE_URL + encodeURIComponent(shareText)
+                                                        constantsUrl.TWITTER_SHARE_URL +
+                                                        encodeURIComponent(shareText + t('twitterHashtags'))
                                                     window.open(url, '_blank')
                                                 }}
                                             >
