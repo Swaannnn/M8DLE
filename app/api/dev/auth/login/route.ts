@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
         const id = request.nextUrl.searchParams.get('userId')
         if (!id) {
-            return NextResponse.json({ error: "Parameter 'userId' is required" }, { status: 400 })
+            return NextResponse.json({ error: 'Parameter "userId" is required' }, { status: 400 })
         }
 
         const user = await prisma.user.findUnique({
