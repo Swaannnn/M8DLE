@@ -35,13 +35,12 @@ export async function POST(req: NextRequest) {
                     attempts: {
                         create: {
                             playerId: payload.attempt,
-                            attemptNumber: dailyResult.attempts.length + 1,
+                            attemptNumber:
+                                (dailyResult.attempts[dailyResult.attempts.length - 1]?.attemptNumber ?? 0) + 1,
                         },
                     },
                 },
-                select: {
-                    id: true,
-                    success: true,
+                include: {
                     attempts: true,
                 },
             })
@@ -60,9 +59,7 @@ export async function POST(req: NextRequest) {
                     },
                 },
             },
-            select: {
-                id: true,
-                success: true,
+            include: {
                 attempts: true,
             },
         })

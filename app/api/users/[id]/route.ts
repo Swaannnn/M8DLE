@@ -1,9 +1,15 @@
 import { getSession } from '@/lib/auth/session'
 import { prisma } from '@/lib/db'
+import { Role } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 
 /** Récupère un utilisateur via son identifiant */
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const session = await getSession()
+    if (!session || session.role != Role.ADMIN) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const id = (await params).id
     if (!id) {
         return NextResponse.json({ error: 'Paramter "id" is required' }, { status: 400 })
@@ -17,10 +23,10 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
     return NextResponse.json(user)
 }
 
-/** Modifie un utilisateur via son identifiant,*/
+/** Modifie un utilisateur via son identifiant */
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await getSession()
-    if (!session || session.role != 'ADMIN') {
+    if (!session || session.role != Role.ADMIN) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -46,7 +52,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 /** Supprime un utilisateur via son identifiant */
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await getSession()
-    if (!session || session.role != 'ADMIN') {
+    if (!session || session.role != Role.ADMIN) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
