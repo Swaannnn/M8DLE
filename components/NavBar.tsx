@@ -79,7 +79,10 @@ const NavBar = () => {
                                                 borderBottomWidth="1px"
                                                 paddingBottom="1rem"
                                             >
-                                                <ColorModeButton />
+                                                <HStack>
+                                                    <LangSwitcher />
+                                                    <ColorModeButton />
+                                                </HStack>
                                                 <Button
                                                     variant="ghost"
                                                     onClick={handleClose}

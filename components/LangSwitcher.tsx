@@ -1,35 +1,25 @@
-import { getLocale, setLocale } from '@/utils/localeUtils'
+import { setLocale } from '@/utils/localeUtils'
 import { IconButton } from '@chakra-ui/react'
+import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 
 const LangSwitcher = () => {
     const router = useRouter()
-
-    const [currentLocale, setCurrentLocale] = useState('en')
+    const locale = useLocale()
 
     const changeLanguage = async (locale: string) => {
         await setLocale(locale)
-        setCurrentLocale(locale)
         router.refresh()
     }
-
-    useEffect(() => {
-        const getCurrentLocale = async () => {
-            const locale = await getLocale()
-            setCurrentLocale(locale)
-        }
-        getCurrentLocale()
-    }, [])
 
     return (
         <IconButton
             variant="ghost"
             size="sm"
             aria-label="lang switcher button"
-            onClick={() => changeLanguage(currentLocale === 'en' ? 'fr' : 'en')}
+            onClick={() => changeLanguage(locale === 'en' ? 'fr' : 'en')}
         >
-            {currentLocale === 'fr' ? 'FR' : 'EN'}
+            {locale === 'fr' ? 'FR' : 'EN'}
         </IconButton>
     )
 }

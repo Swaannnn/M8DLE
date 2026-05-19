@@ -17,16 +17,20 @@ import { useTranslations } from 'next-intl'
 import DialogWin from '@/components/DialogWin'
 import { useEffect, useState } from 'react'
 import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
+import { useWinDialog } from '@/hooks/use-win-dialog'
+import { comparePlayer, toEmojiRow } from '@/utils/playerCompareUtils'
 
 const Home = () => {
     const { loading } = useAuth()
     const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
-    const { data, error, isLoading } = useSWR<{ successCount: number }, ApiError>('/api/m8dle/dailywinners', fetcher)
+    const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>(
+        '/api/m8dle/dailywinners',
+        fetcher
+    )
     const t = useTranslations('home')
     const nextGameDateTime = getNextGameDate().getTime()
-
-    const [openWin, setOpenWin] = useState(false)
     const [timeLeft, setTimeLeft] = useState(getTimeLeft(nextGameDateTime))
+    const { isOpen, closeDialog } = useWinDialog(win)
 
     const playerOfTheDay = getPlayerOfTheDay()
 
@@ -44,8 +48,10 @@ const Home = () => {
     const seconds = timer.getUTCSeconds().toString().padStart(2, '0')
 
     useEffect(() => {
-        setOpenWin(win)
-    }, [win])
+        if (win) {
+            mutate()
+        }
+    }, [win, mutate])
 
     if (loading || statusLoading || isLoading) {
         return (
@@ -60,8 +66,16 @@ const Home = () => {
     }
 
     const dailyWinners = data?.successCount ?? 0
-
     const dailyWinnerText = dailyWinners === 0 ? t('count0') : t('count', { count: dailyWinners })
+
+    const comparisons = selectedPlayers.map((player) => comparePlayer(player, playerOfTheDay))
+
+    const result = comparisons
+        // si plus que 12 essais, couper le début pour la limite des posts de twitter
+        .slice(-12)
+        .reverse()
+        .map(toEmojiRow)
+        .join('\n')
 
     return (
         <VStack
@@ -79,7 +93,7 @@ const Home = () => {
             </Text>
             <Text
                 position="absolute"
-                top={{ base: '9rem', md: "13rem" }}
+                top={{ base: '9rem', md: '13rem' }}
                 fontSize={{ base: '4rem', md: '4.5rem' }}
                 className={desirableCalligraphy.className}
                 color={pink}
@@ -117,9 +131,10 @@ const Home = () => {
             />
 
             <DialogWin
-                open={openWin}
-                setIsOpen={setOpenWin}
+                isOpen={isOpen}
+                onClose={closeDialog}
                 nbPlayers={selectedPlayers.length}
+                result={result}
             />
         </VStack>
     )

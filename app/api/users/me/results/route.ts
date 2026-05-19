@@ -8,7 +8,7 @@ export async function GET() {
         const now = new Date()
         const session = await getSession()
         if (!session || !session.userId) {
-            return NextResponse.json({ error: 'Accès non-autorisé' }, { status: 401 })
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
         const results = await prisma.dailyM8DLEResult.findMany({

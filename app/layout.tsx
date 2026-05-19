@@ -77,9 +77,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                             minHeight="calc(100vh)"
                         >
                             <NavBar />
-                            <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>
-                                {children}
-                            </main>
+                            <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>{children}</main>
                             <Footer />
                         </Box>
                     </NextIntlClientProvider>
