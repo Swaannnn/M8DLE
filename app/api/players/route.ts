@@ -9,7 +9,6 @@ export async function GET() {
         const players = await prisma.player.findMany({
             include: {
                 organizationPlayers: true,
-                nationality: true,
             },
         })
 
