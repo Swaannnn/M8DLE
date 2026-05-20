@@ -56,14 +56,6 @@ model Attempt {
   @@unique([dailyResultId, attemptNumber])
 }
 
-model Nationality {
-  id       String @id @default(cuid())
-  name     String @unique
-  imageUrl String
-
-  players Player[]
-}
-
 model Game {
   id       String @id @default(cuid())
   name     String @unique
@@ -97,8 +89,7 @@ model Player {
   birthDate DateTime
   imageUrl  String
 
-  nationality   Nationality @relation(fields: [nationalityId], references: [id])
-  nationalityId String
+  nationality String
 
   organizationPlayers OrganizationPlayer[]
   attempts            Attempt[]
