@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { getSession } from '@/lib/auth/session'
 import { getGameDate } from '@/utils/dateUtils'
-import { M8dleStatus } from '@/types/M8dleStatus'
 
 /**
  * Récupère le status de l'avancement
@@ -11,23 +10,26 @@ import { M8dleStatus } from '@/types/M8dleStatus'
  * @returns
  */
 export async function GET() {
-    const session = await getSession()
-    if (!session?.userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    try {
+        const session = await getSession()
+        if (!session?.userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const gameDate = getGameDate()
-    const result = await prisma.dailyM8DLEResult.findUnique({
-        where: { userId_date: { userId: session.userId, date: gameDate } },
-    })
+        const gameDate = getGameDate()
+        const dailyResult = await prisma.dailyM8DLEResult.findUnique({
+            where: { userId_date: { userId: session.userId, date: gameDate } },
+            select: { userId: true, success: true, attempts: true },
+        })
 
-    let attempts: string[] = []
-    if (result?.attempts) {
-        attempts = [...(result.attempts as string[])]
+        if (!dailyResult) {
+            return NextResponse.json({
+                userId: session.userId,
+                success: false,
+                attempts: [],
+            })
+        }
+
+        return NextResponse.json(dailyResult)
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
-
-    const status: M8dleStatus = {
-        attempts,
-        isWin: result?.success ?? false,
-    }
-
-    return NextResponse.json(status)
 }

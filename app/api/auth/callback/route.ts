@@ -18,14 +18,12 @@ export async function GET(request: NextRequest) {
             where: { discordId: discordUser.id },
             update: {
                 username: discordUser.username,
-                discriminator: discordUser.discriminator,
                 avatar: discordUser.avatar,
                 email: discordUser.email,
             },
             create: {
                 discordId: discordUser.id,
                 username: discordUser.username,
-                discriminator: discordUser.discriminator,
                 avatar: discordUser.avatar,
                 email: discordUser.email,
             },
@@ -35,7 +33,6 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.redirect(redirection)
     } catch (error) {
-        console.error('Auth Error:', error)
         return NextResponse.json({ error: 'Authentication failed' }, { status: 500 })
     }
 }
