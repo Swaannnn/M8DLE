@@ -236,12 +236,12 @@
         "nationality": "DE",
         "joinDate": "2025-05-29",
         "previousOrganization": {
-            "name": "Eintracht Frankfurt",
-            "logo": "/images/teams/eintracht_frankfurt.png"
-        },
-        "lastOrganization": {
             "name": "Enterprise Esports",
             "logo": "/images/teams/enterprise_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
         },
         "birthDate": "2003-04-25",
         "image": "/images/players/proxh.jpg"
@@ -316,8 +316,8 @@
             "logo": "/images/teams/winthrop_university.png"
         },
         "lastOrganization": {
-            "name": "Gentle Mates",
-            "logo": "/images/teams/gentle_mates.png"
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
         },
         "birthDate": "2003-12-11",
         "image": "/images/players/glyph.jpg"
@@ -411,8 +411,8 @@
             "logo": "/images/teams/startpoint.png"
         },
         "lastOrganization": {
-            "name": "GentleBench",
-            "logo": null
+            "name": "Magnolia",
+            "logo": "/images/teams/magnolia.png"
         },
         "birthDate": "2007-11-27",
         "image": "/images/players/yujin.jpg"
@@ -430,8 +430,8 @@
             "logo": "/images/teams/team_bds.png"
         },
         "lastOrganization": {
-            "name": "Geekay Esports",
-            "logo": "/images/teams/geekay_esports.png"
+            "name": "Manchester City",
+            "logo": "/images/teams/manchester_city.png"
         },
         "birthDate": "2004-07-06",
         "image": "/images/players/seikoo.jpg"
@@ -741,6 +741,44 @@
         "image": "/images/players/mopoz.jpg"
     },
     {
+        "name": "Opale",
+        "game": {
+            "name": "TFT",
+            "logo": "/images/games/tft.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2026-04-30",
+        "previousOrganization": {
+            "name": "AEGIS",
+            "logo": "/images/teams/aegis.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "1999-01-01",
+        "image": "/images/players/opale.jpg"
+    },
+    {
+        "name": "Xperion",
+        "game": {
+            "name": "TFT",
+            "logo": "/images/games/tft.png"
+        },
+        "nationality": "FR",
+        "joinDate": "2026-04-30",
+        "previousOrganization": {
+            "name": "Rocalys Esport",
+            "logo": "/images/teams/rocalys_esport.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2002-03-12",
+        "image": "/images/players/xperion.jpg"
+    },
+    {
         "name": "Enzosx",
         "game": {
             "name": "TFT",
@@ -753,8 +791,8 @@
             "logo": "/images/teams/mihos_esport.png"
         },
         "lastOrganization": {
-            "name": "Gentle Mates",
-            "logo": "/images/teams/gentle_mates.png"
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
         },
         "birthDate": "2000-11-14",
         "image": "/images/players/enzosx.jpg"
@@ -1285,8 +1323,8 @@
             "logo": "/images/teams/vancouver_surge.png"
         },
         "lastOrganization": {
-            "name": "Gentle Mates",
-            "logo": "/images/teams/gentle_mates.png"
+            "name": "Unknown",
+            "logo": "/images/teams/unknown.png"
         },
         "birthDate": "2002-04-09",
         "image": "/images/players/neptune.jpg"
@@ -1323,11 +1361,49 @@
             "logo": "/images/teams/100_thieves.png"
         },
         "lastOrganization": {
-            "name": "Gentle Mates",
-            "logo": "/images/teams/gentle_mates.png"
+            "name": "G2 Esports",
+            "logo": "/images/teams/g2_esports.png"
         },
         "birthDate": "2000-01-19",
         "image": "/images/players/envoy.jpg"
+    },
+    {
+        "name": "Estreal",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2026-05-28",
+        "previousOrganization": {
+            "name": "G2 Esports",
+            "logo": "/images/teams/g2_esports.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2002-12-17",
+        "image": "/images/players/estreal.png"
+    },
+    {
+        "name": "JoeDeceives",
+        "game": {
+            "name": "Call of Duty",
+            "logo": "/images/games/call_of_duty.png"
+        },
+        "nationality": "US",
+        "joinDate": "2026-06-03",
+        "previousOrganization": {
+            "name": "Koi",
+            "logo": "/images/teams/koi.png"
+        },
+        "lastOrganization": {
+            "name": "Gentle Mates",
+            "logo": "/images/teams/gentle_mates.png"
+        },
+        "birthDate": "2004-09-23",
+        "image": "/images/players/joedeceives.png"
     },
     {
         "name": "Priestahh",
