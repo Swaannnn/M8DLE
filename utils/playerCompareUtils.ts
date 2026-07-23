@@ -13,25 +13,33 @@ export type PlayerComparison = {
     agePlayer: number
 }
 
+/** Recherche l'entrée Gentle Mates du joueur dans sa liste d'organisations */
+const getGentleMatesEntry = (player: Player) => {
+    const orgs = player.organizationPlayers ?? []
+    const index = orgs.findIndex((op) => op.organization.name === 'Gentle Mates')
+    const entry = index !== -1 ? orgs[index] : orgs.find((op) => !op.end) ?? orgs[orgs.length - 1]
+    return { orgs, index, entry }
+}
+
 /** Obtient l'organisation actuelle (Club Actuel) du joueur */
 export const getCurrentOrganization = (player: Player) => {
-    const orgs = player.organizationPlayers ?? []
-    const current = orgs.find((op) => !op.end) ?? orgs[orgs.length - 1]
-    return current ? current.organization : { name: 'Inconnu', imageUrl: null }
+    const { entry } = getGentleMatesEntry(player)
+    return entry ? entry.organization : { name: 'Inconnu', imageUrl: null }
 }
 
 /** Obtient l'organisation précédente (Avant M8) du joueur */
 export const getPreviousOrganization = (player: Player) => {
-    const orgs = player.organizationPlayers ?? []
-    const prev = orgs[orgs.length - 2]
-    return prev ? prev.organization : { name: 'Aucun', imageUrl: null }
+    const { orgs, index } = getGentleMatesEntry(player)
+    if (index > 0) {
+        return orgs[index - 1].organization
+    }
+    return { name: 'Aucun', imageUrl: null }
 }
 
-/** Obtient l'année d'arrivée au club actuel (ex: Gentle Mates) */
+/** Obtient l'année d'arrivée au club actuel (Gentle Mates) */
 export const getPlayerJoinYear = (player: Player): number => {
-    const orgs = player.organizationPlayers ?? []
-    const current = orgs.find((op) => !op.end) ?? orgs[orgs.length - 1]
-    return current ? getYear(current.start.toString()) : -1
+    const { entry } = getGentleMatesEntry(player)
+    return entry ? getYear(entry.start.toString()) : -1
 }
 
 export const comparePlayer = (player: Player, target: Player): PlayerComparison => {

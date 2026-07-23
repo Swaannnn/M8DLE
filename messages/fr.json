@@ -38,6 +38,7 @@
         "title": "Bravo !",
         "winnerMessagePrefix": "Le joueur du jour était",
         "winnerMessageSuffix": "!",
+        "playerOtd": "Joueur du jour",
         "playerImageAlt": "Image du joueur du jour",
         "attemptsMessage": "Tu l'as trouvé en {nbPlayers} essais.",
         "share": "Partager :",

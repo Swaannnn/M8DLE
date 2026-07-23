@@ -43,7 +43,7 @@ const DialogWin = ({ isOpen, onClose, nbPlayers, result, playerOfTheDay }: Dialo
                         <Dialog.Body>
                             <VStack gap="4">
                                 <Text fontSize="lg">
-                                    {t('winnerMessagePrefix')} <strong>{playerOfTheDay?.name ?? ''}</strong>{' '}
+                                    {t('winnerMessagePrefix')} <strong>{playerOfTheDay?.name ?? t('playerOtd')}</strong>{' '}
                                     {t('winnerMessageSuffix')}
                                 </Text>
                                 {playerOfTheDay?.imageUrl && (

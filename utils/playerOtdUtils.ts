@@ -1,3 +1,5 @@
+'use server'
+
 import { prisma } from '@/lib/db'
 import { getGameDate } from '@/utils/dateUtils'
 
