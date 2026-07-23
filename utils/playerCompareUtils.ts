@@ -13,20 +13,46 @@ export type PlayerComparison = {
     agePlayer: number
 }
 
+/** Obtient l'organisation actuelle (Club Actuel) du joueur */
+export const getCurrentOrganization = (player: Player) => {
+    const orgs = player.organizationPlayers ?? []
+    const current = orgs.find((op) => !op.end) ?? orgs[orgs.length - 1]
+    return current ? current.organization : { name: 'Inconnu', imageUrl: null }
+}
+
+/** Obtient l'organisation précédente (Avant M8) du joueur */
+export const getPreviousOrganization = (player: Player) => {
+    const orgs = player.organizationPlayers ?? []
+    const prev = orgs[orgs.length - 2]
+    return prev ? prev.organization : { name: 'Aucun', imageUrl: null }
+}
+
+/** Obtient l'année d'arrivée au club actuel (ex: Gentle Mates) */
+export const getPlayerJoinYear = (player: Player): number => {
+    const orgs = player.organizationPlayers ?? []
+    const current = orgs.find((op) => !op.end) ?? orgs[orgs.length - 1]
+    return current ? getYear(current.start.toString()) : -1
+}
+
 export const comparePlayer = (player: Player, target: Player): PlayerComparison => {
-    const joinDatePlayer = getYear(player.joinDate)
-    const joinDateTarget = getYear(target.joinDate)
-    const agePlayer = getAge(player.birthDate)
-    const ageTarget = getAge(target.birthDate)
+    const joinDatePlayer = getPlayerJoinYear(player)
+    const agePlayer = getAge(player.birthDate.toString())
+    const currentOrg = getCurrentOrganization(player)
+    const prevOrg = getPreviousOrganization(player)
+
+    const targetJoinDate = getPlayerJoinYear(target)
+    const targetAge = getAge(target.birthDate.toString())
+    const targetCurrentOrg = getCurrentOrganization(target)
+    const targetPrevOrg = getPreviousOrganization(target)
 
     return {
-        player: player.name === target.name,
-        game: player.game.name === target.game.name,
-        nationality: player.nationality === target.nationality,
-        joinDate: joinDatePlayer - joinDateTarget,
-        previousOrganization: player.previousOrganization.name === target.previousOrganization.name,
-        lastOrganization: player.lastOrganization.name === target.lastOrganization.name,
-        age: agePlayer - ageTarget,
+        player: player.id === target.id,
+        game: Boolean(player.game?.name && player.game.name === target.game?.name),
+        nationality: player.nationality.toLowerCase() === target.nationality.toLowerCase(),
+        joinDate: joinDatePlayer - targetJoinDate,
+        previousOrganization: prevOrg.name === targetPrevOrg.name,
+        lastOrganization: currentOrg.name === targetCurrentOrg.name,
+        age: agePlayer - targetAge,
         joinDatePlayer,
         agePlayer,
     }

@@ -1,4 +1,3 @@
-import players from '@/data/players.json'
 import { Player } from '@/types/player'
 import { getGameDate } from '@/utils/dateUtils'
 
@@ -16,19 +15,24 @@ const seededRandom = (seed: number) => {
     return x - Math.floor(x)
 }
 
-export function filterPlayersByAttempts(attempts: string[]): Player[] {
-    return attempts.map((name) => players.find((p) => p.name === name)) as Player[]
+export function filterPlayersByAttempts(allPlayers: Player[], attempts: string[]): Player[] {
+    if (!attempts || attempts.length === 0) return []
+    return attempts
+        .map((id) => allPlayers.find((p) => p.id === id))
+        .filter((p): p is Player => p !== undefined)
 }
 
-export function filterPlayersNotInAttempts(playersList: Player[], attempts: string[]): Player[] {
-    return playersList.filter((p) => !attempts.includes(p.name))
+export function filterPlayersNotInAttempts(allPlayers: Player[], attempts: string[]): Player[] {
+    if (!attempts || attempts.length === 0) return allPlayers
+    return allPlayers.filter((p) => !attempts.includes(p.id))
 }
 
-export function getPlayerOfTheDay() {
+export function getPlayerOfTheDay(allPlayers: Player[]): Player | null {
+    if (!allPlayers || allPlayers.length === 0) return null
     const dayKey = getGameDate().toISOString().slice(0, 10)
     const seed = hashString(dayKey)
     const random = seededRandom(seed)
-    const index = Math.floor(random * players.length)
+    const index = Math.floor(random * allPlayers.length)
 
-    return players[index]
+    return allPlayers[index]
 }

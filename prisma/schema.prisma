@@ -60,6 +60,8 @@ model Game {
   id       String @id @default(cuid())
   name     String @unique
   imageUrl String
+
+  players Player[]
 }
 
 model Organization {
@@ -90,6 +92,9 @@ model Player {
   imageUrl  String
 
   nationality String
+
+  game   Game?   @relation(fields: [gameId], references: [id])
+  gameId String?
 
   organizationPlayers OrganizationPlayer[]
   attempts            Attempt[]

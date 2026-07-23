@@ -5,6 +5,7 @@ import { getGameDate } from '@/utils/dateUtils'
 import { AttemptDto } from '@/dto/AttemptDto'
 import { ZodError } from 'zod'
 import { Role } from '@prisma/client'
+import { getOrGeneratePlayerOfTheDay } from '@/utils/playerOtdUtils'
 
 export async function POST(req: NextRequest) {
     const session = await getSession()
@@ -15,6 +16,9 @@ export async function POST(req: NextRequest) {
         const payload = AttemptDto.parse(body)
 
         const gameDate = getGameDate()
+        const playerOtd = await getOrGeneratePlayerOfTheDay(gameDate)
+        const isWin = playerOtd ? payload.attempt === playerOtd.id : false
+
         const dailyResult = await prisma.dailyM8DLEResult.findUnique({
             where: { userId_date: { userId: session.userId, date: gameDate } },
             select: { id: true, success: true, attempts: true },
@@ -32,6 +36,7 @@ export async function POST(req: NextRequest) {
             const updated = await prisma.dailyM8DLEResult.update({
                 where: { id: dailyResult.id },
                 data: {
+                    success: isWin,
                     attempts: {
                         create: {
                             playerId: payload.attempt,
@@ -52,6 +57,7 @@ export async function POST(req: NextRequest) {
             data: {
                 userId: session.userId,
                 date: gameDate,
+                success: isWin,
                 attempts: {
                     create: {
                         attemptNumber: 1,
