@@ -22,7 +22,7 @@ import { comparePlayer, toEmojiRow } from '@/utils/playerCompareUtils'
 
 const Home = () => {
     const { loading } = useAuth()
-    const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
+    const { allPlayers, selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
     const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>(
         '/api/m8dle/dailywinners',
         fetcher
@@ -32,7 +32,7 @@ const Home = () => {
     const [timeLeft, setTimeLeft] = useState(getTimeLeft(nextGameDateTime))
     const { isOpen, closeDialog } = useWinDialog(win)
 
-    const playerOfTheDay = getPlayerOfTheDay()
+    const playerOfTheDay = getPlayerOfTheDay(allPlayers)
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -53,7 +53,7 @@ const Home = () => {
         }
     }, [win, mutate])
 
-    if (loading || statusLoading || isLoading) {
+    if (loading || statusLoading || isLoading || !playerOfTheDay) {
         return (
             <AbsoluteCenter>
                 <Spinner size="xl" />
@@ -135,6 +135,7 @@ const Home = () => {
                 onClose={closeDialog}
                 nbPlayers={selectedPlayers.length}
                 result={result}
+                playerOfTheDay={playerOfTheDay}
             />
         </VStack>
     )

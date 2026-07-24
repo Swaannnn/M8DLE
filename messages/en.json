@@ -38,6 +38,7 @@
         "title": "Well done!",
         "winnerMessagePrefix": "The player of the day was",
         "winnerMessageSuffix": "!",
+        "playerOtd": "Player of the day",
         "attemptsMessage": "You found it in {nbPlayers} tries.",
         "share": "Share :",
         "copyText": "Copy the text",
