@@ -2,7 +2,6 @@
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import type { Player } from '@/types/player'
-import { getAge, getYear } from '@/utils/dateUtils'
 import ReactCountryFlag from 'react-country-flag'
 import Image from 'next/image'
 import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu'
@@ -11,6 +10,7 @@ import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
 import { useColorMode } from './ui/color-mode'
 import { grey, lightGrey, pink } from '@/constants/colors'
 import { useTranslations } from 'next-intl'
+import { comparePlayer, getCurrentOrganization, getPreviousOrganization } from '@/utils/playerCompareUtils'
 
 const containerVariants: Variants = {
     hidden: {},
@@ -162,39 +162,39 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                     <HeaderItem>{t('age')}</HeaderItem>
                 </HStack>
                 {[...players].reverse().map((player) => {
-                    const joinDatePlayer = getYear(player.joinDate)
-                    const joinDatePlayerOfTheDay = getYear(playerOfTheDay.joinDate)
-
-                    const agePlayer = getAge(player.birthDate)
-                    const agePlayerOfTheDay = getAge(playerOfTheDay.birthDate)
+                    const cmp = comparePlayer(player, playerOfTheDay)
+                    const prevOrg = getPreviousOrganization(player)
+                    const currentOrg = getCurrentOrganization(player)
 
                     return (
                         <MotionDiv
-                            key={player.name}
+                            key={player.id}
                             variants={containerVariants}
                             initial="hidden"
                             animate="visible"
                         >
-                            <HStack key={player.name}>
-                                <RowItem isValid={playerOfTheDay.name === player.name}>
+                            <HStack key={player.id}>
+                                <RowItem isValid={cmp.player}>
                                     <Image
-                                        src={player.image}
+                                        src={player.imageUrl}
                                         alt={player.name}
                                         width={120}
                                         height={120}
-                                        style={{ width: 'auto', height: 'auto' }}
                                     />
                                 </RowItem>
-                                <RowItem isValid={playerOfTheDay.game.name === player.game.name}>
-                                    <Image
-                                        src={player.game.logo}
-                                        alt={player.game.name}
-                                        width={80}
-                                        height={80}
-                                        style={{ width: 'auto', height: 'auto' }}
-                                    />
+                                <RowItem isValid={cmp.game}>
+                                    {player.game?.imageUrl ? (
+                                        <Image
+                                            src={player.game.imageUrl}
+                                            alt={player.game.name}
+                                            width={80}
+                                            height={80}
+                                        />
+                                    ) : (
+                                        <Text textAlign="center" fontWeight="bold">{player.game?.name ?? 'N/A'}</Text>
+                                    )}
                                 </RowItem>
-                                <RowItem isValid={playerOfTheDay.nationality === player.nationality}>
+                                <RowItem isValid={cmp.nationality}>
                                     <ReactCountryFlag
                                         svg
                                         style={{
@@ -205,50 +205,42 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                     />
                                 </RowItem>
                                 <RowNumber
-                                    isLess={joinDatePlayer > joinDatePlayerOfTheDay}
-                                    isMore={joinDatePlayer < joinDatePlayerOfTheDay}
-                                    isValid={joinDatePlayer === joinDatePlayerOfTheDay}
+                                    isLess={cmp.joinDate > 0}
+                                    isMore={cmp.joinDate < 0}
+                                    isValid={cmp.joinDate === 0}
                                 >
-                                    {joinDatePlayer}
+                                    {cmp.joinDatePlayer}
                                 </RowNumber>
-                                <RowItem
-                                    isValid={
-                                        playerOfTheDay.previousOrganization.name === player.previousOrganization.name
-                                    }
-                                >
-                                    {player.previousOrganization.logo ? (
+                                <RowItem isValid={cmp.previousOrganization}>
+                                    {prevOrg.imageUrl ? (
                                         <Image
-                                            src={player.previousOrganization.logo}
-                                            alt={player.previousOrganization.name}
+                                            src={prevOrg.imageUrl}
+                                            alt={prevOrg.name}
                                             width={80}
                                             height={80}
-                                            style={{ width: 'auto', height: 'auto' }}
                                         />
                                     ) : (
-                                        <Text>{player.previousOrganization.name}</Text>
+                                        <Text textAlign="center">{prevOrg.name}</Text>
                                     )}
                                 </RowItem>
-                                <RowItem
-                                    isValid={playerOfTheDay.lastOrganization.name === player.lastOrganization.name}
-                                >
-                                    {player.lastOrganization.logo ? (
+                                <RowItem isValid={cmp.lastOrganization}>
+                                    {currentOrg.imageUrl ? (
                                         <Image
-                                            src={player.lastOrganization.logo}
-                                            alt={player.lastOrganization.name}
+                                            src={currentOrg.imageUrl}
+                                            alt={currentOrg.name}
                                             width={80}
                                             height={80}
-                                            style={{ width: 'auto', height: 'auto' }}
                                         />
                                     ) : (
-                                        <Text>{player.lastOrganization.name}</Text>
+                                        <Text textAlign="center">{currentOrg.name}</Text>
                                     )}
                                 </RowItem>
                                 <RowNumber
-                                    isLess={agePlayer > agePlayerOfTheDay}
-                                    isMore={agePlayer < agePlayerOfTheDay}
-                                    isValid={agePlayer === agePlayerOfTheDay}
+                                    isLess={cmp.age > 0}
+                                    isMore={cmp.age < 0}
+                                    isValid={cmp.age === 0}
                                 >
-                                    {agePlayer}
+                                    {cmp.agePlayer}
                                 </RowNumber>
                             </HStack>
                         </MotionDiv>

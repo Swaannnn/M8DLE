@@ -1,19 +1,16 @@
-export interface Player {
-    name: string
-    game: {
-        name: string
-        logo: string
+import { Prisma } from '@prisma/client'
+
+export type PlayerWithRelations = Prisma.PlayerGetPayload<{
+    include: {
+        game: true
+        organizationPlayers: {
+            include: {
+                organization: true
+            }
+        }
     }
-    nationality: string
-    joinDate: string
-    previousOrganization: {
-        name: string
-        logo: string | null
-    }
-    lastOrganization: {
-        name: string
-        logo: string | null
-    }
-    birthDate: string
-    image: string
-}
+}>
+
+export type Player = PlayerWithRelations
+
+
