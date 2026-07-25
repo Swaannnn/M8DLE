@@ -33,6 +33,8 @@ export function SearchableSelect({ value, onChange, options, placeholder = 'Sele
         return options.filter(o => normalize(o.label).includes(normalize(inputValue)))
     }, [options, inputValue, selectedOption])
 
+    const showDefaultOption = !inputValue || inputValue === selectedOption?.label
+
     const collection = useMemo(() => createListCollection({
         items: filteredOptions,
         itemToString: (item) => item.label,
@@ -68,31 +70,33 @@ export function SearchableSelect({ value, onChange, options, placeholder = 'Sele
                     <Combobox.Positioner zIndex={1400}>
                         <Combobox.Content maxH="250px" overflowY="auto" bg="bg.panel" p="1" borderRadius="md" boxShadow="lg" borderWidth="1px">
                             <Combobox.List>
-                                <Box
-                                    cursor="pointer"
-                                    px="3"
-                                    py="2"
-                                    borderRadius="sm"
-                                    _hover={{ bg: 'whiteAlpha.200' }}
-                                    onMouseDown={(e) => {
-                                        e.preventDefault()
-                                        onChange('')
-                                        setInputValue('')
-                                        setIsOpen(false)
-                                    }}
-                                    onClick={() => {
-                                        onChange('')
-                                        setInputValue('')
-                                        setIsOpen(false)
-                                    }}
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="space-between"
-                                >
-                                    <Box as="span">{placeholder}</Box>
-                                    {!value && <LuCheck />}
-                                </Box>
-                                {filteredOptions.length === 0 && (
+                                {showDefaultOption && (
+                                    <Box
+                                        cursor="pointer"
+                                        px="3"
+                                        py="2"
+                                        borderRadius="sm"
+                                        _hover={{ bg: 'whiteAlpha.200' }}
+                                        onMouseDown={(e) => {
+                                            e.preventDefault()
+                                            onChange('')
+                                            setInputValue('')
+                                            setIsOpen(false)
+                                        }}
+                                        onClick={() => {
+                                            onChange('')
+                                            setInputValue('')
+                                            setIsOpen(false)
+                                        }}
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="space-between"
+                                    >
+                                        <Box as="span">{placeholder}</Box>
+                                        {!value && <LuCheck />}
+                                    </Box>
+                                )}
+                                {filteredOptions.length === 0 && !showDefaultOption && (
                                     <Box p="2" textAlign="center" color="gray.500" fontSize="sm">{t('noResults')}</Box>
                                 )}
                                 {filteredOptions.map((item) => (
