@@ -1,3 +1,4 @@
+import { CreatePlayerDto } from '@/dto/CreatePlayerDto'
 import { UpdatePlayerDto } from '@/dto/UpdatePlayerDto'
 import { getSession } from '@/lib/auth/session'
 import { prisma } from '@/lib/db'
@@ -26,6 +27,38 @@ export async function GET() {
     }
 }
 
+export async function POST(req: NextRequest) {
+    try {
+        const session = await getSession()
+        if (!session || session.role != Role.ADMIN) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
+        const content = CreatePlayerDto.parse(await req.json())
+        const created = await prisma.player.create({
+            data: {
+                name: content.name,
+                birthDate: content.birthDate,
+                imageUrl: content.imageUrl,
+                nationality: content.nationality,
+                gameId: content.gameId,
+                organizationPlayers: {
+                    create: content.organizationPlayers?.map(org => ({
+                        start: org.start,
+                        end: org.end,
+                        organizationId: org.organizationId,
+                    })) || [],
+                },
+            },
+        })
+
+        return NextResponse.json(created, { status: 201 })
+    } catch (error) {
+        console.error(error)
+        return NextResponse.json({ error: 'Failed to create player' }, { status: 500 })
+    }
+}
+
 export async function PATCH(req: NextRequest) {
     try {
         const session = await getSession()
@@ -34,12 +67,31 @@ export async function PATCH(req: NextRequest) {
         }
 
         const content = UpdatePlayerDto.parse(await req.json())
+
+        // Handle organizationPlayers update separately since Prisma's update is tricky with nested arrays
+        if (content.organizationPlayers) {
+            await prisma.organizationPlayer.deleteMany({
+                where: { playerId: content.id }
+            })
+        }
+
         const updated = await prisma.player.update({
             where: { id: content.id },
             data: {
                 name: content.name,
                 birthDate: content.birthDate,
                 imageUrl: content.imageUrl,
+                nationality: content.nationality,
+                gameId: content.gameId,
+                ...(content.organizationPlayers && {
+                    organizationPlayers: {
+                        create: content.organizationPlayers.map(org => ({
+                            start: org.start,
+                            end: org.end,
+                            organizationId: org.organizationId,
+                        })),
+                    }
+                }),
             },
         })
 
@@ -66,6 +118,7 @@ export async function DELETE(req: NextRequest) {
         }
 
         // Set DELETED_AT to NOW()
+        await prisma.player.delete({ where: { id } })
 
         return NextResponse.json({ success: true })
     } catch (error) {

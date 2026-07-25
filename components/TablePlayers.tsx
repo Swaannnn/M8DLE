@@ -191,7 +191,12 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                             height={80}
                                         />
                                     ) : (
-                                        <Text textAlign="center" fontWeight="bold">{player.game?.name ?? 'N/A'}</Text>
+                                        <Text
+                                            textAlign="center"
+                                            fontWeight="bold"
+                                        >
+                                            {player.game?.name ?? 'N/A'}
+                                        </Text>
                                     )}
                                 </RowItem>
                                 <RowItem isValid={cmp.nationality}>

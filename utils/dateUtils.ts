@@ -76,3 +76,20 @@ export function getFirstDayOfMonth(date: Date): Date {
     dateCopy.setDate(1)
     return dateCopy
 }
+
+/**
+ * Formate une date (chaîne ISO ou objet Date) dans un format adapté pour <input type="date" /> (YYYY-MM-DD)
+ * @param date - La date à formater
+ * @returns La chaîne de date formatée, ou une chaîne vide si invalide/nulle
+ */
+export function formatDateForInput(date: string | Date | null | undefined): string {
+    if (!date) return ''
+    try {
+        if (typeof date === 'string') {
+            return date.split('T')[0]
+        }
+        return date.toISOString().split('T')[0]
+    } catch {
+        return ''
+    }
+}

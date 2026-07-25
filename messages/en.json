@@ -10,6 +10,7 @@
         "leaderboard": "Leaderboard",
         "myAccount": "My account",
         "login": "Login",
+        "admin": "Admin",
         "credits": "Credits",
         "privacyPolicy": "Privacy Policy",
         "legalNotice": "Legal Notice"
@@ -49,7 +50,15 @@
     },
     "calendar": {
         "myVictories": "My victories in",
-        "days": ["M", "T", "W", "J", "F", "S", "D"]
+        "days": [
+            "M",
+            "T",
+            "W",
+            "J",
+            "F",
+            "S",
+            "D"
+        ]
     },
     "input": {
         "playersPlaceholder": "Type to search",
@@ -174,6 +183,54 @@
     "metadata": {
         "title": "M8DLE - Guess the Gentle Mates Player of the Day",
         "description": "M8DLE is a daily game inspired by Wordle and set in the Gentle Mates universe. Guess the player of the day and compare your score with the community.",
-        "keywords": ["gentlemates", "m8dle", "jeu gentlemates", "gentlemates wordle", "dle"]
+        "keywords": [
+            "gentlemates",
+            "m8dle",
+            "jeu gentlemates",
+            "gentlemates wordle",
+            "dle"
+        ]
+    },
+    "adminPlayers": {
+        "title": "ADMINISTRATION",
+        "addPlayer": "Add Player",
+        "searchPlayer": "Search Player",
+        "allGames": "All games",
+        "name": "Name",
+        "game": "Game",
+        "nationality": "Nationality",
+        "currentTeam": "Current team",
+        "actions": "Actions",
+        "editPlayer": "Edit",
+        "deletePlayer": "Delete",
+        "deleteConfirmTitle": "Confirm deletion",
+        "deleteConfirmText": "Are you sure you want to delete this player?",
+        "playerCreated": "Player created",
+        "playerUpdated": "Player updated",
+        "playerDeleted": "Player deleted",
+        "error": "An error occurred",
+        "playersTab": "Players",
+        "usersTab": "Users",
+        "organizationsTab": "Organizations",
+        "gamesTab": "Games",
+        "addOrg": "Add Org",
+        "start": "Start",
+        "end": "End",
+        "none": "None",
+        "select": "Select...",
+        "organizations": "Organizations",
+        "imageUrl": "Image URL",
+        "birthDate": "Birth Date",
+        "nationalityInput": "Nationality (e.g. FR)",
+        "orgNotAvailable": "Organizations management is not available yet.",
+        "gamesNotAvailable": "Games management is not available yet.",
+        "usersNotAvailable": "Users management is not available yet.",
+        "noneTeam": "None",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+    },
+    "ui": {
+        "searchPlaceholder": "Search...",
+        "noResults": "No results"
     }
 }
