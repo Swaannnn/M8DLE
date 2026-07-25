@@ -193,7 +193,7 @@
         ]
     },
     "adminPlayers": {
-        "title": "Administration",
+        "title": "ADMINISTRATION",
         "addPlayer": "Ajouter un joueur",
         "searchPlayer": "Rechercher un joueur",
         "allGames": "Tous les jeux",

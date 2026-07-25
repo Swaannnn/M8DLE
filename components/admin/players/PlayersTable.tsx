@@ -3,7 +3,7 @@ import Image from 'next/image'
 import ReactCountryFlag from 'react-country-flag'
 import { LuPencil, LuTrash } from 'react-icons/lu'
 import { useTranslations } from 'next-intl'
-import { countries } from '@/utils/countries'
+import { useCountries } from '@/utils/countries'
 import type { Player } from '@/types/player'
 
 type PlayersTableProps = {
@@ -14,6 +14,7 @@ type PlayersTableProps = {
 
 export function PlayersTable({ players, onEdit, onDelete }: PlayersTableProps) {
     const t = useTranslations('adminPlayers')
+    const countries = useCountries()
 
     return (
         <Box overflowX="auto" w="full" bg="bg" borderRadius="md" borderWidth="1px">

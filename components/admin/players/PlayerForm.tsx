@@ -7,8 +7,9 @@ import type { Player } from '@/types/player'
 import { LuPlus, LuTrash } from 'react-icons/lu'
 import { SearchableSelect } from '@/components/ui/SearchableSelect'
 import { CustomDatePicker } from '@/components/ui/DatePicker'
+import { ImageUpload } from '@/components/ui/ImageUpload'
 import { formatDateForInput } from '@/utils/dateUtils'
-import { countries } from '@/utils/countries'
+import { useCountries } from '@/utils/countries'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 
@@ -25,6 +26,7 @@ type OrgPlayerForm = {
 
 export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
     const t = useTranslations('adminPlayers')
+    const countries = useCountries()
 
     const { data: games } = useSWR<{ id: string; name: string }[]>('/api/games', fetcher)
     const { data: orgs } = useSWR<{ id: string; name: string }[]>('/api/organizations', fetcher)
@@ -121,7 +123,7 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
 
                 <Box>
                     <Text mb="0.5rem">{t('imageUrl')}</Text>
-                    <Input required value={imageUrl} onChange={e => setImageUrl(e.target.value)} />
+                    <ImageUpload value={imageUrl} onChange={setImageUrl} />
                 </Box>
 
                 <Box>
