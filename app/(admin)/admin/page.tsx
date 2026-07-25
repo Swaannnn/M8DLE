@@ -24,7 +24,7 @@ export default function AdminPlayersPage() {
                 className={tuskerGrotesk.className}
                 mx="auto"
             >
-                {t('title').toUpperCase()}
+                {t('title')}
             </Text>
 
             <HStack mb="2rem" borderBottomWidth="1px" pb="1rem" overflowX="auto">

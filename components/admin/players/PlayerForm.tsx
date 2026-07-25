@@ -7,7 +7,6 @@ import type { Player } from '@/types/player'
 import { LuPlus, LuTrash } from 'react-icons/lu'
 import { SearchableSelect } from '@/components/ui/SearchableSelect'
 import { CustomDatePicker } from '@/components/ui/DatePicker'
-import { ImageUpload } from '@/components/ui/ImageUpload'
 import { formatDateForInput } from '@/utils/dateUtils'
 import { useCountries } from '@/utils/countries'
 import useSWR from 'swr'
@@ -123,7 +122,7 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
 
                 <Box>
                     <Text mb="0.5rem">{t('imageUrl')}</Text>
-                    <ImageUpload value={imageUrl} onChange={setImageUrl} />
+                    <Input required value={imageUrl} onChange={e => setImageUrl(e.target.value)} />
                 </Box>
 
                 <Box>
