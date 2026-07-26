@@ -221,7 +221,7 @@
         "organizations": "Organizations",
         "imageUrl": "Image URL",
         "birthDate": "Birth Date",
-        "nationalityInput": "Nationality (e.g. FR)",
+        "nationalityInput": "Nationality",
         "orgNotAvailable": "Organizations management is not available yet.",
         "gamesNotAvailable": "Games management is not available yet.",
         "usersNotAvailable": "Users management is not available yet.",

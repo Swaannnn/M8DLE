@@ -222,7 +222,7 @@
         "organizations": "Organisations",
         "imageUrl": "Image URL",
         "birthDate": "Date de naissance",
-        "nationalityInput": "Nationalité (ex: FR)",
+        "nationalityInput": "Nationalité",
         "orgNotAvailable": "La gestion des organisations n'est pas encore disponible.",
         "gamesNotAvailable": "La gestion des jeux n'est pas encore disponible.",
         "usersNotAvailable": "La gestion des utilisateurs n'est pas encore disponible.",

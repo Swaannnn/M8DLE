@@ -8,6 +8,7 @@ import { LuMenu } from 'react-icons/lu'
 import { useState } from 'react'
 import LangSwitcher from './LangSwitcher'
 import { useTranslations } from 'next-intl'
+import { Role } from '@prisma/client'
 
 const NavBar = () => {
     const { user, loading } = useAuth()
@@ -108,7 +109,7 @@ const NavBar = () => {
                                                 </Link>
                                                 {user ? (
                                                     <>
-                                                        {user.role === 'ADMIN' && (
+                                                        {user.role === Role.ADMIN && (
                                                             <Link
                                                                 onClick={handleClose}
                                                                 asChild
@@ -173,7 +174,7 @@ const NavBar = () => {
                     </Link>
                     {user ? (
                         <>
-                            {user.role === 'ADMIN' && (
+                            {user.role === Role.ADMIN && (
                                 <Link asChild>
                                     <NextLink href="/admin">{t('admin')}</NextLink>
                                 </Link>
