@@ -10,6 +10,7 @@
         "leaderboard": "Classement",
         "myAccount": "Mon Compte",
         "login": "Se connecter",
+        "admin": "Admin",
         "credits": "Crédits",
         "privacyPolicy": "Politique de confidentialité",
         "legalNotice": "Mentions légales"
@@ -50,7 +51,15 @@
     },
     "calendar": {
         "myVictories": "Mes victoires en",
-        "days": ["L", "M", "M", "J", "V", "S", "D"]
+        "days": [
+            "L",
+            "M",
+            "M",
+            "J",
+            "V",
+            "S",
+            "D"
+        ]
     },
     "input": {
         "playersPlaceholder": "Tapez pour rechercher",
@@ -175,6 +184,54 @@
     "metadata": {
         "title": "M8DLE - Devine le joueur Gentle Mates du jour",
         "description": "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
-        "keywords": ["gentlemates", "m8dle", "jeu gentlemates", "gentlemates wordle", "dle"]
+        "keywords": [
+            "gentlemates",
+            "m8dle",
+            "jeu gentlemates",
+            "gentlemates wordle",
+            "dle"
+        ]
+    },
+    "adminPlayers": {
+        "title": "ADMINISTRATION",
+        "addPlayer": "Ajouter un joueur",
+        "searchPlayer": "Rechercher un joueur",
+        "allGames": "Tous les jeux",
+        "name": "Nom",
+        "game": "Jeu",
+        "nationality": "Nationalité",
+        "currentTeam": "Équipe actuelle",
+        "actions": "Actions",
+        "editPlayer": "Modifier",
+        "deletePlayer": "Supprimer",
+        "deleteConfirmTitle": "Confirmer la suppression",
+        "deleteConfirmText": "Êtes-vous sûr de vouloir supprimer ce joueur ?",
+        "playerCreated": "Joueur créé",
+        "playerUpdated": "Joueur mis à jour",
+        "playerDeleted": "Joueur supprimé",
+        "error": "Une erreur est survenue",
+        "playersTab": "Joueurs",
+        "usersTab": "Utilisateurs",
+        "organizationsTab": "Organisations",
+        "gamesTab": "Jeux",
+        "addOrg": "Ajouter",
+        "start": "Début",
+        "end": "Fin",
+        "none": "Aucun",
+        "select": "Sélectionner...",
+        "organizations": "Organisations",
+        "imageUrl": "Image URL",
+        "birthDate": "Date de naissance",
+        "nationalityInput": "Nationalité",
+        "orgNotAvailable": "La gestion des organisations n'est pas encore disponible.",
+        "gamesNotAvailable": "La gestion des jeux n'est pas encore disponible.",
+        "usersNotAvailable": "La gestion des utilisateurs n'est pas encore disponible.",
+        "noneTeam": "Aucune",
+        "confirm": "Confirmer",
+        "cancel": "Annuler"
+    },
+    "ui": {
+        "searchPlaceholder": "Rechercher...",
+        "noResults": "Aucun résultat"
     }
 }

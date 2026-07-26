@@ -8,6 +8,7 @@ import { LuMenu } from 'react-icons/lu'
 import { useState } from 'react'
 import LangSwitcher from './LangSwitcher'
 import { useTranslations } from 'next-intl'
+import { Role } from '@prisma/client'
 
 const NavBar = () => {
     const { user, loading } = useAuth()
@@ -47,7 +48,7 @@ const NavBar = () => {
                     open={open}
                     onOpenChange={(details) => setOpen(details.open)}
                 >
-                    <Drawer.Trigger>
+                    <Drawer.Trigger asChild>
                         <Button
                             variant="ghost"
                             onClick={() => setOpen(true)}
@@ -107,12 +108,22 @@ const NavBar = () => {
                                                     <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
                                                 </Link>
                                                 {user ? (
-                                                    <Link
-                                                        onClick={handleClose}
-                                                        asChild
-                                                    >
-                                                        <NextLink href="/account">{t('myAccount')}</NextLink>
-                                                    </Link>
+                                                    <>
+                                                        {user.role === Role.ADMIN && (
+                                                            <Link
+                                                                onClick={handleClose}
+                                                                asChild
+                                                            >
+                                                                <NextLink href="/admin">{t('admin')}</NextLink>
+                                                            </Link>
+                                                        )}
+                                                        <Link
+                                                            onClick={handleClose}
+                                                            asChild
+                                                        >
+                                                            <NextLink href="/account">{t('myAccount')}</NextLink>
+                                                        </Link>
+                                                    </>
                                                 ) : (
                                                     <Link
                                                         onClick={handleClose}
@@ -162,9 +173,16 @@ const NavBar = () => {
                         <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
                     </Link>
                     {user ? (
-                        <Link asChild>
-                            <NextLink href="/account">{t('myAccount')}</NextLink>
-                        </Link>
+                        <>
+                            {user.role === Role.ADMIN && (
+                                <Link asChild>
+                                    <NextLink href="/admin">{t('admin')}</NextLink>
+                                </Link>
+                            )}
+                            <Link asChild>
+                                <NextLink href="/account">{t('myAccount')}</NextLink>
+                            </Link>
+                        </>
                     ) : (
                         <Link asChild>
                             <NextLink href="/login">{t('login')}</NextLink>
