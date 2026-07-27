@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { VStack, Stack, Input, Button, AbsoluteCenter, Spinner, Dialog, Portal, CloseButton, Text } from '@chakra-ui/react'
+import { VStack, Stack, Input, Button, AbsoluteCenter, Spinner, Dialog, Portal, Text } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { LuPlus } from 'react-icons/lu'
 import { GamesTable } from './GamesTable'
@@ -76,39 +76,15 @@ export function GamesTab() {
                 )}
             </VStack>
 
-            <Dialog.Root
+            <GameForm
                 open={isFormOpen}
-                onOpenChange={(details) => !details.open && setIsFormOpen(false)}
-                size="lg"
-                scrollBehavior="inside"
-            >
-                <Portal>
-                    <Dialog.Backdrop />
-                    <Dialog.Positioner>
-                        <Dialog.Content bg="bg.panel" p="4">
-                            <Dialog.Header>
-                                <Dialog.Title fontSize="2xl">
-                                    {editingGame ? t('editGame') : t('addGame')}
-                                </Dialog.Title>
-                            </Dialog.Header>
-
-                            <Dialog.Body>
-                                <GameForm
-                                    game={editingGame}
-                                    onSuccess={() => {
-                                        setIsFormOpen(false)
-                                        mutate()
-                                    }}
-                                />
-                            </Dialog.Body>
-
-                            <Dialog.CloseTrigger asChild>
-                                <CloseButton size="sm" />
-                            </Dialog.CloseTrigger>
-                        </Dialog.Content>
-                    </Dialog.Positioner>
-                </Portal>
-            </Dialog.Root>
+                onClose={() => setIsFormOpen(false)}
+                game={editingGame}
+                onSuccess={() => {
+                    setIsFormOpen(false)
+                    mutate()
+                }}
+            />
 
             <Dialog.Root
                 open={!!gameToDelete}

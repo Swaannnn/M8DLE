@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { VStack, Stack, Input, AbsoluteCenter, Spinner, Dialog, Portal, CloseButton, Text, Button } from '@chakra-ui/react'
+import { VStack, Stack, Input, AbsoluteCenter, Spinner, Dialog, Portal, Text, Button } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { UsersTable } from './UsersTable'
 import { UserForm } from './UserForm'
@@ -73,39 +73,15 @@ export function UsersTab() {
                 )}
             </VStack>
 
-            <Dialog.Root
+            <UserForm
                 open={isFormOpen}
-                onOpenChange={(details) => !details.open && setIsFormOpen(false)}
-                size="lg"
-                scrollBehavior="inside"
-            >
-                <Portal>
-                    <Dialog.Backdrop />
-                    <Dialog.Positioner>
-                        <Dialog.Content bg="bg.panel" p="4">
-                            <Dialog.Header>
-                                <Dialog.Title fontSize="2xl">{t('editUser')}</Dialog.Title>
-                            </Dialog.Header>
-
-                            <Dialog.Body>
-                                {editingUser && (
-                                    <UserForm
-                                        user={editingUser}
-                                        onSuccess={() => {
-                                            setIsFormOpen(false)
-                                            mutate()
-                                        }}
-                                    />
-                                )}
-                            </Dialog.Body>
-
-                            <Dialog.CloseTrigger asChild>
-                                <CloseButton size="sm" />
-                            </Dialog.CloseTrigger>
-                        </Dialog.Content>
-                    </Dialog.Positioner>
-                </Portal>
-            </Dialog.Root>
+                onClose={() => setIsFormOpen(false)}
+                onSuccess={() => {
+                    setIsFormOpen(false)
+                    mutate()
+                }}
+                user={editingUser}
+            />
 
             <Dialog.Root
                 open={!!userToDelete}
