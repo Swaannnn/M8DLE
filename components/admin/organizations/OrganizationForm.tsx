@@ -5,6 +5,7 @@ import { Box, Button, VStack, Input, Text } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { ImageUpload } from '@/components/admin/players/ImageUpload'
 import type { Organization } from '@prisma/client'
+import { toaster } from '@/components/ui/toaster'
 
 type OrganizationFormProps = {
     organization?: Organization | null
@@ -38,11 +39,19 @@ export function OrganizationForm({ organization, onSuccess }: OrganizationFormPr
 
             if (!res.ok) throw new Error('Failed')
 
-            alert(organization ? t('organizationUpdated') : t('organizationCreated'))
+            toaster.create({
+                description: organization ? t('organizationUpdated') : t('organizationCreated'),
+                type: "info",
+                closable: true,
+            })
             onSuccess()
         } catch (error) {
             console.error(error)
-            alert(t('error'))
+            toaster.create({
+                description: t('error'),
+                type: "error",
+                closable: true,
+            })
         } finally {
             setLoading(false)
         }

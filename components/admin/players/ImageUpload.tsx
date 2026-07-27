@@ -26,7 +26,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
 
             const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
             if (!cloudName) {
-                alert('La variable d\'environnement NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME n\'est pas définie.')
+                console.error('La variable d\'environnement NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME n\'est pas définie.')
                 setIsUploading(false)
                 return
             }
@@ -42,11 +42,9 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
                 onChange(data.secure_url)
             } else {
                 console.error('Erreur Cloudinary:', data)
-                alert('Erreur lors de l\'upload de l\'image (vérifiez que le preset m8dle_preset existe et est "Unsigned").')
             }
         } catch (error) {
             console.error('Erreur lors de l\'upload:', error)
-            alert('Une erreur est survenue lors de l\'upload.')
         } finally {
             setIsUploading(false)
             if (fileInputRef.current) {

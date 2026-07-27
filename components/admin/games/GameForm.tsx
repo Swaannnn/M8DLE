@@ -5,6 +5,7 @@ import { Box, Button, VStack, Input, Text } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { ImageUpload } from '@/components/admin/players/ImageUpload'
 import type { Game } from '@prisma/client'
+import { toaster } from '@/components/ui/toaster'
 
 type GameFormProps = {
     game?: Game | null
@@ -38,11 +39,19 @@ export function GameForm({ game, onSuccess }: GameFormProps) {
 
             if (!res.ok) throw new Error('Failed')
 
-            alert(game ? t('gameUpdated') : t('gameCreated'))
+            toaster.create({
+                description: game ? t('gameUpdated') : t('gameCreated'),
+                type: "info",
+                closable: true,
+            })
             onSuccess()
         } catch (error) {
             console.error(error)
-            alert(t('error'))
+            toaster.create({
+                description: t('error'),
+                type: "error",
+                closable: true,
+            })
         } finally {
             setLoading(false)
         }

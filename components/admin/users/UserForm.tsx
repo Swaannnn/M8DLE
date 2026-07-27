@@ -5,6 +5,7 @@ import { Box, Button, VStack, Input, Text } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { SearchableSelect } from '@/components/ui/SearchableSelect'
 import type { User } from '@prisma/client'
+import { Toaster, toaster } from '@/components/ui/toaster'
 
 type UserFormProps = {
     user: User
@@ -36,11 +37,19 @@ export function UserForm({ user, onSuccess }: UserFormProps) {
 
             if (!res.ok) throw new Error('Failed')
 
-            alert(t('userUpdated'))
+            toaster.create({
+                description: t('userUpdated'),
+                type: "info",
+                closable: true,
+            })
             onSuccess()
         } catch (error) {
             console.error(error)
-            alert(t('error'))
+            toaster.create({
+                description: t('error'),
+                type: "error",
+                closable: true,
+            })
         } finally {
             setLoading(false)
         }

@@ -8,6 +8,7 @@ import { PlayersTab } from '@/components/admin/players/PlayersTab'
 import { OrganizationsTab } from '@/components/admin/organizations/OrganizationsTab'
 import { GamesTab } from '@/components/admin/games/GamesTab'
 import { UsersTab } from '@/components/admin/users/UsersTab'
+import { Toaster } from '@/components/ui/toaster'
 
 const PLAYERS_TAB = 'PLAYERS_TAB'
 const ORGANIZATIONS_TAB = 'ORGANIZATIONS_TAB'
@@ -61,6 +62,8 @@ export default function AdminPlayersPage() {
             {activeTab === ORGANIZATIONS_TAB && <OrganizationsTab />}
             {activeTab === GAMES_TAB && <GamesTab />}
             {activeTab === USERS_TAB && <UsersTab />}
+
+            <Toaster />
         </VStack>
     )
 }

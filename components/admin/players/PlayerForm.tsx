@@ -12,6 +12,7 @@ import { useCountries } from '@/utils/countries'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { ImageUpload } from './ImageUpload'
+import { toaster } from '@/components/ui/toaster'
 
 type PlayerFormProps = {
     player?: Player | null
@@ -74,11 +75,19 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
 
             if (!res.ok) throw new Error('Failed')
 
-            alert(player ? t('playerUpdated') : t('playerCreated'))
+            toaster.create({
+                description: player ? t('playerUpdated') : t('playerCreated'),
+                type: "info",
+                closable: true,
+            })
             onSuccess()
         } catch (error) {
             console.error(error)
-            alert(t('error'))
+            toaster.create({
+                description: t('error'),
+                type: "error",
+                closable: true,
+            })
         } finally {
             setLoading(false)
         }
