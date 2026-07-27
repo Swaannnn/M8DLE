@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Box, Button, HStack, VStack, Input, Text, IconButton } from '@chakra-ui/react'
+import { useState, useEffect } from 'react'
+import { Box, Button, HStack, VStack, Input, Text, IconButton, Dialog, Portal, CloseButton } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import type { Player } from '@/types/player'
 import { LuPlus, LuTrash } from 'react-icons/lu'
@@ -11,8 +11,12 @@ import { formatDateForInput } from '@/utils/dateUtils'
 import { useCountries } from '@/utils/countries'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { ImageUpload } from './ImageUpload'
+import { toaster } from '@/components/ui/toaster'
 
 type PlayerFormProps = {
+    open: boolean
+    onClose: () => void
     player?: Player | null
     onSuccess: () => void
 }
@@ -23,8 +27,8 @@ type OrgPlayerForm = {
     end: string | null
 }
 
-export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
-    const t = useTranslations('adminPlayers')
+export function PlayerForm({ open, onClose, player, onSuccess }: PlayerFormProps) {
+    const t = useTranslations('admin')
     const countries = useCountries()
 
     const { data: games } = useSWR<{ id: string; name: string }[]>('/api/games', fetcher)
@@ -43,6 +47,23 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
         })) || []
     )
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if (open) {
+            setName(player?.name || '')
+            setBirthDate(formatDateForInput(player?.birthDate))
+            setNationality(player?.nationality || '')
+            setImageUrl(player?.imageUrl || '')
+            setGameId(player?.gameId || '')
+            setOrgPlayers(
+                player?.organizationPlayers?.map(op => ({
+                    organizationId: op.organizationId,
+                    start: formatDateForInput(op.start),
+                    end: formatDateForInput(op.end)
+                })) || []
+            )
+        }
+    }, [open, player])
 
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault()
@@ -73,11 +94,19 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
 
             if (!res.ok) throw new Error('Failed')
 
-            alert(player ? t('playerUpdated') : t('playerCreated'))
+            toaster.create({
+                description: player ? t('playerUpdated') : t('playerCreated'),
+                type: "info",
+                closable: true,
+            })
             onSuccess()
         } catch (error) {
             console.error(error)
-            alert(t('error'))
+            toaster.create({
+                description: t('error'),
+                type: "error",
+                closable: true,
+            })
         } finally {
             setLoading(false)
         }
@@ -98,80 +127,115 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <VStack align="stretch" gap="1rem" maxW="600px">
-                <Box>
-                    <Text mb="0.5rem">{t('name')}</Text>
-                    <Input required value={name} onChange={e => setName(e.target.value)} />
-                </Box>
+        <Dialog.Root
+            open={open}
+            onOpenChange={(details) => !details.open && onClose()}
+            size="xl"
+            scrollBehavior="inside"
+            closeOnInteractOutside={false}
+        >
+            <Portal>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                    <Dialog.Content bg="bg.panel" p="4">
+                        <Dialog.Header>
+                            <Dialog.Title fontSize="2xl">
+                                {player ? t('editPlayer') : t('addPlayer')}
+                            </Dialog.Title>
+                        </Dialog.Header>
 
-                <Box>
-                    <Text fontWeight="bold" mb="0.5rem">{t('birthDate')}</Text>
-                    <CustomDatePicker required value={birthDate} onChange={setBirthDate} />
-                </Box>
+                        <Dialog.Body>
+                            <form id="player-form" onSubmit={handleSubmit}>
+                                <VStack align="stretch" gap="1rem" maxW="800px">
+                                    <Box>
+                                        <Text mb="0.5rem">{t('name')}</Text>
+                                        <Input required value={name} onChange={e => setName(e.target.value)} />
+                                    </Box>
 
-                <Box>
-                    <Text mb="0.5rem">{t('nationalityInput')}</Text>
-                    <SearchableSelect
-                        value={nationality}
-                        onChange={setNationality}
-                        options={countries}
-                        placeholder={t('select')}
-                    />
-                </Box>
+                                    <Box>
+                                        <Text fontWeight="bold" mb="0.5rem">{t('birthDate')}</Text>
+                                        <CustomDatePicker required value={birthDate} onChange={setBirthDate} />
+                                    </Box>
 
-                <Box>
-                    <Text mb="0.5rem">{t('imageUrl')}</Text>
-                    <Input required value={imageUrl} onChange={e => setImageUrl(e.target.value)} />
-                </Box>
+                                    <Box>
+                                        <Text mb="0.5rem">{t('nationalityInput')}</Text>
+                                        <SearchableSelect
+                                            value={nationality}
+                                            onChange={setNationality}
+                                            options={countries}
+                                            placeholder={t('select')}
+                                        />
+                                    </Box>
 
-                <Box>
-                    <Text mb="0.5rem">{t('game')}</Text>
-                    <SearchableSelect
-                        value={gameId}
-                        onChange={setGameId}
-                        options={games?.map(g => ({ value: g.id, label: g.name })) || []}
-                        placeholder={t('none')}
-                    />
-                </Box>
+                                    <Box>
+                                        <Text mb="0.5rem">{t('imageUrl')}</Text>
+                                        <ImageUpload
+                                            value={imageUrl}
+                                            onChange={setImageUrl}
+                                        />
+                                    </Box>
 
-                <Box>
-                    <HStack justify="space-between" mb="1rem">
-                        <Text fontWeight="bold">{t('organizations')}</Text>
-                        <Button variant='outline' size="sm" onClick={addOrg}><LuPlus /> {t('addOrg')}</Button>
-                    </HStack>
-                    <VStack align="stretch" gap="1rem">
-                        {orgPlayers.map((op, i) => (
-                            <HStack key={i} p="1rem" borderWidth="1px" borderRadius="md" align="end">
-                                <VStack align="start" flex="1">
-                                    <Text fontSize="sm">{t('organizations')}</Text>
-                                    <SearchableSelect
-                                        value={op.organizationId}
-                                        onChange={(val) => updateOrg(i, 'organizationId', val)}
-                                        options={orgs?.map(o => ({ value: o.id, label: o.name })) || []}
-                                        placeholder={t('select')}
-                                    />
+                                    <Box>
+                                        <Text mb="0.5rem">{t('game')}</Text>
+                                        <SearchableSelect
+                                            value={gameId}
+                                            onChange={setGameId}
+                                            options={games?.map(g => ({ value: g.id, label: g.name })) || []}
+                                            placeholder={t('none')}
+                                        />
+                                    </Box>
+
+                                    <Box>
+                                        <HStack justify="space-between" mb="1rem">
+                                            <Text fontWeight="bold">{t('organizations')}</Text>
+                                            <Button variant='outline' size="sm" onClick={addOrg}><LuPlus /> {t('addOrg')}</Button>
+                                        </HStack>
+                                        <VStack align="stretch" gap="1rem">
+                                            {orgPlayers.map((op, i) => (
+                                                <HStack key={i} p="1rem" borderWidth="1px" borderRadius="md" align="end" gap="0.75rem">
+                                                    <VStack align="stretch" flex="1" minW="200px">
+                                                        <Text fontSize="sm">{t('organizations')}</Text>
+                                                        <SearchableSelect
+                                                            value={op.organizationId}
+                                                            onChange={(val) => updateOrg(i, 'organizationId', val)}
+                                                            options={orgs?.map(o => ({ value: o.id, label: o.name })) || []}
+                                                            placeholder={t('select')}
+                                                        />
+                                                    </VStack>
+                                                    <VStack align="stretch" w="140px" flex="0 0 140px">
+                                                        <Text fontSize="sm">{t('start')}</Text>
+                                                        <CustomDatePicker required value={op.start} onChange={val => updateOrg(i, 'start', val || '')} />
+                                                    </VStack>
+                                                    <VStack align="stretch" w="140px" flex="0 0 140px">
+                                                        <Text fontSize="sm">{t('end')}</Text>
+                                                        <CustomDatePicker value={op.end || null} onChange={val => updateOrg(i, 'end', val)} />
+                                                    </VStack>
+                                                    <IconButton variant='outline' onClick={() => removeOrg(i)}>
+                                                        <LuTrash />
+                                                    </IconButton>
+                                                </HStack>
+                                            ))}
+                                        </VStack>
+                                    </Box>
                                 </VStack>
-                                <VStack align="start">
-                                    <Text fontSize="sm">{t('start')}</Text>
-                                    <CustomDatePicker required value={op.start} onChange={val => updateOrg(i, 'start', val || '')} />
-                                </VStack>
-                                <VStack align="start">
-                                    <Text fontSize="sm">{t('end')}</Text>
-                                    <CustomDatePicker value={op.end || null} onChange={val => updateOrg(i, 'end', val)} />
-                                </VStack>
-                                <IconButton variant='outline' onClick={() => removeOrg(i)}>
-                                    <LuTrash />
-                                </IconButton>
-                            </HStack>
-                        ))}
-                    </VStack>
-                </Box>
+                            </form>
+                        </Dialog.Body>
 
-                <Button type="submit" mt="2rem" disabled={loading}>
-                    {player ? t('editPlayer') : t('addPlayer')}
-                </Button>
-            </VStack>
-        </form>
+                        <Dialog.Footer mt="1rem">
+                            <Button variant="outline" disabled={loading} onClick={onClose}>
+                                {t('cancel')}
+                            </Button>
+                            <Button type="submit" form="player-form" disabled={loading}>
+                                {player ? t('editPlayer') : t('addPlayer')}
+                            </Button>
+                        </Dialog.Footer>
+
+                        <Dialog.CloseTrigger asChild>
+                            <CloseButton size="sm" />
+                        </Dialog.CloseTrigger>
+                    </Dialog.Content>
+                </Dialog.Positioner>
+            </Portal>
+        </Dialog.Root>
     )
 }

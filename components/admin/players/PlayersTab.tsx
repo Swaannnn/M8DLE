@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { VStack, HStack, Input, Button, AbsoluteCenter, Spinner, Dialog, Portal, CloseButton, Stack, Text } from '@chakra-ui/react'
+import { VStack, HStack, Input, Button, AbsoluteCenter, Spinner, Dialog, Portal, Stack, Text } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { LuPlus } from 'react-icons/lu'
 import { SearchableSelect } from '@/components/ui/SearchableSelect'
@@ -10,7 +10,7 @@ import { fetcher } from '@/utils/fetcher'
 import type { Player } from '@/types/player'
 
 export function PlayersTab() {
-    const t = useTranslations('adminPlayers')
+    const t = useTranslations('admin')
 
     const { data: players, mutate, isLoading } = useSWR<Player[]>('/api/players', fetcher)
     const { data: games } = useSWR<{ id: string; name: string }[]>('/api/games', fetcher)
@@ -92,39 +92,15 @@ export function PlayersTab() {
                 )}
             </VStack>
 
-            <Dialog.Root
+            <PlayerForm
                 open={isFormOpen}
-                onOpenChange={(details) => !details.open && setIsFormOpen(false)}
-                size="lg"
-                scrollBehavior="inside"
-            >
-                <Portal>
-                    <Dialog.Backdrop />
-                    <Dialog.Positioner>
-                        <Dialog.Content bg="bg.panel" p="4">
-                            <Dialog.Header>
-                                <Dialog.Title fontSize="2xl">
-                                    {editingPlayer ? t('editPlayer') : t('addPlayer')}
-                                </Dialog.Title>
-                            </Dialog.Header>
-
-                            <Dialog.Body>
-                                <PlayerForm
-                                    player={editingPlayer}
-                                    onSuccess={() => {
-                                        setIsFormOpen(false)
-                                        mutate()
-                                    }}
-                                />
-                            </Dialog.Body>
-
-                            <Dialog.CloseTrigger asChild>
-                                <CloseButton size="sm" />
-                            </Dialog.CloseTrigger>
-                        </Dialog.Content>
-                    </Dialog.Positioner>
-                </Portal>
-            </Dialog.Root>
+                onClose={() => setIsFormOpen(false)}
+                player={editingPlayer}
+                onSuccess={() => {
+                    setIsFormOpen(false)
+                    mutate()
+                }}
+            />
             <Dialog.Root
                 open={!!playerToDelete}
                 onOpenChange={(details) => !details.open && setPlayerToDelete(null)}
