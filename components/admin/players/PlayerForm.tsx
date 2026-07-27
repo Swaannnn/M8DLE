@@ -11,6 +11,7 @@ import { formatDateForInput } from '@/utils/dateUtils'
 import { useCountries } from '@/utils/countries'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { ImageUpload } from './ImageUpload'
 
 type PlayerFormProps = {
     player?: Player | null
@@ -24,7 +25,7 @@ type OrgPlayerForm = {
 }
 
 export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
-    const t = useTranslations('adminPlayers')
+    const t = useTranslations('admin')
     const countries = useCountries()
 
     const { data: games } = useSWR<{ id: string; name: string }[]>('/api/games', fetcher)
@@ -99,7 +100,7 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <VStack align="stretch" gap="1rem" maxW="600px">
+            <VStack align="stretch" gap="1rem" maxW="800px">
                 <Box>
                     <Text mb="0.5rem">{t('name')}</Text>
                     <Input required value={name} onChange={e => setName(e.target.value)} />
@@ -122,7 +123,10 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
 
                 <Box>
                     <Text mb="0.5rem">{t('imageUrl')}</Text>
-                    <Input required value={imageUrl} onChange={e => setImageUrl(e.target.value)} />
+                    <ImageUpload
+                        value={imageUrl}
+                        onChange={setImageUrl}
+                    />
                 </Box>
 
                 <Box>
@@ -142,8 +146,8 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
                     </HStack>
                     <VStack align="stretch" gap="1rem">
                         {orgPlayers.map((op, i) => (
-                            <HStack key={i} p="1rem" borderWidth="1px" borderRadius="md" align="end">
-                                <VStack align="start" flex="1">
+                            <HStack key={i} p="1rem" borderWidth="1px" borderRadius="md" align="end" gap="0.75rem">
+                                <VStack align="stretch" flex="1" minW="200px">
                                     <Text fontSize="sm">{t('organizations')}</Text>
                                     <SearchableSelect
                                         value={op.organizationId}
@@ -152,11 +156,11 @@ export function PlayerForm({ player, onSuccess }: PlayerFormProps) {
                                         placeholder={t('select')}
                                     />
                                 </VStack>
-                                <VStack align="start">
+                                <VStack align="stretch" w="140px" flex="0 0 140px">
                                     <Text fontSize="sm">{t('start')}</Text>
                                     <CustomDatePicker required value={op.start} onChange={val => updateOrg(i, 'start', val || '')} />
                                 </VStack>
-                                <VStack align="start">
+                                <VStack align="stretch" w="140px" flex="0 0 140px">
                                     <Text fontSize="sm">{t('end')}</Text>
                                     <CustomDatePicker value={op.end || null} onChange={val => updateOrg(i, 'end', val)} />
                                 </VStack>

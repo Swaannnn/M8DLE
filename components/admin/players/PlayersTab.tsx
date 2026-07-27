@@ -10,7 +10,7 @@ import { fetcher } from '@/utils/fetcher'
 import type { Player } from '@/types/player'
 
 export function PlayersTab() {
-    const t = useTranslations('adminPlayers')
+    const t = useTranslations('admin')
 
     const { data: players, mutate, isLoading } = useSWR<Player[]>('/api/players', fetcher)
     const { data: games } = useSWR<{ id: string; name: string }[]>('/api/games', fetcher)
@@ -95,7 +95,7 @@ export function PlayersTab() {
             <Dialog.Root
                 open={isFormOpen}
                 onOpenChange={(details) => !details.open && setIsFormOpen(false)}
-                size="lg"
+                size="xl"
                 scrollBehavior="inside"
             >
                 <Portal>
