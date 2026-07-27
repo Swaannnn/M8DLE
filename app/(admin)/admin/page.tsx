@@ -1,10 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { tuskerGrotesk } from '@/utils/fontUtils'
 import { PlayersTab } from '@/components/admin/players/PlayersTab'
+import { OrganizationsTab } from '@/components/admin/organizations/OrganizationsTab'
+import { GamesTab } from '@/components/admin/games/GamesTab'
+import { UsersTab } from '@/components/admin/users/UsersTab'
+import { Toaster } from '@/components/ui/toaster'
 
 const PLAYERS_TAB = 'PLAYERS_TAB'
 const ORGANIZATIONS_TAB = 'ORGANIZATIONS_TAB'
@@ -12,7 +16,7 @@ const GAMES_TAB = 'GAMES_TAB'
 const USERS_TAB = 'USERS_TAB'
 
 export default function AdminPlayersPage() {
-    const t = useTranslations('adminPlayers')
+    const t = useTranslations('admin')
 
     const [activeTab, setActiveTab] = useState<string>(PLAYERS_TAB)
 
@@ -55,24 +59,11 @@ export default function AdminPlayersPage() {
             </HStack>
 
             {activeTab === PLAYERS_TAB && <PlayersTab />}
+            {activeTab === ORGANIZATIONS_TAB && <OrganizationsTab />}
+            {activeTab === GAMES_TAB && <GamesTab />}
+            {activeTab === USERS_TAB && <UsersTab />}
 
-            {activeTab === ORGANIZATIONS_TAB && (
-                <Box py="4rem" textAlign="center">
-                    <Text color="gray.500">{t('orgNotAvailable')}</Text>
-                </Box>
-            )}
-
-            {activeTab === GAMES_TAB && (
-                <Box py="4rem" textAlign="center">
-                    <Text color="gray.500">{t('gamesNotAvailable')}</Text>
-                </Box>
-            )}
-
-            {activeTab === USERS_TAB && (
-                <Box py="4rem" textAlign="center">
-                    <Text color="gray.500">{t('usersNotAvailable')}</Text>
-                </Box>
-            )}
+            <Toaster />
         </VStack>
     )
 }

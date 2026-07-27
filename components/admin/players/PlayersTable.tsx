@@ -13,7 +13,7 @@ type PlayersTableProps = {
 }
 
 export function PlayersTable({ players, onEdit, onDelete }: PlayersTableProps) {
-    const t = useTranslations('adminPlayers')
+    const t = useTranslations('admin')
     const countries = useCountries()
 
     return (

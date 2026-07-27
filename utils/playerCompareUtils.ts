@@ -17,7 +17,7 @@ export type PlayerComparison = {
 const getGentleMatesEntry = (player: Player) => {
     const orgs = player.organizationPlayers ?? []
     const index = orgs.findIndex((op) => op.organization.name === 'Gentle Mates')
-    const entry = index !== -1 ? orgs[index] : orgs.find((op) => !op.end) ?? orgs[orgs.length - 1]
+    const entry = index !== -1 ? orgs[index] : (orgs.find((op) => !op.end) ?? orgs[orgs.length - 1])
     return { orgs, index, entry }
 }
 
