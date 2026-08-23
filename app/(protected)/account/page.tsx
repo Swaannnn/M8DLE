@@ -26,7 +26,7 @@ const AccountPage = () => {
 
     useEffect(() => {
         if (!userLoading && loggedOut) {
-            router.push('/login')
+            router.push('/')
         }
     }, [userLoading, loggedOut, router])
 

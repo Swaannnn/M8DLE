@@ -9,6 +9,7 @@ import { useState } from 'react'
 import LangSwitcher from './LangSwitcher'
 import { useTranslations } from 'next-intl'
 import { Role } from '@prisma/client'
+import LoginDialog from './LoginDialog'
 
 const NavBar = () => {
     const { user, loading } = useAuth()
@@ -16,6 +17,7 @@ const NavBar = () => {
     const t = useTranslations('header')
 
     const [open, setOpen] = useState(false)
+    const [loginOpen, setLoginOpen] = useState(false)
 
     const handleClose = () => setOpen(false)
 
@@ -24,7 +26,8 @@ const NavBar = () => {
     }
 
     return (
-        <HStack
+        <>
+            <HStack
             width="100%"
             position="fixed"
             top="0"
@@ -126,10 +129,13 @@ const NavBar = () => {
                                                     </>
                                                 ) : (
                                                     <Link
-                                                        onClick={handleClose}
-                                                        asChild
+                                                        onClick={() => {
+                                                            handleClose()
+                                                            setLoginOpen(true)
+                                                        }}
+                                                        cursor="pointer"
                                                     >
-                                                        <NextLink href="/login">{t('login')}</NextLink>
+                                                        {t('login')}
                                                     </Link>
                                                 )}
                                             </VStack>
@@ -184,8 +190,8 @@ const NavBar = () => {
                             </Link>
                         </>
                     ) : (
-                        <Link asChild>
-                            <NextLink href="/login">{t('login')}</NextLink>
+                        <Link onClick={() => setLoginOpen(true)} cursor="pointer">
+                            {t('login')}
                         </Link>
                     )}
                     <LangSwitcher />
@@ -193,6 +199,8 @@ const NavBar = () => {
                 </HStack>
             )}
         </HStack>
+        <LoginDialog open={loginOpen} onClose={() => setLoginOpen(false)} />
+        </>
     )
 }
 
