@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation'
 import { IconButton } from '@chakra-ui/react'
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
 import { DailyM8DLEResultWithAttemptsCount } from '@/types/m8dleResults'
+import { getMonthIndex } from '@/utils/dateUtils'
 
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
@@ -22,6 +23,7 @@ const AccountPage = () => {
     const locale = useLocale()
     const router = useRouter()
     const now = new Date()
+    now.setDate(1)
     const [selectedDate, setSelectedDate] = useState(now);
     const { data, error, isLoading: resultsLoading } = useSWR<DailyM8DLEResultWithAttemptsCount[], ApiError>(
         `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`, 
@@ -30,23 +32,14 @@ const AccountPage = () => {
     const monthName = selectedDate.toLocaleString(locale, { month: 'long' })
     const year = selectedDate.getFullYear()
 
-    const handlePrevious = () => {
+    const handleNav = (offset: number) => {
         setSelectedDate((prevDate) => {
             const newDate = new Date(prevDate);
             newDate.setDate(1);
-            newDate.setMonth(newDate.getMonth() - 1);
+            newDate.setMonth(newDate.getMonth() + offset);
             return newDate;
         });
-    };
-
-    const handleNext = () => {
-        setSelectedDate((prevDate) => {
-            const newDate = new Date(prevDate);
-            newDate.setDate(1);
-            newDate.setMonth(newDate.getMonth() + 1);
-            return newDate;
-        });
-    };
+    }
 
     useEffect(() => {
         if (!userLoading && loggedOut) {
@@ -107,11 +100,15 @@ const AccountPage = () => {
                 <Separator />
                 <VStack width="350px" height="350px" >
                     <HStack width="100%" justifyContent="space-between" >
-                        <IconButton variant="ghost" disabled={selectedDate.getMonth() <= new Date(user.createdAt).getMonth()} onClick={handlePrevious}><LuChevronLeft/></IconButton>
+                        <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) <= getMonthIndex(new Date(user.createdAt))} onClick={() => handleNav(-1)}>
+                            <LuChevronLeft/>
+                        </IconButton>
                         <Text>
                             {t('myVictories')} {monthName} {year}
                         </Text>
-                        <IconButton variant="ghost" disabled={selectedDate.getMonth() >= now.getMonth()} onClick={handleNext}><LuChevronRight/></IconButton>
+                        <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) >= getMonthIndex(now)} onClick={() => handleNav(1)}>
+                            <LuChevronRight/>
+                        </IconButton>
                     </HStack>
                     <CurrentMonthCalendar results={data ?? []} loading={resultsLoading} date={selectedDate} />
                 </VStack>
