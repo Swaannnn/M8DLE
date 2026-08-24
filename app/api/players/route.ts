@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET() {
     try {
         const players = await prisma.player.findMany({
+            orderBy: { id: 'asc' },
             include: {
                 game: true,
                 organizationPlayers: {

@@ -1,78 +1,91 @@
 'use client'
 
 import { grey, lightGrey, pink } from '@/constants/colors'
-import { Box, Grid, GridItem, Text, VStack } from '@chakra-ui/react'
+import { AbsoluteCenter, Box, Grid, GridItem, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useColorMode } from './ui/color-mode'
-import { DailyM8DLEResult } from '@prisma/client'
 import { getDaysOfMonth, getFirstDayOfMonth } from '@/utils/dateUtils'
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
+import { Tooltip } from './ui/tooltip'
+import { DailyM8DLEResultWithAttemptsCount } from '@/types/m8dleResults'
 
-const CurrentMonthCalendar = ({ results }: { results: DailyM8DLEResult[] }) => {
+const CurrentMonthCalendar = ({ results, loading, date }: { results: DailyM8DLEResultWithAttemptsCount[], loading: boolean, date: Date }) => {
     const { colorMode } = useColorMode()
     const t = useTranslations('calendar')
-    const locale = useLocale()
 
-    const now = new Date()
-    const monthName = now.toLocaleString(locale, { month: 'long' })
-    const year = now.getFullYear()
-    const firstDay = getFirstDayOfMonth(now).getDay()
+    if (loading) {
+        return (
+            <Spinner size="xl" />
+        )
+    }
+
+    const firstDay = getFirstDayOfMonth(date).getDay()
     const startOffset = (firstDay + 6) % 7
-    const days = getDaysOfMonth(now)
+    const days = getDaysOfMonth(date)
     const invalidGrey = colorMode === 'light' ? lightGrey : grey
     const daysOfWeek = t.raw('days') as string[]
-    const map = new Map<number, DailyM8DLEResult | null>()
+    const map = new Map<number, DailyM8DLEResultWithAttemptsCount | null>()
 
-    for (let i = 0; i < getDaysOfMonth(now); i++) {
+    for (let i = 0; i < getDaysOfMonth(date); i++) {
         map.set(i, results.find((r) => new Date(r.date).getDate() === i) ?? null)
     }
 
     return (
-        <VStack gap={4}>
-            <VStack>
-                <Text>
-                    {t('myVictories')} {monthName} {year}
-                </Text>
-            </VStack>
+        <Grid
+            templateColumns="repeat(7, 1fr)"
+            gap={2}
+        >
+            {daysOfWeek.map((day, index) => (
+                <GridItem
+                    key={index}
+                    borderRadius="md"
+                    p={2}
+                    border={`1px solid ${invalidGrey}`}
+                >
+                    <Text textAlign="center">{day}</Text>
+                </GridItem>
+            ))}
 
-            <Grid
-                templateColumns="repeat(7, 1fr)"
-                gap={2}
-            >
-                {daysOfWeek.map((day, index) => (
-                    <GridItem
-                        key={index}
+            {Array.from({ length: startOffset }).map((_, index) => (
+                <GridItem key={`empty-${index}`} />
+            ))}
+
+            {Array.from({ length: days }).map((_, index) => {
+                const day = index + 1
+                const result = map.get(day)
+                const isVictory = result?.success ?? false
+                const attemptsCount = result?._count.attempts ?? 0
+
+                const cell = (
+                    <Box
+                        textAlign="center"
                         borderRadius="md"
                         p={2}
-                        border={`1px solid ${invalidGrey}`}
+                        bg={isVictory ? pink : invalidGrey}
+                        color={isVictory ? 'black' : 'white'}
+                        cursor={isVictory ? 'pointer' : 'default'}
                     >
-                        <Text textAlign="center">{day}</Text>
+                        {day}
+                    </Box>
+                )
+
+                if (!isVictory) {
+                    return <GridItem key={day}>{cell}</GridItem>
+                }
+
+                return (
+                    <GridItem key={day}>
+                        <Tooltip
+                            content={`${attemptsCount} ${attemptsCount > 1 ? t('tries') : t('try') }`}
+                            openDelay={50}
+                            closeDelay={100}
+                            showArrow
+                        >
+                            {cell}
+                        </Tooltip>
                     </GridItem>
-                ))}
-
-                {Array.from({ length: startOffset }).map((_, index) => (
-                    <GridItem key={`empty-${index}`} />
-                ))}
-
-                {Array.from({ length: days }).map((_, index) => {
-                    const day = index + 1
-                    const result = map.get(day)
-
-                    return (
-                        <GridItem key={day}>
-                            <Box
-                                textAlign="center"
-                                borderRadius="md"
-                                p={2}
-                                bg={result?.success ? pink : invalidGrey}
-                                color={result?.success ? 'black' : 'white'}
-                            >
-                                {day}
-                            </Box>
-                        </GridItem>
-                    )
-                })}
-            </Grid>
-        </VStack>
+                )
+            })}
+        </Grid>
     )
 }
 
