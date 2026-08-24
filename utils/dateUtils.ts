@@ -71,6 +71,14 @@ export function getDaysOfMonth(date: Date): number {
     return dayjs(date).daysInMonth()
 }
 
+/**
+ * Renvoi un index comparable année+mois (ex: 2026-01 < 2026-02 < 2027-01),
+ * pour comparer deux dates par mois sans tenir compte du jour.
+ */
+export function getMonthIndex(date: Date): number {
+    return date.getFullYear() * 12 + date.getMonth()
+}
+
 export function getFirstDayOfMonth(date: Date): Date {
     const dateCopy = date
     dateCopy.setDate(1)

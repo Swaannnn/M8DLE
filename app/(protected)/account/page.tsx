@@ -1,28 +1,45 @@
 'use client'
 
 import { useAuth } from '@/hooks/use-auth'
-import { AbsoluteCenter, Button, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
+import { AbsoluteCenter, Button, HStack, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getProfileAvatar } from '@/utils/userUtils'
-import { DailyM8DLEResult } from '@prisma/client'
 import { tuskerGrotesk } from '@/utils/fontUtils'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { IconButton } from '@chakra-ui/react'
+import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
+import { DailyM8DLEResultWithAttemptsCount } from '@/types/m8dleResults'
+import { getMonthIndex } from '@/utils/dateUtils'
 
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
     const t = useTranslations('account')
     const locale = useLocale()
     const router = useRouter()
-    const { data, error, isLoading } = useSWR<DailyM8DLEResult[], ApiError>(
-        !userLoading && !loggedOut ? '/api/users/me/results' : null,
-        fetcher
-    )
+    const now = new Date()
+    now.setDate(1)
+    const [selectedDate, setSelectedDate] = useState(now);
+    const { data, error, isLoading: resultsLoading } = useSWR<DailyM8DLEResultWithAttemptsCount[], ApiError>(
+        `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`, 
+        fetcher)
+    
+    const monthName = selectedDate.toLocaleString(locale, { month: 'long' })
+    const year = selectedDate.getFullYear()
+
+    const handleNav = (offset: number) => {
+        setSelectedDate((prevDate) => {
+            const newDate = new Date(prevDate);
+            newDate.setDate(1);
+            newDate.setMonth(newDate.getMonth() + offset);
+            return newDate;
+        });
+    }
 
     useEffect(() => {
         if (!userLoading && loggedOut) {
@@ -30,7 +47,7 @@ const AccountPage = () => {
         }
     }, [userLoading, loggedOut, router])
 
-    if (userLoading || isLoading) {
+    if (userLoading) {
         return (
             <AbsoluteCenter>
                 <Spinner size="xl" />
@@ -81,7 +98,20 @@ const AccountPage = () => {
                     </Text>
                 </VStack>
                 <Separator />
-                <CurrentMonthCalendar results={data ?? []} />
+                <VStack width="350px" height="350px" >
+                    <HStack width="100%" justifyContent="space-between" >
+                        <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) <= getMonthIndex(new Date(user.createdAt))} onClick={() => handleNav(-1)}>
+                            <LuChevronLeft/>
+                        </IconButton>
+                        <Text>
+                            {t('myVictories')} {monthName} {year}
+                        </Text>
+                        <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) >= getMonthIndex(now)} onClick={() => handleNav(1)}>
+                            <LuChevronRight/>
+                        </IconButton>
+                    </HStack>
+                    <CurrentMonthCalendar results={data ?? []} loading={resultsLoading} date={selectedDate} />
+                </VStack>
             </Stack>
 
             <Button

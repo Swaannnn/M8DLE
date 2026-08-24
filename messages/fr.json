@@ -26,7 +26,8 @@
     "account": {
         "accountFullCaps": "MON COMPTE",
         "memberSince": "Membre depuis le",
-        "logout": "Se déconnecter"
+        "logout": "Se déconnecter",
+        "myVictories": "Mes victoires en"
     },
     "login": {
         "loginFullCaps": "CONNEXION"
@@ -50,7 +51,6 @@
         "twitterHashtags": "\n\n#M8WIN #M8DLE"
     },
     "calendar": {
-        "myVictories": "Mes victoires en",
         "days": [
             "L",
             "M",
@@ -59,7 +59,9 @@
             "V",
             "S",
             "D"
-        ]
+        ],
+        "try": "essai",
+        "tries": "essais"
     },
     "input": {
         "playersPlaceholder": "Tapez pour rechercher",
