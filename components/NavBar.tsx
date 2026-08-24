@@ -28,178 +28,178 @@ const NavBar = () => {
     return (
         <>
             <HStack
-            width="100%"
-            position="fixed"
-            top="0"
-            justify="space-between"
-            bg="bg"
-            padding="1rem 2rem"
-            borderBottomWidth="1px"
-            borderColor="fg"
-            zIndex="100"
-        >
-            <HStack gap="1rem">
-                <Link
-                    onClick={handleClose}
-                    asChild
-                >
-                    <NextLink href="/">{t('home')}</NextLink>
-                </Link>
-            </HStack>
-            {isMobile ? (
-                <Drawer.Root
-                    open={open}
-                    onOpenChange={(details) => setOpen(details.open)}
-                >
-                    <Drawer.Trigger asChild>
-                        <Button
-                            variant="ghost"
-                            onClick={() => setOpen(true)}
-                            aria-label="Ouvrir le menu"
-                        >
-                            <LuMenu />
-                        </Button>
-                    </Drawer.Trigger>
-                    <Portal>
-                        <Drawer.Backdrop />
-                        <Drawer.Positioner>
-                            <Drawer.Content>
-                                <Drawer.Body>
-                                    <VStack
-                                        paddingTop="1rem"
-                                        align="start"
-                                        justifyContent="space-between"
-                                        h="100%"
-                                        w="100%"
-                                    >
+                width="100%"
+                position="fixed"
+                top="0"
+                justify="space-between"
+                bg="bg"
+                padding="1rem 2rem"
+                borderBottomWidth="1px"
+                borderColor="fg"
+                zIndex="100"
+            >
+                <HStack gap="1rem">
+                    <Link
+                        onClick={handleClose}
+                        asChild
+                    >
+                        <NextLink href="/">{t('home')}</NextLink>
+                    </Link>
+                </HStack>
+                {isMobile ? (
+                    <Drawer.Root
+                        open={open}
+                        onOpenChange={(details) => setOpen(details.open)}
+                    >
+                        <Drawer.Trigger asChild>
+                            <Button
+                                variant="ghost"
+                                onClick={() => setOpen(true)}
+                                aria-label="Ouvrir le menu"
+                            >
+                                <LuMenu />
+                            </Button>
+                        </Drawer.Trigger>
+                        <Portal>
+                            <Drawer.Backdrop />
+                            <Drawer.Positioner>
+                                <Drawer.Content>
+                                    <Drawer.Body>
                                         <VStack
+                                            paddingTop="1rem"
+                                            align="start"
+                                            justifyContent="space-between"
+                                            h="100%"
                                             w="100%"
-                                            gap="1rem"
                                         >
-                                            <HStack
-                                                width="100%"
-                                                alignItems="start"
-                                                justifyContent="space-between"
-                                                borderBottomWidth="1px"
-                                                paddingBottom="1rem"
+                                            <VStack
+                                                w="100%"
+                                                gap="1rem"
                                             >
-                                                <HStack>
-                                                    <LangSwitcher />
-                                                    <ColorModeButton />
-                                                </HStack>
-                                                <Button
-                                                    variant="ghost"
-                                                    onClick={handleClose}
+                                                <HStack
+                                                    width="100%"
+                                                    alignItems="start"
+                                                    justifyContent="space-between"
+                                                    borderBottomWidth="1px"
+                                                    paddingBottom="1rem"
                                                 >
-                                                    <LuMenu />
-                                                </Button>
-                                            </HStack>
+                                                    <HStack>
+                                                        <LangSwitcher />
+                                                        <ColorModeButton />
+                                                    </HStack>
+                                                    <Button
+                                                        variant="ghost"
+                                                        onClick={handleClose}
+                                                    >
+                                                        <LuMenu />
+                                                    </Button>
+                                                </HStack>
+                                                <VStack
+                                                    align="start"
+                                                    w="100%"
+                                                >
+                                                    <Link
+                                                        onClick={handleClose}
+                                                        asChild
+                                                    >
+                                                        <NextLink href="/">{t('home')}</NextLink>
+                                                    </Link>
+                                                    <Link
+                                                        onClick={handleClose}
+                                                        asChild
+                                                    >
+                                                        <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
+                                                    </Link>
+                                                    {user ? (
+                                                        <>
+                                                            {user.role === Role.ADMIN && (
+                                                                <Link
+                                                                    onClick={handleClose}
+                                                                    asChild
+                                                                >
+                                                                    <NextLink href="/admin">{t('admin')}</NextLink>
+                                                                </Link>
+                                                            )}
+                                                            <Link
+                                                                onClick={handleClose}
+                                                                asChild
+                                                            >
+                                                                <NextLink href="/account">{t('myAccount')}</NextLink>
+                                                            </Link>
+                                                        </>
+                                                    ) : (
+                                                        <Link
+                                                            onClick={() => {
+                                                                handleClose()
+                                                                setLoginOpen(true)
+                                                            }}
+                                                            cursor="pointer"
+                                                        >
+                                                            {t('login')}
+                                                        </Link>
+                                                    )}
+                                                </VStack>
+                                            </VStack>
                                             <VStack
                                                 align="start"
+                                                gap="0.5rem"
+                                                pt="1rem"
+                                                borderTopWidth="1px"
                                                 w="100%"
                                             >
                                                 <Link
                                                     onClick={handleClose}
                                                     asChild
                                                 >
-                                                    <NextLink href="/">{t('home')}</NextLink>
+                                                    <NextLink href="/credits">{t('credits')}</NextLink>
                                                 </Link>
                                                 <Link
                                                     onClick={handleClose}
                                                     asChild
                                                 >
-                                                    <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
+                                                    <NextLink href="/privacy">{t('privacyPolicy')}</NextLink>
                                                 </Link>
-                                                {user ? (
-                                                    <>
-                                                        {user.role === Role.ADMIN && (
-                                                            <Link
-                                                                onClick={handleClose}
-                                                                asChild
-                                                            >
-                                                                <NextLink href="/admin">{t('admin')}</NextLink>
-                                                            </Link>
-                                                        )}
-                                                        <Link
-                                                            onClick={handleClose}
-                                                            asChild
-                                                        >
-                                                            <NextLink href="/account">{t('myAccount')}</NextLink>
-                                                        </Link>
-                                                    </>
-                                                ) : (
-                                                    <Link
-                                                        onClick={() => {
-                                                            handleClose()
-                                                            setLoginOpen(true)
-                                                        }}
-                                                        cursor="pointer"
-                                                    >
-                                                        {t('login')}
-                                                    </Link>
-                                                )}
+                                                <Link
+                                                    onClick={handleClose}
+                                                    asChild
+                                                >
+                                                    <NextLink href="/legal">{t('legalNotice')}</NextLink>
+                                                </Link>
+                                                <Text p="1rem 0">© 2026 M8DLE</Text>
                                             </VStack>
                                         </VStack>
-                                        <VStack
-                                            align="start"
-                                            gap="0.5rem"
-                                            pt="1rem"
-                                            borderTopWidth="1px"
-                                            w="100%"
-                                        >
-                                            <Link
-                                                onClick={handleClose}
-                                                asChild
-                                            >
-                                                <NextLink href="/credits">{t('credits')}</NextLink>
-                                            </Link>
-                                            <Link
-                                                onClick={handleClose}
-                                                asChild
-                                            >
-                                                <NextLink href="/privacy">{t('privacyPolicy')}</NextLink>
-                                            </Link>
-                                            <Link
-                                                onClick={handleClose}
-                                                asChild
-                                            >
-                                                <NextLink href="/legal">{t('legalNotice')}</NextLink>
-                                            </Link>
-                                            <Text p="1rem 0">© 2026 M8DLE</Text>
-                                        </VStack>
-                                    </VStack>
-                                </Drawer.Body>
-                            </Drawer.Content>
-                        </Drawer.Positioner>
-                    </Portal>
-                </Drawer.Root>
-            ) : (
-                <HStack gap="1rem">
-                    <Link asChild>
-                        <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
-                    </Link>
-                    {user ? (
-                        <>
-                            {user.role === Role.ADMIN && (
-                                <Link asChild>
-                                    <NextLink href="/admin">{t('admin')}</NextLink>
-                                </Link>
-                            )}
-                            <Link asChild>
-                                <NextLink href="/account">{t('myAccount')}</NextLink>
-                            </Link>
-                        </>
-                    ) : (
-                        <Link onClick={() => setLoginOpen(true)} cursor="pointer">
-                            {t('login')}
+                                    </Drawer.Body>
+                                </Drawer.Content>
+                            </Drawer.Positioner>
+                        </Portal>
+                    </Drawer.Root>
+                ) : (
+                    <HStack gap="1rem">
+                        <Link asChild>
+                            <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
                         </Link>
-                    )}
-                    <LangSwitcher />
-                    <ColorModeButton />
-                </HStack>
-            )}
-        </HStack>
-        <LoginDialog open={loginOpen} onClose={() => setLoginOpen(false)} />
+                        {user ? (
+                            <>
+                                {user.role === Role.ADMIN && (
+                                    <Link asChild>
+                                        <NextLink href="/admin">{t('admin')}</NextLink>
+                                    </Link>
+                                )}
+                                <Link asChild>
+                                    <NextLink href="/account">{t('myAccount')}</NextLink>
+                                </Link>
+                            </>
+                        ) : (
+                            <Link onClick={() => setLoginOpen(true)} cursor="pointer">
+                                {t('login')}
+                            </Link>
+                        )}
+                        <LangSwitcher />
+                        <ColorModeButton />
+                    </HStack>
+                )}
+            </HStack>
+            <LoginDialog open={loginOpen} onClose={() => setLoginOpen(false)} />
         </>
     )
 }
