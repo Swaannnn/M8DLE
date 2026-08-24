@@ -34,14 +34,16 @@ export async function POST(req: Request) {
                 },
             },
         })
+        const existingPlayerIds = new Set(players.map((p) => p.id))
 
-        const attempts = []
-        for (let i = 0; i < players.length; i++) {
-            attempts.push({
-                playerId: players[i].id,
-                attemptNumber: i + 1,
-            })
-        }
+        // On numérote selon l'ordre chronologique de payload.attempts (celui du local storage),
+        // pas selon l'ordre renvoyé par la requête ci-dessus qui n'est pas garanti.
+        const attempts = payload.attempts
+            .filter((playerId) => existingPlayerIds.has(playerId))
+            .map((playerId, index) => ({
+                playerId,
+                attemptNumber: index + 1,
+            }))
 
         const created = await prisma.dailyM8DLEResult.create({
             data: {

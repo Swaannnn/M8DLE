@@ -17,7 +17,11 @@ export async function GET() {
         const gameDate = getGameDate()
         const dailyResult = await prisma.dailyM8DLEResult.findUnique({
             where: { userId_date: { userId: session.userId, date: gameDate } },
-            select: { userId: true, success: true, attempts: true },
+            select: {
+                userId: true,
+                success: true,
+                attempts: { orderBy: { attemptNumber: 'asc' } },
+            },
         })
 
         if (!dailyResult) {

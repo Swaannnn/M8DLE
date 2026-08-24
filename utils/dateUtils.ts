@@ -41,9 +41,11 @@ export function getYear(date: string): number {
  * Renvoi la date de début du tirage actuel
  */
 export function getGameDate(): Date {
-    const now = dayjs().tz(TZ).hour(2).minute(0).second(0).millisecond(0)
+    const now = dayjs().tz(TZ)
+    const todayCutoff = now.hour(2).minute(0).second(0).millisecond(0)
+    const gameDate = now.isBefore(todayCutoff) ? todayCutoff.subtract(1, 'day') : todayCutoff
 
-    return now.toDate()
+    return gameDate.toDate()
 }
 
 /**

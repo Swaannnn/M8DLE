@@ -21,7 +21,11 @@ export async function POST(req: NextRequest) {
 
         const dailyResult = await prisma.dailyM8DLEResult.findUnique({
             where: { userId_date: { userId: session.userId, date: gameDate } },
-            select: { id: true, success: true, attempts: true },
+            select: {
+                id: true,
+                success: true,
+                attempts: { orderBy: { attemptNumber: 'asc' } },
+            },
         })
 
         if (dailyResult) {
@@ -46,7 +50,7 @@ export async function POST(req: NextRequest) {
                     },
                 },
                 include: {
-                    attempts: true,
+                    attempts: { orderBy: { attemptNumber: 'asc' } },
                 },
             })
 
@@ -66,7 +70,7 @@ export async function POST(req: NextRequest) {
                 },
             },
             include: {
-                attempts: true,
+                attempts: { orderBy: { attemptNumber: 'asc' } },
             },
         })
 
