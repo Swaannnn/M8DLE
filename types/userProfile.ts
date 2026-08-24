@@ -5,6 +5,6 @@ export type UserProfile = {
     email: string | null
     avatar: string | null
     role: string
-    createdAt: Date
-    updatedAt: Date
+    createdAt: string
+    updatedAt: string
 }
