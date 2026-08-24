@@ -26,9 +26,9 @@ const AccountPage = () => {
     now.setDate(1)
     const [selectedDate, setSelectedDate] = useState(now);
     const { data, error, isLoading: resultsLoading } = useSWR<DailyM8DLEResultWithAttemptsCount[], ApiError>(
-        `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`, 
+        `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`,
         fetcher)
-    
+
     const monthName = selectedDate.toLocaleString(locale, { month: 'long' })
     const year = selectedDate.getFullYear()
 
@@ -40,6 +40,11 @@ const AccountPage = () => {
             return newDate;
         });
     }
+
+    const { data: winstreakData, isLoading: winstreakLoading } = useSWR<{ winstreak: number }, ApiError>(
+        !userLoading && !loggedOut ? '/api/users/me/winstreak' : null,
+        fetcher
+    )
 
     useEffect(() => {
         if (!userLoading && loggedOut) {
@@ -96,18 +101,23 @@ const AccountPage = () => {
                             day: 'numeric',
                         })}
                     </Text>
+                    {!winstreakLoading && winstreakData && (
+                        <Text fontSize="md" fontWeight="bold">
+                            Winstreak : {winstreakData.winstreak}
+                        </Text>
+                    )}
                 </VStack>
                 <Separator />
                 <VStack width="350px" height="350px" >
                     <HStack width="100%" justifyContent="space-between" >
                         <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) <= getMonthIndex(new Date(user.createdAt))} onClick={() => handleNav(-1)}>
-                            <LuChevronLeft/>
+                            <LuChevronLeft />
                         </IconButton>
                         <Text>
                             {t('myVictories')} {monthName} {year}
                         </Text>
                         <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) >= getMonthIndex(now)} onClick={() => handleNav(1)}>
-                            <LuChevronRight/>
+                            <LuChevronRight />
                         </IconButton>
                     </HStack>
                     <CurrentMonthCalendar results={data ?? []} loading={resultsLoading} date={selectedDate} />
