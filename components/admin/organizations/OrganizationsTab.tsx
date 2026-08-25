@@ -7,7 +7,7 @@ import { OrganizationForm } from './OrganizationForm'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import type { Organization } from '@prisma/client'
-import type { ApiError } from 'next/dist/server/api-utils'
+import type { ApiError } from '@/utils/apiError'
 import { ApiErrorMessage } from '@/components/ApiErrorMessage'
 import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 

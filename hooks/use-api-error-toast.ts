@@ -2,16 +2,8 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-import { ApiError } from 'next/dist/server/api-utils'
+import { ApiError, translateApiError } from '@/utils/apiError'
 import { toaster } from '@/components/ui/toaster'
-
-/**
- * error.message est censé être un code (voir constants/apiErrorCodes.ts). Si ce n'est pas
- * une clé connue (route non migrée, erreur réseau...), on retombe sur le message brut.
- */
-function translateApiError(t: ReturnType<typeof useTranslations<'error'>>, error: ApiError): string {
-    return t.has(error.message) ? t(error.message) : error.message
-}
 
 /**
  * Affiche un toast d'erreur pour une erreur API "métier" (statut < 500), déjà connue

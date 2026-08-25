@@ -7,9 +7,9 @@ import { GameForm } from './GameForm'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import type { Game } from '@prisma/client'
-import type { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorMessage } from '@/components/ApiErrorMessage'
 import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
+import { ApiError } from '@/utils/apiError'
 
 export function GamesTab() {
     const t = useTranslations('admin')

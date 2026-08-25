@@ -1,4 +1,4 @@
-import { ApiError } from 'next/dist/server/api-utils'
+import { ApiError } from '@/utils/apiError'
 
 export async function fetcher<T>(url: string, init?: RequestInit): Promise<T> {
     const res = await fetch(url, init)

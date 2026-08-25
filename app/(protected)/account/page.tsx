@@ -5,7 +5,7 @@ import { AbsoluteCenter, Button, HStack, Image, Separator, Spinner, Stack, Text,
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
-import { ApiError } from 'next/dist/server/api-utils'
+import { ApiError } from '@/utils/apiError'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
 import { ApiErrorMessage } from '@/components/ApiErrorMessage'
 import { useApiErrorToast } from '@/hooks/use-api-error-toast'

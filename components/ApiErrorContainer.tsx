@@ -1,10 +1,10 @@
 import { Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
-import { ApiError } from 'next/dist/server/api-utils'
+import { ApiError, translateApiError } from '@/utils/apiError'
 
 export const ApiErrorContainer = ({ error }: { error: ApiError }) => {
     const t = useTranslations('error')
-    const message = t.has(error.message) ? t(error.message) : error.message
+    const message = translateApiError(t, error)
 
     return (
         <VStack
