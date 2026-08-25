@@ -1,4 +1,20 @@
 {
+    "error": {
+        "unauthorized": "Vous devez être connecté pour effectuer cette action.",
+        "badRequest": "La requête est invalide.",
+        "missingParameter": "Un paramètre requis est manquant.",
+        "notFound": "Élément introuvable.",
+        "alreadyExists": "Cet élément existe déjà.",
+        "alreadySuccess": "Vous avez déjà trouvé le joueur du jour.",
+        "alreadyAttempted": "Ce joueur a déjà été proposé.",
+        "methodNotAllowed": "Méthode non autorisée.",
+        "authFailed": "L'authentification a échoué.",
+        "fetchFailed": "Erreur lors de la récupération des données.",
+        "createFailed": "Erreur lors de la création.",
+        "updateFailed": "Erreur lors de la mise à jour.",
+        "deleteFailed": "Erreur lors de la suppression.",
+        "internalError": "Une erreur interne est survenue."
+    },
     "home": {
         "nextDraw": "Prochain tirage dans",
         "count0": "Personne n'a encore trouvé le joueur du jour",

@@ -6,6 +6,8 @@ import { useTranslations } from 'next-intl'
 import { ImageUpload } from '@/components/admin/players/ImageUpload'
 import type { Game } from '@prisma/client'
 import { toaster } from '@/components/ui/toaster'
+import { fetcher } from '@/utils/fetcher'
+import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
 type GameFormProps = {
     open: boolean
@@ -16,6 +18,7 @@ type GameFormProps = {
 
 export function GameForm({ open, onClose, game, onSuccess }: GameFormProps) {
     const t = useTranslations('admin')
+    const showApiErrorToast = useShowApiErrorToast()
     const [name, setName] = useState(game?.name || '')
     const [imageUrl, setImageUrl] = useState(game?.imageUrl || '')
     const [loading, setLoading] = useState(false)
@@ -40,13 +43,11 @@ export function GameForm({ open, onClose, game, onSuccess }: GameFormProps) {
                 imageUrl,
             }
 
-            const res = await fetch(url, {
+            await fetcher(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
             })
-
-            if (!res.ok) throw new Error('Failed')
 
             toaster.create({
                 description: game ? t('gameUpdated') : t('gameCreated'),
@@ -55,12 +56,7 @@ export function GameForm({ open, onClose, game, onSuccess }: GameFormProps) {
             })
             onSuccess()
         } catch (error) {
-            console.error(error)
-            toaster.create({
-                description: t('error'),
-                type: "error",
-                closable: true,
-            })
+            showApiErrorToast(error)
         } finally {
             setLoading(false)
         }

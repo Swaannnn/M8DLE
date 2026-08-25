@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { getGameDate, getNextGameDate } from '@/utils/dateUtils'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function GET() {
     try {
@@ -18,7 +19,8 @@ export async function GET() {
         })
 
         return NextResponse.json({ successCount: count })
-    } catch (err) {
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    } catch (error) {
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorKey.INTERNAL_ERROR }, { status: 500 })
     }
 }

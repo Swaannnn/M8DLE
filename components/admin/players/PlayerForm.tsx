@@ -13,6 +13,7 @@ import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { ImageUpload } from './ImageUpload'
 import { toaster } from '@/components/ui/toaster'
+import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
 type PlayerFormProps = {
     open: boolean
@@ -30,6 +31,7 @@ type OrgPlayerForm = {
 export function PlayerForm({ open, onClose, player, onSuccess }: PlayerFormProps) {
     const t = useTranslations('admin')
     const countries = useCountries()
+    const showApiErrorToast = useShowApiErrorToast()
 
     const { data: games } = useSWR<{ id: string; name: string }[]>('/api/games', fetcher)
     const { data: orgs } = useSWR<{ id: string; name: string }[]>('/api/organizations', fetcher)
@@ -86,13 +88,11 @@ export function PlayerForm({ open, onClose, player, onSuccess }: PlayerFormProps
                 }))
             }
 
-            const res = await fetch(url, {
+            await fetcher(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             })
-
-            if (!res.ok) throw new Error('Failed')
 
             toaster.create({
                 description: player ? t('playerUpdated') : t('playerCreated'),
@@ -101,12 +101,7 @@ export function PlayerForm({ open, onClose, player, onSuccess }: PlayerFormProps
             })
             onSuccess()
         } catch (error) {
-            console.error(error)
-            toaster.create({
-                description: t('error'),
-                type: "error",
-                closable: true,
-            })
+            showApiErrorToast(error)
         } finally {
             setLoading(false)
         }

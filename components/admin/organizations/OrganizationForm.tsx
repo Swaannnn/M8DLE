@@ -6,6 +6,8 @@ import { useTranslations } from 'next-intl'
 import { ImageUpload } from '@/components/admin/players/ImageUpload'
 import type { Organization } from '@prisma/client'
 import { toaster } from '@/components/ui/toaster'
+import { fetcher } from '@/utils/fetcher'
+import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
 type OrganizationFormProps = {
     open: boolean
@@ -16,6 +18,7 @@ type OrganizationFormProps = {
 
 export function OrganizationForm({ open, onClose, organization, onSuccess }: OrganizationFormProps) {
     const t = useTranslations('admin')
+    const showApiErrorToast = useShowApiErrorToast()
     const [name, setName] = useState(organization?.name || '')
     const [imageUrl, setImageUrl] = useState(organization?.imageUrl || '')
     const [loading, setLoading] = useState(false)
@@ -40,13 +43,11 @@ export function OrganizationForm({ open, onClose, organization, onSuccess }: Org
                 imageUrl,
             }
 
-            const res = await fetch(url, {
+            await fetcher(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
             })
-
-            if (!res.ok) throw new Error('Failed')
 
             toaster.create({
                 description: organization ? t('organizationUpdated') : t('organizationCreated'),
@@ -55,12 +56,7 @@ export function OrganizationForm({ open, onClose, organization, onSuccess }: Org
             })
             onSuccess()
         } catch (error) {
-            console.error(error)
-            toaster.create({
-                description: t('error'),
-                type: "error",
-                closable: true,
-            })
+            showApiErrorToast(error)
         } finally {
             setLoading(false)
         }

@@ -6,6 +6,7 @@ import './globals.css'
 import NavBar from '@/components/NavBar'
 import { Box } from '@chakra-ui/react'
 import Footer from '@/components/Footer'
+import { Toaster } from '@/components/ui/toaster'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getTranslations } from 'next-intl/server'
@@ -80,6 +81,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                             <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>{children}</main>
                             <Footer />
                         </Box>
+                        <Toaster />
                     </NextIntlClientProvider>
                 </Provider>
             </body>

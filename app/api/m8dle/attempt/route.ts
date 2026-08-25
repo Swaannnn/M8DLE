@@ -6,10 +6,11 @@ import { AttemptDto } from '@/dto/AttemptDto'
 import { ZodError } from 'zod'
 import { Role } from '@prisma/client'
 import { getOrGeneratePlayerOfTheDay } from '@/utils/playerOtdUtils'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function POST(req: NextRequest) {
     const session = await getSession()
-    if (!session?.userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!session?.userId) return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
 
     try {
         const body = await req.json()
@@ -30,11 +31,11 @@ export async function POST(req: NextRequest) {
 
         if (dailyResult) {
             if (dailyResult.success) {
-                return NextResponse.json({ error: 'Daily Result is already a success' }, { status: 400 })
+                return NextResponse.json({ error: ApiErrorKey.ALREADY_SUCCESS }, { status: 400 })
             }
 
             if (dailyResult.attempts.some((a) => a.playerId === payload.attempt)) {
-                return NextResponse.json({ error: 'Player already attempted' }, { status: 400 })
+                return NextResponse.json({ error: ApiErrorKey.ALREADY_ATTEMPTED }, { status: 400 })
             }
 
             const updated = await prisma.dailyM8DLEResult.update({
@@ -75,12 +76,13 @@ export async function POST(req: NextRequest) {
         })
 
         return NextResponse.json(created, { status: 201 })
-    } catch (err) {
-        if (err instanceof ZodError) {
-            return NextResponse.json({ error: 'Bad Request' }, { status: 400 })
-        } else {
-            return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    } catch (error) {
+        if (error instanceof ZodError) {
+            return NextResponse.json({ error: ApiErrorKey.BAD_REQUEST }, { status: 400 })
         }
+
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorKey.INTERNAL_ERROR }, { status: 500 })
     }
 }
 
@@ -88,22 +90,23 @@ export async function DELETE(req: NextRequest) {
     try {
         const session = await getSession()
         if (!session?.userId || session?.role !== Role.ADMIN) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+            return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 
         const id = req.nextUrl.searchParams.get('id')
         if (!id) {
-            return NextResponse.json({ error: "Parameter 'id' is required" }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorKey.MISSING_PARAMETER }, { status: 400 })
         }
 
         const attempt = await prisma.attempt.findUnique({ where: { id } })
         if (!attempt) {
-            return NextResponse.json({ error: 'Attempt does not exists' }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorKey.NOT_FOUND }, { status: 404 })
         }
 
         await prisma.attempt.delete({ where: { id } })
         return NextResponse.json({ success: true })
     } catch (error) {
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorKey.INTERNAL_ERROR }, { status: 500 })
     }
 }

@@ -6,6 +6,8 @@ import { useTranslations } from 'next-intl'
 import { SearchableSelect } from '@/components/ui/SearchableSelect'
 import type { User } from '@prisma/client'
 import { toaster } from '@/components/ui/toaster'
+import { fetcher } from '@/utils/fetcher'
+import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
 type UserFormProps = {
     open: boolean
@@ -16,6 +18,7 @@ type UserFormProps = {
 
 export function UserForm({ open, onClose, onSuccess, user }: UserFormProps) {
     const t = useTranslations('admin')
+    const showApiErrorToast = useShowApiErrorToast()
     const [username, setUsername] = useState(user?.username || '')
     const [email, setEmail] = useState(user?.email || '')
     const [role, setRole] = useState<string>(user?.role || 'USER')
@@ -35,7 +38,7 @@ export function UserForm({ open, onClose, onSuccess, user }: UserFormProps) {
         setLoading(true)
 
         try {
-            const res = await fetch('/api/users', {
+            await fetcher('/api/users', {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -46,8 +49,6 @@ export function UserForm({ open, onClose, onSuccess, user }: UserFormProps) {
                 }),
             })
 
-            if (!res.ok) throw new Error('Failed')
-
             toaster.create({
                 description: t('userUpdated'),
                 type: "info",
@@ -55,12 +56,7 @@ export function UserForm({ open, onClose, onSuccess, user }: UserFormProps) {
             })
             onSuccess()
         } catch (error) {
-            console.error(error)
-            toaster.create({
-                description: t('error'),
-                type: "error",
-                closable: true,
-            })
+            showApiErrorToast(error)
         } finally {
             setLoading(false)
         }

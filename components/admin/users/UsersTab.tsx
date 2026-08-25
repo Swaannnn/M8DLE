@@ -6,15 +6,25 @@ import { UserForm } from './UserForm'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import type { User } from '@prisma/client'
+import type { ApiError } from '@/utils/apiError'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
 export function UsersTab() {
     const t = useTranslations('admin')
+    const showApiErrorToast = useShowApiErrorToast()
 
-    const { data: users, mutate, isLoading } = useSWR<User[]>('/api/users', fetcher)
+    const { data: users, error, mutate, isLoading } = useSWR<User[], ApiError>('/api/users', fetcher)
+
+    useApiErrorToast(error)
 
     const deleteUser = async (userId: string) => {
-        await fetch(`/api/users?userId=${userId}`, { method: 'DELETE' })
-        mutate()
+        try {
+            await fetcher(`/api/users?userId=${userId}`, { method: 'DELETE' })
+            mutate()
+        } catch (err) {
+            showApiErrorToast(err)
+        }
     }
 
     const [searchQuery, setSearchQuery] = useState('')
@@ -60,7 +70,9 @@ export function UsersTab() {
                     />
                 </Stack>
 
-                {isLoading || !users ? (
+                {error ? (
+                    <ApiErrorMessage error={error} />
+                ) : isLoading || !users ? (
                     <AbsoluteCenter>
                         <Spinner marginTop="3rem" size="xl" />
                     </AbsoluteCenter>

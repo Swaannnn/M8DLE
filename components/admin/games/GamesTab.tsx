@@ -7,15 +7,25 @@ import { GameForm } from './GameForm'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import type { Game } from '@prisma/client'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
+import { ApiError } from '@/utils/apiError'
 
 export function GamesTab() {
     const t = useTranslations('admin')
+    const showApiErrorToast = useShowApiErrorToast()
 
-    const { data: games, mutate, isLoading } = useSWR<Game[]>('/api/games', fetcher)
+    const { data: games, error, mutate, isLoading } = useSWR<Game[], ApiError>('/api/games', fetcher)
+
+    useApiErrorToast(error)
 
     const deleteGame = async (gameId: string) => {
-        await fetch(`/api/games?gameId=${gameId}`, { method: 'DELETE' })
-        mutate()
+        try {
+            await fetcher(`/api/games?gameId=${gameId}`, { method: 'DELETE' })
+            mutate()
+        } catch (err) {
+            showApiErrorToast(err)
+        }
     }
 
     const [searchName, setSearchName] = useState('')
@@ -63,7 +73,9 @@ export function GamesTab() {
                     </Button>
                 </Stack>
 
-                {isLoading || !games ? (
+                {error ? (
+                    <ApiErrorMessage error={error} />
+                ) : isLoading || !games ? (
                     <AbsoluteCenter>
                         <Spinner marginTop="3rem" size="xl" />
                     </AbsoluteCenter>

@@ -1,23 +1,33 @@
 import { useState, useMemo } from 'react'
-import { VStack, HStack, Input, Button, AbsoluteCenter, Spinner, Dialog, Portal, Stack, Text } from '@chakra-ui/react'
+import { VStack, Input, Button, AbsoluteCenter, Spinner, Dialog, Portal, Stack, Text } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { LuPlus } from 'react-icons/lu'
 import { SearchableSelect } from '@/components/ui/SearchableSelect'
 import { PlayersTable } from '@/components/admin/players/PlayersTable'
 import { PlayerForm } from '@/components/admin/players/PlayerForm'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import type { Player } from '@/types/player'
+import type { ApiError } from '@/utils/apiError'
+import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
 export function PlayersTab() {
     const t = useTranslations('admin')
+    const showApiErrorToast = useShowApiErrorToast()
 
-    const { data: players, mutate, isLoading } = useSWR<Player[]>('/api/players', fetcher)
+    const { data: players, error, mutate, isLoading } = useSWR<Player[], ApiError>('/api/players', fetcher)
     const { data: games } = useSWR<{ id: string; name: string }[]>('/api/games', fetcher)
 
+    useApiErrorToast(error)
+
     const deletePlayer = async (playerId: string) => {
-        await fetch(`/api/players?playerId=${playerId}`, { method: 'DELETE' })
-        mutate()
+        try {
+            await fetcher(`/api/players?playerId=${playerId}`, { method: 'DELETE' })
+            mutate()
+        } catch (err) {
+            showApiErrorToast(err)
+        }
     }
 
     const [searchName, setSearchName] = useState('')
@@ -79,7 +89,9 @@ export function PlayersTab() {
                     </Button>
                 </Stack>
 
-                {isLoading || !players ? (
+                {error ? (
+                    <ApiErrorMessage error={error} />
+                ) : isLoading || !players ? (
                     <AbsoluteCenter>
                         <Spinner marginTop="3rem" size="xl" />
                     </AbsoluteCenter>
