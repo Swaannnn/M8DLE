@@ -1,17 +1,17 @@
 import { createSession } from '@/lib/auth/session'
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import ApiErrorCode from '@/constants/apiErrorCodes'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function GET(request: NextRequest) {
     try {
         if (process.env.NODE_ENV != 'development') {
-            return NextResponse.json({ error: ApiErrorCode.METHOD_NOT_ALLOWED }, { status: 405 })
+            return NextResponse.json({ error: ApiErrorKey.METHOD_NOT_ALLOWED }, { status: 405 })
         }
 
         const id = request.nextUrl.searchParams.get('userId')
         if (!id) {
-            return NextResponse.json({ error: ApiErrorCode.MISSING_PARAMETER }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorKey.MISSING_PARAMETER }, { status: 400 })
         }
 
         const user = await prisma.user.findUnique({
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
         })
 
         if (!user) {
-            return NextResponse.json({ error: ApiErrorCode.NOT_FOUND }, { status: 404 })
+            return NextResponse.json({ error: ApiErrorKey.NOT_FOUND }, { status: 404 })
         }
 
         await createSession(id, user.discordId, user.role)
@@ -33,6 +33,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(user)
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: ApiErrorCode.AUTH_FAILED }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.AUTH_FAILED }, { status: 500 })
     }
 }

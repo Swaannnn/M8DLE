@@ -6,6 +6,25 @@ import { ApiError, translateApiError } from '@/utils/apiError'
 import { toaster } from '@/components/ui/toaster'
 
 /**
+ * toaster.create() appelle flushSync en interne (store Zustand de Chakra). L'appeler
+ * pendant que React est encore en train de flusher les effets du commit courant lève
+ * "flushSync was called from inside a lifecycle method" — ça peut arriver dès qu'une page
+ * a plusieurs useEffect au montage, pas seulement en cas de redirection concurrente.
+ * On diffère donc toujours l'appel d'un tick (setTimeout) pour sortir de ce cycle.
+ */
+function createErrorToast(description: string) {
+    const timeoutId = setTimeout(() => {
+        toaster.create({
+            description,
+            type: 'error',
+            closable: true,
+        })
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
+}
+
+/**
  * Affiche un toast d'erreur pour une erreur API "métier" (statut < 500), déjà connue
  * (ex: le résultat d'un useSWR). Les erreurs serveur (5xx) sont ignorées ici : elles sont
  * gérées séparément par ApiErrorContainer, affiché à la place du contenu de la page.
@@ -31,11 +50,7 @@ export function useApiErrorToast(error?: ApiError | null) {
         if (lastShownSignature.current === signature) return
         lastShownSignature.current = signature
 
-        toaster.create({
-            description: translateApiError(t, error),
-            type: 'error',
-            closable: true,
-        })
+        return createErrorToast(translateApiError(t, error))
     }, [error, t])
 }
 
@@ -51,12 +66,7 @@ export function useShowApiErrorToast() {
     return useCallback(
         (error: unknown) => {
             const description = error instanceof ApiError ? translateApiError(t, error) : t('internalError')
-
-            toaster.create({
-                description,
-                type: 'error',
-                closable: true,
-            })
+            createErrorToast(description)
         },
         [t]
     )

@@ -1,7 +1,7 @@
 /**
- * Codes d'erreur communs à toutes les routes API.
+ * Clés d'erreur communs à toutes les routes API pour le i18n.
  */
-const ApiErrorCode = {
+const ApiErrorKey = {
     UNAUTHORIZED: 'unauthorized',
     BAD_REQUEST: 'badRequest',
     MISSING_PARAMETER: 'missingParameter',
@@ -18,6 +18,6 @@ const ApiErrorCode = {
     INTERNAL_ERROR: 'internalError',
 } as const
 
-export type ApiErrorCode = (typeof ApiErrorCode)[keyof typeof ApiErrorCode]
+export type ApiErrorKey = (typeof ApiErrorKey)[keyof typeof ApiErrorKey]
 
-export default ApiErrorCode
+export default ApiErrorKey

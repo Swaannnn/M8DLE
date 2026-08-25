@@ -5,11 +5,11 @@ import { getGameDate } from '@/utils/dateUtils'
 import { MultipleAttemptDto } from '@/dto/AttemptDto'
 import { ZodError } from 'zod'
 import { getOrGeneratePlayerOfTheDay } from '@/utils/playerOtdUtils'
-import ApiErrorCode from '@/constants/apiErrorCodes'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function POST(req: Request) {
     const session = await getSession()
-    if (!session?.userId) return NextResponse.json({ error: ApiErrorCode.UNAUTHORIZED }, { status: 401 })
+    if (!session?.userId) return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
 
     try {
         const body = await req.json()
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
         })
 
         if (dailyResult) {
-            return NextResponse.json({ error: ApiErrorCode.ALREADY_EXISTS }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorKey.ALREADY_EXISTS }, { status: 400 })
         }
 
         const players = await prisma.player.findMany({
@@ -67,10 +67,10 @@ export async function POST(req: Request) {
         return NextResponse.json(created, { status: 201 })
     } catch (error) {
         if (error instanceof ZodError) {
-            return NextResponse.json({ error: ApiErrorCode.BAD_REQUEST }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorKey.BAD_REQUEST }, { status: 400 })
         }
 
         console.error(error)
-        return NextResponse.json({ error: ApiErrorCode.INTERNAL_ERROR }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.INTERNAL_ERROR }, { status: 500 })
     }
 }

@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db'
 import { LeaderboardUser } from '@/types/leaderboard'
 import { getNumberParamFromRequest } from '@/utils/requestUtils'
 import constantsParams from '@/constants/constantsParams'
-import ApiErrorCode from '@/constants/apiErrorCodes'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 /**
  * Récupère la liste des utiliateurs dans le BDD.
@@ -61,6 +61,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ total, users })
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: ApiErrorCode.INTERNAL_ERROR }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.INTERNAL_ERROR }, { status: 500 })
     }
 }

@@ -2,7 +2,7 @@ import { exchangeCodeForToken, getDiscordUser } from '@/lib/auth/discord'
 import { createSession } from '@/lib/auth/session'
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import ApiErrorCode from '@/constants/apiErrorCodes'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function GET(request: NextRequest) {
     const redirection = new URL('/', request.url)
@@ -35,6 +35,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(redirection)
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: ApiErrorCode.AUTH_FAILED }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.AUTH_FAILED }, { status: 500 })
     }
 }

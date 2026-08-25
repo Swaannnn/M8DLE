@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db'
 import { Role } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
-import ApiErrorCode from '@/constants/apiErrorCodes'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function GET() {
     try {
@@ -15,7 +15,7 @@ export async function GET() {
         return NextResponse.json(games)
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: ApiErrorCode.FETCH_FAILED }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.FETCH_FAILED }, { status: 500 })
     }
 }
 
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     try {
         const session = await getSession()
         if (!session || session.role != Role.ADMIN) {
-            return NextResponse.json({ error: ApiErrorCode.UNAUTHORIZED }, { status: 401 })
+            return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 
         const content = CreateGameDto.parse(await req.json())
@@ -37,11 +37,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(created, { status: 201 })
     } catch (error) {
         if (error instanceof ZodError) {
-            return NextResponse.json({ error: ApiErrorCode.BAD_REQUEST }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorKey.BAD_REQUEST }, { status: 400 })
         }
 
         console.error(error)
-        return NextResponse.json({ error: ApiErrorCode.CREATE_FAILED }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.CREATE_FAILED }, { status: 500 })
     }
 }
 
@@ -49,7 +49,7 @@ export async function PATCH(req: NextRequest) {
     try {
         const session = await getSession()
         if (!session || session.role != Role.ADMIN) {
-            return NextResponse.json({ error: ApiErrorCode.UNAUTHORIZED }, { status: 401 })
+            return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 
         const content = UpdateGameDto.parse(await req.json())
@@ -65,11 +65,11 @@ export async function PATCH(req: NextRequest) {
         return NextResponse.json(updated)
     } catch (error) {
         if (error instanceof ZodError) {
-            return NextResponse.json({ error: ApiErrorCode.BAD_REQUEST }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorKey.BAD_REQUEST }, { status: 400 })
         }
 
         console.error(error)
-        return NextResponse.json({ error: ApiErrorCode.UPDATE_FAILED }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.UPDATE_FAILED }, { status: 500 })
     }
 }
 
@@ -77,16 +77,16 @@ export async function DELETE(req: NextRequest) {
     try {
         const session = await getSession()
         if (!session || session.role != Role.ADMIN) {
-            return NextResponse.json({ error: ApiErrorCode.UNAUTHORIZED }, { status: 401 })
+            return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 
         const id = req.nextUrl.searchParams.get('gameId')
         if (!id) {
-            return NextResponse.json({ error: ApiErrorCode.MISSING_PARAMETER }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorKey.MISSING_PARAMETER }, { status: 400 })
         }
 
         if (!(await prisma.game.findUnique({ where: { id } }))) {
-            return NextResponse.json({ error: ApiErrorCode.NOT_FOUND }, { status: 404 })
+            return NextResponse.json({ error: ApiErrorKey.NOT_FOUND }, { status: 404 })
         }
 
         // Unset gameId on associated players before deleting to avoid constraint issues
@@ -100,6 +100,6 @@ export async function DELETE(req: NextRequest) {
         return NextResponse.json({ success: true })
     } catch (error) {
         console.log(error)
-        return NextResponse.json({ error: ApiErrorCode.DELETE_FAILED }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.DELETE_FAILED }, { status: 500 })
     }
 }
