@@ -2,12 +2,13 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { getSession } from '@/lib/auth/session'
 import { getFirstDayOfMonth } from '@/utils/dateUtils'
+import ApiErrorCode from '@/constants/apiErrorCodes'
 
 export async function GET(request: Request) {
     try {
         const session = await getSession()
         if (!session || !session.userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+            return NextResponse.json({ error: ApiErrorCode.UNAUTHORIZED }, { status: 401 })
         }
 
         const { searchParams } = new URL(request.url)
@@ -16,7 +17,7 @@ export async function GET(request: Request) {
         const targetDate = dateParam ? new Date(dateParam) : new Date()
 
         if (isNaN(targetDate.getTime())) {
-            return NextResponse.json({ error: 'Invalid param' }, { status: 400 })
+            return NextResponse.json({ error: ApiErrorCode.BAD_REQUEST }, { status: 400 })
         }
 
         const firstDayOfMonth = getFirstDayOfMonth(targetDate)
@@ -44,6 +45,7 @@ export async function GET(request: Request) {
 
         return NextResponse.json(results)
     } catch (error) {
-        return NextResponse.json({ error: 'Erreur lors de la récupération des résultats' }, { status: 500 })
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorCode.FETCH_FAILED }, { status: 500 })
     }
 }

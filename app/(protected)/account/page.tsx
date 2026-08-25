@@ -7,6 +7,8 @@ import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast } from '@/hooks/use-api-error-toast'
 import { useEffect, useState } from 'react'
 import { getProfileAvatar } from '@/utils/userUtils'
 import { tuskerGrotesk } from '@/utils/fontUtils'
@@ -26,9 +28,13 @@ const AccountPage = () => {
     now.setDate(1)
     const [selectedDate, setSelectedDate] = useState(now);
     const { data, error, isLoading: resultsLoading } = useSWR<DailyM8DLEResultWithAttemptsCount[], ApiError>(
-        `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`, 
+        !userLoading && !loggedOut
+            ? `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`
+            : null,
         fetcher)
-    
+
+    useApiErrorToast(error)
+
     const monthName = selectedDate.toLocaleString(locale, { month: 'long' })
     const year = selectedDate.getFullYear()
 
@@ -99,6 +105,7 @@ const AccountPage = () => {
                 </VStack>
                 <Separator />
                 <VStack width="350px" height="350px" >
+                    {error && <ApiErrorMessage error={error} />}
                     <HStack width="100%" justifyContent="space-between" >
                         <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) <= getMonthIndex(new Date(user.createdAt))} onClick={() => handleNav(-1)}>
                             <LuChevronLeft/>

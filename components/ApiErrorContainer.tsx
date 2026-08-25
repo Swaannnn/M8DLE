@@ -1,7 +1,11 @@
 import { Text, VStack } from '@chakra-ui/react'
+import { useTranslations } from 'next-intl'
 import { ApiError } from 'next/dist/server/api-utils'
 
 export const ApiErrorContainer = ({ error }: { error: ApiError }) => {
+    const t = useTranslations('error')
+    const message = t.has(error.message) ? t(error.message) : error.message
+
     return (
         <VStack
             w="90vw"
@@ -13,7 +17,7 @@ export const ApiErrorContainer = ({ error }: { error: ApiError }) => {
                 as="h1"
                 fontSize={{ base: '2.5rem', md: '4rem' }}
             >
-                {error.statusCode} - {error.message}
+                {error.statusCode} - {message}
             </Text>
         </VStack>
     )

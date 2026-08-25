@@ -2,6 +2,7 @@ import { getSession } from '@/lib/auth/session'
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { UserProfile } from '@/types/userProfile'
+import ApiErrorCode from '@/constants/apiErrorCodes'
 
 export async function GET() {
     const session = await getSession()
@@ -26,7 +27,7 @@ export async function GET() {
     })
 
     if (!user) {
-        return NextResponse.json({ message: 'User not found' }, { status: 404 })
+        return NextResponse.json({ error: ApiErrorCode.NOT_FOUND }, { status: 404 })
     }
 
     return NextResponse.json(user)

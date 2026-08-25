@@ -1,4 +1,20 @@
 {
+    "error": {
+        "unauthorized": "You must be logged in to perform this action.",
+        "badRequest": "The request is invalid.",
+        "missingParameter": "A required parameter is missing.",
+        "notFound": "Item not found.",
+        "alreadyExists": "This item already exists.",
+        "alreadySuccess": "You have already found the player of the day.",
+        "alreadyAttempted": "This player has already been guessed.",
+        "methodNotAllowed": "Method not allowed.",
+        "authFailed": "Authentication failed.",
+        "fetchFailed": "Error while fetching data.",
+        "createFailed": "Error while creating.",
+        "updateFailed": "Error while updating.",
+        "deleteFailed": "Error while deleting.",
+        "internalError": "An internal error occurred."
+    },
     "home": {
         "nextDraw": "Next drawing in",
         "count0": "No one has found the player of the day yet.",

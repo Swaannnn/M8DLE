@@ -7,15 +7,28 @@ import { OrganizationForm } from './OrganizationForm'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import type { Organization } from '@prisma/client'
+import type { ApiError } from 'next/dist/server/api-utils'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
 export function OrganizationsTab() {
     const t = useTranslations('admin')
+    const showApiErrorToast = useShowApiErrorToast()
 
-    const { data: organizations, mutate, isLoading } = useSWR<Organization[]>('/api/organizations', fetcher)
+    const { data: organizations, error, mutate, isLoading } = useSWR<Organization[], ApiError>(
+        '/api/organizations',
+        fetcher
+    )
+
+    useApiErrorToast(error)
 
     const deleteOrganization = async (orgId: string) => {
-        await fetch(`/api/organizations?organizationId=${orgId}`, { method: 'DELETE' })
-        mutate()
+        try {
+            await fetcher(`/api/organizations?organizationId=${orgId}`, { method: 'DELETE' })
+            mutate()
+        } catch (err) {
+            showApiErrorToast(err)
+        }
     }
 
     const [searchName, setSearchName] = useState('')
@@ -63,7 +76,9 @@ export function OrganizationsTab() {
                     </Button>
                 </Stack>
 
-                {isLoading || !organizations ? (
+                {error ? (
+                    <ApiErrorMessage error={error} />
+                ) : isLoading || !organizations ? (
                     <AbsoluteCenter>
                         <Spinner marginTop="3rem" size="xl" />
                     </AbsoluteCenter>
