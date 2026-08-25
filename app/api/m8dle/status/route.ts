@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { getSession } from '@/lib/auth/session'
 import { getGameDate } from '@/utils/dateUtils'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 /**
  * Récupère le status de l'avancement
@@ -12,7 +13,7 @@ import { getGameDate } from '@/utils/dateUtils'
 export async function GET() {
     try {
         const session = await getSession()
-        if (!session?.userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        if (!session?.userId) return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
 
         const gameDate = getGameDate()
         const dailyResult = await prisma.dailyM8DLEResult.findUnique({
@@ -34,6 +35,7 @@ export async function GET() {
 
         return NextResponse.json(dailyResult)
     } catch (error) {
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorKey.INTERNAL_ERROR }, { status: 500 })
     }
 }

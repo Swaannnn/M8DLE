@@ -18,8 +18,10 @@ import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
 import { fetcher } from '@/utils/fetcher'
 import useSWR from 'swr'
 import { LeaderboardData, LeaderboardUser } from '@/types/leaderboard'
-import { ApiError } from 'next/dist/server/api-utils'
+import { ApiError } from '@/utils/apiError'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast } from '@/hooks/use-api-error-toast'
 import constantsParams from '@/constants/constantsParams'
 import { getProfileAvatar } from '@/utils/userUtils'
 import { tuskerGrotesk } from '@/utils/fontUtils'
@@ -55,6 +57,8 @@ const Leaderboard = () => {
     const isMobile = useBreakpointValue({ base: true, md: false })
     const t = useTranslations('leaderboard')
 
+    useApiErrorToast(error)
+
     const OnPaginationClick = (page: number) => {
         setPage(page)
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -71,7 +75,7 @@ const Leaderboard = () => {
         )
     }
 
-    if (error) {
+    if (error && error.statusCode >= 500) {
         return <ApiErrorContainer error={error} />
     }
 
@@ -93,6 +97,7 @@ const Leaderboard = () => {
                 {t('leaderboardFullCaps')}
             </Text>
             <Text>{t('leaderboardDescription')}</Text>
+            {error && <ApiErrorMessage error={error} />}
             <Table.Root
                 size="sm"
                 variant="outline"

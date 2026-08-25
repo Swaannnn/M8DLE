@@ -10,8 +10,10 @@ import PrecisionDialog from '@/components/PrecisionDialog'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { pink } from '@/constants/colors'
-import { ApiError } from 'next/dist/server/api-utils'
+import { ApiError } from '@/utils/apiError'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast } from '@/hooks/use-api-error-toast'
 import { desirableCalligraphy, tuskerGrotesk } from '@/utils/fontUtils'
 import { useTranslations } from 'next-intl'
 import DialogWin from '@/components/DialogWin'
@@ -31,6 +33,8 @@ const Home = () => {
     const nextGameDateTime = getNextGameDate().getTime()
     const [timeLeft, setTimeLeft] = useState(getTimeLeft(nextGameDateTime))
     const { isOpen, closeDialog } = useWinDialog(win)
+
+    useApiErrorToast(error)
 
     const playerOfTheDay = getPlayerOfTheDay(allPlayers)
 
@@ -61,7 +65,7 @@ const Home = () => {
         )
     }
 
-    if (error) {
+    if (error && error.statusCode >= 500) {
         return <ApiErrorContainer error={error} />
     }
 
@@ -108,6 +112,8 @@ const Home = () => {
             </Text>
 
             <PrecisionDialog />
+
+            {error && <ApiErrorMessage error={error} />}
 
             {win ? (
                 <Text
