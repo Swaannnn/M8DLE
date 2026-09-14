@@ -1,10 +1,25 @@
+import type { PlayerComparison } from '@/utils/playerCompareUtils'
+import type { Player } from '@/types/player'
+
+/** Un essai et les indices calculés côté serveur. */
+export type AttemptResult = {
+    playerId: string
+    comparison: PlayerComparison
+}
+
 /**
- * Format de stockage local (invité, non connecté) du statut M8DLE dans le localStorage.
- * Volontairement distinct du modèle Prisma `DailyM8DLEResult` : ici `attempts` n'est
- * qu'une liste d'IDs de joueurs, pas des `Attempt` complets.
+ * Etat du jour renvoyé au client. `playerOfTheDay` n'est renseigné qu'une fois la partie
+ * gagnée : tant qu'elle est en cours, le client n'a que les indices, jamais la réponse.
  */
 export type M8dleStatus = {
-    attempts: string[]
     success: boolean
-    date?: Date
+    attempts: AttemptResult[]
+    playerOfTheDay: Player | null
+}
+
+/** Réponse à une tentative : mêmes règles de révélation que M8dleStatus. */
+export type AttemptResponse = {
+    success: boolean
+    comparison: PlayerComparison
+    playerOfTheDay: Player | null
 }

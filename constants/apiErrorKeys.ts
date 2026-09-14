@@ -9,6 +9,7 @@ const ApiErrorKey = {
     ALREADY_EXISTS: 'alreadyExists',
     ALREADY_SUCCESS: 'alreadySuccess',
     ALREADY_ATTEMPTED: 'alreadyAttempted',
+    CONFLICT: 'conflict',
     METHOD_NOT_ALLOWED: 'methodNotAllowed',
     AUTH_FAILED: 'authFailed',
     FETCH_FAILED: 'fetchFailed',

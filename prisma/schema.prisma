@@ -28,9 +28,11 @@ model User {
 }
 
 model DailyM8DLEResult {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String  @id @default(cuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  guestId String?
 
   date     DateTime
   attempts Attempt[]
@@ -39,6 +41,7 @@ model DailyM8DLEResult {
   createdAt DateTime @default(now())
 
   @@unique([userId, date])
+  @@unique([guestId, date])
 }
 
 model Attempt {
@@ -108,6 +111,8 @@ model PlayerOtd {
 
   player   Player @relation(fields: [playerId], references: [id])
   playerId String
+
+  @@unique([date])
 }
 
 enum Role {

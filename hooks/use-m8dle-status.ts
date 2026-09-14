@@ -1,95 +1,82 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
-import type { Attempt, DailyM8DLEResult } from '@prisma/client'
 import type { Player } from '@/types/player'
-import type { M8dleStatus } from '@/types/M8dleStatus'
-import { filterPlayersByAttempts, filterPlayersNotInAttempts, getPlayerOfTheDay } from '@/utils/playersUtils'
-import { getGameDate } from '@/utils/dateUtils'
+import type { ApiError } from '@/utils/apiError'
+import type { AttemptResponse, M8dleStatus } from '@/types/m8dleStatus'
+import type { PlayerComparison } from '@/utils/playerCompareUtils'
+import { filterPlayersNotInAttempts } from '@/utils/playersUtils'
 import { useAuth } from './use-auth'
+import { useShowApiErrorToast } from './use-api-error-toast'
 import { fetcher } from '@/utils/fetcher'
-import {
-    clearLocalM8dleStatus,
-    createLocalM8dleStatus,
-    getLocalM8dleStatus,
-    saveLocalM8dleStatus,
-} from '@/utils/m8dleLocalStatus'
 
-/**
- * Forme de la réponse de GET /api/m8dle/status, dérivée du modèle Prisma
- * (voir le `select` de app/api/m8dle/status/route.ts).
- */
-type M8dleStatusResponse = Pick<DailyM8DLEResult, 'userId' | 'success'> & {
-    attempts: Pick<Attempt, 'playerId'>[]
+/** Un essai joué, avec les indices calculés par le serveur. */
+export type PlayedAttempt = {
+    player: Player
+    comparison: PlayerComparison
 }
 
-/**
- * Forme de la réponse de POST /api/m8dle/attempt (voir app/api/m8dle/attempt/route.ts).
- * C'est cette valeur, calculée côté serveur à partir du vrai PlayerOtd, qui fait foi.
- */
-type AttemptResponse = Pick<DailyM8DLEResult, 'success'>
+const EMPTY_STATE = {
+    win: false,
+    attempts: [] as PlayedAttempt[],
+    playerOfTheDay: null as Player | null,
+}
 
 export const useM8dleStatus = () => {
-    const { loggedOut } = useAuth()
-    const { data: allPlayers = [], isLoading: playersLoading } = useSWR<Player[]>('/api/players', fetcher)
-    const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
-    const [availablePlayers, setAvailablePlayers] = useState<Player[]>([])
-    const [win, setWin] = useState(false)
+    const { loggedOut, loading: authLoading } = useAuth()
+    const {
+        data: players,
+        error: playersError,
+        isLoading: playersLoading,
+    } = useSWR<Player[], ApiError>('/api/players', fetcher)
+    // Référence stable : sinon un échec de /api/players recrée un tableau à chaque rendu et
+    // relance l'effet en boucle.
+    const allPlayers = useMemo(() => players ?? [], [players])
+    const [state, setState] = useState(EMPTY_STATE)
     const [statusLoading, setStatusLoading] = useState(true)
+    const showApiErrorToast = useShowApiErrorToast()
 
-    /**
-     * Synchronise le local storage de l'invité vers la BDD utilisateur
-     */
-    const syncLocalToUser = useCallback(async (state: M8dleStatus) => {
-        if (state.attempts.length > 0) {
-            try {
-                await fetcher('/api/m8dle/attempt/import', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ attempts: state.attempts }),
-                })
-            } catch (err) {
-                console.error('Erreur lors de la synchronisation des tentatives:', err)
-            }
-        }
-        clearLocalM8dleStatus()
-    }, [])
+    const availablePlayers = useMemo(
+        () =>
+            filterPlayersNotInAttempts(
+                allPlayers,
+                state.attempts.map((attempt) => attempt.player.id)
+            ),
+        [allPlayers, state.attempts]
+    )
 
+    // Le serveur résout lui-même qui joue depuis les cookies ; `loggedOut` ne sert qu'à relire
+    // le statut quand l'identité change. Le rattachement de la partie invité se fait à la
+    // création de session (voir utils/guestGameUtils.ts).
     useEffect(() => {
-        if (playersLoading) return
+        if (authLoading || playersLoading) return
 
         let cancelled = false
 
         const loadStatus = async () => {
             setStatusLoading(true)
-            const guestState = getLocalM8dleStatus()
-            let isWin = false
-            let attemptIds: string[] = []
 
-            if (!loggedOut) {
-                if (guestState) await syncLocalToUser(guestState)
+            let loaded = EMPTY_STATE
 
-                try {
-                    const data = await fetcher<M8dleStatusResponse>('/api/m8dle/status')
-                    isWin = data.success
-                    attemptIds = data.attempts.map((a) => a.playerId)
-                } catch (error) {
-                    console.error('Erreur lors de la récupération du statut:', error)
+            try {
+                const status = await fetcher<M8dleStatus>('/api/m8dle/status')
+                const playersById = new Map(allPlayers.map((player) => [player.id, player]))
+
+                loaded = {
+                    win: status.success,
+                    playerOfTheDay: status.playerOfTheDay,
+                    attempts: status.attempts.flatMap(({ playerId, comparison }) => {
+                        const player = playersById.get(playerId)
+                        return player ? [{ player, comparison }] : []
+                    }),
                 }
-            } else if (guestState) {
-                isWin = guestState.success
-                attemptIds = guestState.attempts
-            } else {
-                const status = createLocalM8dleStatus()
-                isWin = status.success
-                attemptIds = status.attempts
+            } catch (error) {
+                console.error('Erreur lors de la récupération du statut:', error)
             }
 
             if (cancelled) return
-            setWin(isWin)
-            setSelectedPlayers(filterPlayersByAttempts(allPlayers, attemptIds))
-            setAvailablePlayers(filterPlayersNotInAttempts(allPlayers, attemptIds))
+            setState(loaded)
             setStatusLoading(false)
         }
 
@@ -98,45 +85,43 @@ export const useM8dleStatus = () => {
         return () => {
             cancelled = true
         }
-    }, [loggedOut, allPlayers, playersLoading, syncLocalToUser])
+    }, [loggedOut, authLoading, allPlayers, playersLoading])
 
     /**
-     * Ajoute un essai d'un joueur. Pour un utilisateur connecté, le résultat (`success`)
-     * vient de la réponse serveur, seule source fiable puisqu'elle est calculée à partir
-     * du vrai PlayerOtd stocké en base — jamais recalculé côté client.
+     * Ajoute un essai. Les indices et la victoire viennent du serveur, seule source fiable.
+     * En cas d'échec l'essai n'est pas affiché et l'erreur part en toast : l'appelant n'attend
+     * pas la promesse.
      */
     const addAttempt = useCallback(
         async (player: Player) => {
-            if (!loggedOut) {
-                const updated = await fetcher<AttemptResponse>('/api/m8dle/attempt', {
+            let result: AttemptResponse
+            try {
+                result = await fetcher<AttemptResponse>('/api/m8dle/attempt', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ attempt: player.id }),
                 })
-                setWin(updated.success)
-            } else {
-                const playerOfTheDay = getPlayerOfTheDay(allPlayers)
-                const isWin = playerOfTheDay ? player.id === playerOfTheDay.id : false
-                const storage = getLocalM8dleStatus() ?? createLocalM8dleStatus()
-                saveLocalM8dleStatus({
-                    attempts: [...storage.attempts, player.id],
-                    success: isWin,
-                    date: getGameDate(),
-                })
-                setWin(isWin)
+            } catch (error) {
+                showApiErrorToast(error)
+                return
             }
 
-            setSelectedPlayers((prev) => [...prev, player])
-            setAvailablePlayers((prev) => filterPlayersNotInAttempts(prev, [player.id]))
+            setState((prev) => ({
+                win: result.success,
+                playerOfTheDay: result.playerOfTheDay,
+                attempts: [...prev.attempts, { player, comparison: result.comparison }],
+            }))
         },
-        [loggedOut, allPlayers]
+        [showApiErrorToast]
     )
 
     return {
         allPlayers,
-        selectedPlayers,
+        playersError,
+        attempts: state.attempts,
         availablePlayers,
-        win,
+        win: state.win,
+        playerOfTheDay: state.playerOfTheDay,
         addAttempt,
         statusLoading: statusLoading || playersLoading,
     }

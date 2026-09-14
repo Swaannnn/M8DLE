@@ -7,6 +7,7 @@
         "alreadyExists": "Cet élément existe déjà.",
         "alreadySuccess": "Vous avez déjà trouvé le joueur du jour.",
         "alreadyAttempted": "Ce joueur a déjà été proposé.",
+        "conflict": "Une autre action est déjà en cours. Réessayez.",
         "methodNotAllowed": "Méthode non autorisée.",
         "authFailed": "L'authentification a échoué.",
         "fetchFailed": "Erreur lors de la récupération des données.",
@@ -19,7 +20,8 @@
         "nextDraw": "Prochain tirage dans",
         "count0": "Personne n'a encore trouvé le joueur du jour",
         "count": "{count, plural, one {# personne a} other {# personnes ont}} déjà trouvé le joueur du jour.",
-        "findedMessage": "Bravo ! Revenez demain pour le prochain joueur."
+        "findedMessage": "Bravo ! Revenez demain pour le prochain joueur.",
+        "unavailable": "Le jeu est momentanément indisponible. Réessayez dans quelques instants."
     },
     "header": {
         "home": "Accueil",
@@ -67,15 +69,7 @@
         "twitterHashtags": "\n\n#M8WIN #M8DLE"
     },
     "calendar": {
-        "days": [
-            "L",
-            "M",
-            "M",
-            "J",
-            "V",
-            "S",
-            "D"
-        ],
+        "days": ["L", "M", "M", "J", "V", "S", "D"],
         "try": "essai",
         "tries": "essais"
     },
@@ -202,13 +196,7 @@
     "metadata": {
         "title": "M8DLE - Devine le joueur Gentle Mates du jour",
         "description": "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
-        "keywords": [
-            "gentlemates",
-            "m8dle",
-            "jeu gentlemates",
-            "gentlemates wordle",
-            "dle"
-        ]
+        "keywords": ["gentlemates", "m8dle", "jeu gentlemates", "gentlemates wordle", "dle"]
     },
     "admin": {
         "title": "ADMINISTRATION",
