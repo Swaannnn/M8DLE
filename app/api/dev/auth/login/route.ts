@@ -1,4 +1,5 @@
 import { createSession } from '@/lib/auth/session'
+import { claimGuestGame } from '@/utils/guestGameUtils'
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import ApiErrorKey from '@/constants/apiErrorKeys'
@@ -29,6 +30,14 @@ export async function GET(request: NextRequest) {
         }
 
         await createSession(id, user.discordId, user.role)
+
+        // Même rattachement de la partie invité que sur la connexion Discord, pour que le
+        // comportement en développement soit identique à la production.
+        try {
+            await claimGuestGame(user.id)
+        } catch (error) {
+            console.error('Erreur lors du rattachement de la partie invité:', error)
+        }
 
         return NextResponse.json(user)
     } catch (error) {

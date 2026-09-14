@@ -3,7 +3,6 @@
 import { AbsoluteCenter, Spinner, Text, VStack } from '@chakra-ui/react'
 import InputPlayersAutocomplete from '@/components/InputPlayersAutocomplete'
 import TablePlayers from '@/components/TablePlayers'
-import { getPlayerOfTheDay } from '@/utils/playersUtils'
 import { useM8dleStatus } from '@/hooks/use-m8dle-status'
 import { useAuth } from '@/hooks/use-auth'
 import PrecisionDialog from '@/components/PrecisionDialog'
@@ -20,11 +19,12 @@ import DialogWin from '@/components/DialogWin'
 import { useEffect, useState } from 'react'
 import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
 import { useWinDialog } from '@/hooks/use-win-dialog'
-import { comparePlayer, toEmojiRow } from '@/utils/playerCompareUtils'
+import { toEmojiRow } from '@/utils/playerCompareUtils'
 
 const Home = () => {
     const { loading } = useAuth()
-    const { allPlayers, selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
+    const { allPlayers, playersError, attempts, availablePlayers, win, playerOfTheDay, addAttempt, statusLoading } =
+        useM8dleStatus()
     const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>(
         '/api/m8dle/dailywinners',
         fetcher
@@ -35,8 +35,6 @@ const Home = () => {
     const { isOpen, closeDialog } = useWinDialog(win)
 
     useApiErrorToast(error)
-
-    const playerOfTheDay = getPlayerOfTheDay(allPlayers)
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -57,7 +55,7 @@ const Home = () => {
         }
     }, [win, mutate])
 
-    if (loading || statusLoading || isLoading || !playerOfTheDay) {
+    if (loading || statusLoading || isLoading) {
         return (
             <AbsoluteCenter>
                 <Spinner size="xl" />
@@ -65,16 +63,29 @@ const Home = () => {
         )
     }
 
-    if (error && error.statusCode >= 500) {
-        return <ApiErrorContainer error={error} />
+    const fatalError = [playersError, error].find((candidate) => candidate && candidate.statusCode >= 500)
+    if (fatalError) {
+        return <ApiErrorContainer error={fatalError} />
+    }
+
+    // Chargement terminé mais aucun joueur à proposer : catalogue vide ou /api/players en
+    // échec. On l'affiche explicitement plutôt que de laisser tourner un spinner sans fin.
+    if (allPlayers.length === 0) {
+        return (
+            <AbsoluteCenter>
+                <VStack gap="1rem">
+                    {playersError && <ApiErrorMessage error={playersError} />}
+                    <Text>{t('unavailable')}</Text>
+                </VStack>
+            </AbsoluteCenter>
+        )
     }
 
     const dailyWinners = data?.successCount ?? 0
     const dailyWinnerText = dailyWinners === 0 ? t('count0') : t('count', { count: dailyWinners })
 
-    const comparisons = selectedPlayers.map((player) => comparePlayer(player, playerOfTheDay))
-
-    const result = comparisons
+    const result = attempts
+        .map((attempt) => attempt.comparison)
         // si plus que 12 essais, couper le début pour la limite des posts de twitter
         .slice(-12)
         .reverse()
@@ -131,15 +142,12 @@ const Home = () => {
 
             <Text>{dailyWinnerText}</Text>
 
-            <TablePlayers
-                playerOfTheDay={playerOfTheDay}
-                players={selectedPlayers}
-            />
+            <TablePlayers attempts={attempts} />
 
             <DialogWin
                 isOpen={isOpen}
                 onClose={closeDialog}
-                nbPlayers={selectedPlayers.length}
+                nbPlayers={attempts.length}
                 result={result}
                 playerOfTheDay={playerOfTheDay}
             />
