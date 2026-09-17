@@ -12,7 +12,7 @@ export function useAuth() {
 
     const user = data ?? null
     const loading = isLoading
-    const loggedOut = error || !user
+    const loggedOut = Boolean(error) || !user
 
     const logout = async () => {
         await fetch('/api/auth/logout', { method: 'POST' })

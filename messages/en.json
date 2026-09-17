@@ -7,6 +7,7 @@
         "alreadyExists": "This item already exists.",
         "alreadySuccess": "You have already found the player of the day.",
         "alreadyAttempted": "This player has already been guessed.",
+        "conflict": "Another action is already in progress. Please try again.",
         "methodNotAllowed": "Method not allowed.",
         "authFailed": "Authentication failed.",
         "fetchFailed": "Error while fetching data.",
@@ -19,7 +20,8 @@
         "nextDraw": "Next drawing in",
         "count0": "No one has found the player of the day yet.",
         "count": "{count, plural, one {# person has} other {# people have}} already found the player of the day.",
-        "findedMessage": "Well done! Come back tomorrow for the next player."
+        "findedMessage": "Well done! Come back tomorrow for the next player.",
+        "unavailable": "The game is temporarily unavailable. Please try again in a moment."
     },
     "header": {
         "home": "Home",
@@ -66,15 +68,7 @@
         "twitterHashtags": "\n\n#M8WIN #M8DLE"
     },
     "calendar": {
-        "days": [
-            "M",
-            "T",
-            "W",
-            "T",
-            "F",
-            "S",
-            "S"
-        ],
+        "days": ["M", "T", "W", "T", "F", "S", "S"],
         "try": "try",
         "tries": "tries"
     },
@@ -201,13 +195,7 @@
     "metadata": {
         "title": "M8DLE - Guess the Gentle Mates Player of the Day",
         "description": "M8DLE is a daily game inspired by Wordle and set in the Gentle Mates universe. Guess the player of the day and compare your score with the community.",
-        "keywords": [
-            "gentlemates",
-            "m8dle",
-            "jeu gentlemates",
-            "gentlemates wordle",
-            "dle"
-        ]
+        "keywords": ["gentlemates", "m8dle", "jeu gentlemates", "gentlemates wordle", "dle"]
     },
     "admin": {
         "title": "ADMINISTRATION",

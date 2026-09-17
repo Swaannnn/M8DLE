@@ -1,55 +1,55 @@
-'use server'
+import 'server-only'
 
+import { randomInt } from 'node:crypto'
 import { prisma } from '@/lib/db'
 import { getGameDate } from '@/utils/dateUtils'
+import { playerWithRelationsInclude, type Player } from '@/types/player'
 
-const hashString = (str: string) => {
-    let hash = 0
-    for (let i = 0; i < str.length; i++) {
-        hash = (hash << 5) - hash + str.charCodeAt(i)
-        hash |= 0
-    }
-    return Math.abs(hash)
-}
+/** Nombre de jours pendant lesquels un joueur déjà tiré n'est pas réélligible. */
+const SELECTION_COOLDOWN_DAYS = 7
 
-const seededRandom = (seed: number) => {
-    const x = Math.sin(seed) * 10000
-    return x - Math.floor(x)
-}
-
-export async function getOrGeneratePlayerOfTheDay(date?: Date) {
+/**
+ * Renvoie le joueur du jour, en le tirant au sort la première fois qu'il est demandé.
+ * Le tirage écarte les joueurs sortis récemment, puis choisit au hasard parmi le reste.
+ * Il n'est volontairement pas reproductible : la réponse n'existe qu'en base.
+ */
+export async function getOrGeneratePlayerOfTheDay(date?: Date): Promise<Player | null> {
     const gameDate = date ?? getGameDate()
 
-    // 1. Cherche dans la base de données s'il existe déjà un Joueur du Jour pour cette date
-    const existing = await prisma.playerOtd.findFirst({
+    const existing = await prisma.playerOtd.findUnique({
         where: { date: gameDate },
-        include: { player: true },
+        include: { player: { include: playerWithRelationsInclude } },
     })
 
-    if (existing) {
-        return existing.player
-    }
+    if (existing) return existing.player
 
-    // 2. Sinon, tirage déterministe et enregistrement du PlayerOtd
-    const allPlayers = await prisma.player.findMany({ orderBy: { id: 'asc' } })
-    if (allPlayers.length === 0) return null
+    const selected = await pickPlayer(gameDate)
+    if (!selected) return null
 
-    const dayKey = gameDate.toISOString().slice(0, 10)
-    const seed = hashString(dayKey)
-    const random = seededRandom(seed)
-    const index = Math.floor(random * allPlayers.length)
-    const selectedPlayer = allPlayers[index]
+    // `date` est unique : en cas de tirages concurrents, l'upsert renvoie de façon atomique
+    // le gagnant, le nôtre ou celui d'une requête qui nous a devancés.
+    const playerOtd = await prisma.playerOtd.upsert({
+        where: { date: gameDate },
+        create: { date: gameDate, playerId: selected.id },
+        update: {},
+        include: { player: { include: playerWithRelationsInclude } },
+    })
 
-    try {
-        await prisma.playerOtd.create({
-            data: {
-                date: gameDate,
-                playerId: selectedPlayer.id,
-            },
-        })
-    } catch (e) {
-        // En cas d'insertion simultanée
-    }
+    return playerOtd.player
+}
 
-    return selectedPlayer
+/** Tire un joueur parmi ceux non sortis durant le cooldown, sinon parmi tous. */
+async function pickPlayer(gameDate: Date): Promise<{ id: string } | null> {
+    const cooldownStart = new Date(gameDate)
+    cooldownStart.setDate(cooldownStart.getDate() - SELECTION_COOLDOWN_DAYS)
+
+    const eligible = await prisma.player.findMany({
+        where: { playerOtds: { none: { date: { gte: cooldownStart } } } },
+        select: { id: true },
+    })
+
+    // Repli quand le catalogue est trop petit pour respecter le cooldown.
+    const pool = eligible.length > 0 ? eligible : await prisma.player.findMany({ select: { id: true } })
+
+    return pool.length > 0 ? pool[randomInt(pool.length)] : null
 }
