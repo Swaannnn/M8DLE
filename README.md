@@ -76,7 +76,7 @@ npm run lint
 
 - La liste des joueurs est dans data/players.json.
 - Le joueur du jour est calculé via la date UTC et un index dans cette liste.
-- Les invités stockent leurs essais dans localStorage; les comptes connectés sont persistés en base.
+- Les essais sont persistés en base pour tous, invités compris (session invité via cookie) ; la partie invité est rattachée au compte à la connexion.
 
 ## Déploiement
 
@@ -85,6 +85,8 @@ npx prisma migrate deploy
 npm run build
 npm run start
 ```
+
+Un Cron Job Vercel (voir vercel.json) nettoie quotidiennement les parties invité jamais rattachées à un compte. Il nécessite la variable d'environnement `CRON_SECRET` (voir .env.example) sur le projet Vercel — Vercel l'ajoute automatiquement en en-tête `Authorization` sur ces appels.
 
 ## À améliorer
 

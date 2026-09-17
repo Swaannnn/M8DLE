@@ -1,7 +1,6 @@
 'use client'
 
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import type { Player } from '@/types/player'
 import ReactCountryFlag from 'react-country-flag'
 import Image from 'next/image'
 import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu'
@@ -10,7 +9,9 @@ import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
 import { useColorMode } from './ui/color-mode'
 import { grey, lightGrey, pink } from '@/constants/colors'
 import { useTranslations } from 'next-intl'
-import { comparePlayer, getCurrentOrganization, getPreviousOrganization } from '@/utils/playerCompareUtils'
+import { getCurrentOrganization, getPlayerJoinYear, getPreviousOrganization } from '@/utils/playerCompareUtils'
+import { getAge } from '@/utils/dateUtils'
+import type { PlayedAttempt } from '@/hooks/use-m8dle-status'
 
 const containerVariants: Variants = {
     hidden: {},
@@ -138,11 +139,10 @@ const RowItem = ({ isValid = false, children }: RowItemProps) => {
 }
 
 type TablePlayersProps = {
-    playerOfTheDay: Player
-    players: Player[]
+    attempts: PlayedAttempt[]
 }
 
-const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
+const TablePlayers = ({ attempts }: TablePlayersProps) => {
     const t = useTranslations('tablePlayers')
 
     return (
@@ -161,10 +161,12 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                     <HeaderItem>{t('currentClub')}</HeaderItem>
                     <HeaderItem>{t('age')}</HeaderItem>
                 </HStack>
-                {[...players].reverse().map((player) => {
-                    const cmp = comparePlayer(player, playerOfTheDay)
+                {[...attempts].reverse().map(({ player, comparison: cmp }) => {
                     const prevOrg = getPreviousOrganization(player)
                     const currentOrg = getCurrentOrganization(player)
+                    // Valeurs de l'essai lui-même : le serveur n'envoie que le sens de l'écart.
+                    const joinYear = getPlayerJoinYear(player)
+                    const age = getAge(player.birthDate.toString())
 
                     return (
                         <MotionDiv
@@ -214,7 +216,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                     isMore={cmp.joinDate < 0}
                                     isValid={cmp.joinDate === 0}
                                 >
-                                    {cmp.joinDatePlayer}
+                                    {joinYear}
                                 </RowNumber>
                                 <RowItem isValid={cmp.previousOrganization}>
                                     {prevOrg.imageUrl ? (
@@ -245,7 +247,7 @@ const TablePlayers = ({ playerOfTheDay, players }: TablePlayersProps) => {
                                     isMore={cmp.age < 0}
                                     isValid={cmp.age === 0}
                                 >
-                                    {cmp.agePlayer}
+                                    {age}
                                 </RowNumber>
                             </HStack>
                         </MotionDiv>
