@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/hooks/use-auth'
-import { AbsoluteCenter, Button, HStack, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
+import { AbsoluteCenter, Box, Button, HStack, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
@@ -26,12 +26,17 @@ const AccountPage = () => {
     const router = useRouter()
     const now = new Date()
     now.setDate(1)
-    const [selectedDate, setSelectedDate] = useState(now);
-    const { data, error, isLoading: resultsLoading } = useSWR<DailyM8DLEResultWithAttemptsCount[], ApiError>(
+    const [selectedDate, setSelectedDate] = useState(now)
+    const {
+        data,
+        error,
+        isLoading: resultsLoading,
+    } = useSWR<DailyM8DLEResultWithAttemptsCount[], ApiError>(
         !userLoading && !loggedOut
             ? `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`
             : null,
-        fetcher)
+        fetcher
+    )
 
     useApiErrorToast(error)
 
@@ -40,17 +45,12 @@ const AccountPage = () => {
 
     const handleNav = (offset: number) => {
         setSelectedDate((prevDate) => {
-            const newDate = new Date(prevDate);
-            newDate.setDate(1);
-            newDate.setMonth(newDate.getMonth() + offset);
-            return newDate;
-        });
+            const newDate = new Date(prevDate)
+            newDate.setDate(1)
+            newDate.setMonth(newDate.getMonth() + offset)
+            return newDate
+        })
     }
-
-    const { data: winstreakData, isLoading: winstreakLoading } = useSWR<{ winstreak: number }, ApiError>(
-        !userLoading && !loggedOut ? '/api/users/me/winstreak' : null,
-        fetcher
-    )
 
     useEffect(() => {
         if (!userLoading && loggedOut) {
@@ -92,42 +92,57 @@ const AccountPage = () => {
                 direction={{ base: 'column', md: 'row' }}
                 align="center"
             >
-                <VStack>
-                    <Image
-                        src={avatarUrl}
-                        alt="user avatar"
-                        className="w-24 h-24 rounded-full"
-                    />
-                    <Text fontSize="lg">{user.username}</Text>
-                    <Text fontSize="sm">
-                        {t('memberSince')}{' '}
-                        {new Date(user.createdAt).toLocaleDateString(locale, {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                        })}
-                    </Text>
-                    {!winstreakLoading && winstreakData && (
-                        <Text fontSize="md" fontWeight="bold">
-                            Winstreak : {winstreakData.winstreak}
+                <VStack gap={16}>
+                    <VStack>
+                        <Image
+                            src={avatarUrl}
+                            alt="user avatar"
+                            className="w-24 h-24 rounded-full"
+                        />
+                        <Text fontSize="lg">{user.username}</Text>
+                        <Text fontSize="sm">
+                            {t('memberSince')}{' '}
+                            {new Date(user.createdAt).toLocaleDateString(locale, {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            })}
                         </Text>
-                    )}
+                    </VStack>
                 </VStack>
                 <Separator />
-                <VStack width="350px" height="350px" >
+                <VStack
+                    width="350px"
+                    height="350px"
+                >
                     {error && <ApiErrorMessage error={error} />}
-                    <HStack width="100%" justifyContent="space-between" >
-                        <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) <= getMonthIndex(new Date(user.createdAt))} onClick={() => handleNav(-1)}>
+                    <HStack
+                        width="100%"
+                        justifyContent="space-between"
+                    >
+                        <IconButton
+                            variant="ghost"
+                            disabled={getMonthIndex(selectedDate) <= getMonthIndex(new Date(user.createdAt))}
+                            onClick={() => handleNav(-1)}
+                        >
                             <LuChevronLeft />
                         </IconButton>
                         <Text>
                             {t('myVictories')} {monthName} {year}
                         </Text>
-                        <IconButton variant="ghost" disabled={getMonthIndex(selectedDate) >= getMonthIndex(now)} onClick={() => handleNav(1)}>
+                        <IconButton
+                            variant="ghost"
+                            disabled={getMonthIndex(selectedDate) >= getMonthIndex(now)}
+                            onClick={() => handleNav(1)}
+                        >
                             <LuChevronRight />
                         </IconButton>
                     </HStack>
-                    <CurrentMonthCalendar results={data ?? []} loading={resultsLoading} date={selectedDate} />
+                    <CurrentMonthCalendar
+                        results={data ?? []}
+                        loading={resultsLoading}
+                        date={selectedDate}
+                    />
                 </VStack>
             </Stack>
 
