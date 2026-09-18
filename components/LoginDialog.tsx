@@ -1,7 +1,7 @@
 'use client'
 
 import LoginDiscord from '@/components/LoginDiscord'
-import { tuskerGrotesk } from '@/utils/fontUtils'
+import { tuskerGrotesk } from '@/lib/fonts'
 import { CloseButton, Dialog, Portal, Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 

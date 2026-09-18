@@ -33,7 +33,7 @@ export function GamesTable({ games, onEdit, onDelete }: GamesTableProps) {
                             <Table.Cell p="2" textAlign="center">
                                 <Box mx="auto" w="80px" h="80px" position="relative" overflow="hidden" borderRadius="md" bg="gray.800">
                                     {game.imageUrl && (
-                                        <Image src={game.imageUrl} alt={game.name} fill style={{ objectFit: 'contain', padding: '4px' }} />
+                                        <Image src={game.imageUrl} alt={game.name} fill sizes="80px" style={{ objectFit: 'contain', padding: '4px' }} />
                                     )}
                                 </Box>
                             </Table.Cell>

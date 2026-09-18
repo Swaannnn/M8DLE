@@ -5,11 +5,10 @@ import { LuPlus } from 'react-icons/lu'
 import { GamesTable } from './GamesTable'
 import { GameForm } from './GameForm'
 import useSWR from 'swr'
-import { fetcher } from '@/utils/fetcher'
+import { fetcher, ApiError } from '@/utils/apiClient'
 import type { Game } from '@prisma/client'
 import { ApiErrorMessage } from '@/components/ApiErrorMessage'
 import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
-import { ApiError } from '@/utils/apiError'
 
 export function GamesTab() {
     const t = useTranslations('admin')

@@ -1,7 +1,7 @@
 'use client'
 
 import { grey, lightGrey, pink } from '@/constants/colors'
-import { AbsoluteCenter, Box, Grid, GridItem, Spinner, Text, VStack } from '@chakra-ui/react'
+import { Box, Grid, GridItem, Spinner, Text } from '@chakra-ui/react'
 import { useColorMode } from './ui/color-mode'
 import { getDaysOfMonth, getFirstDayOfMonth } from '@/utils/dateUtils'
 import { useTranslations } from 'next-intl'

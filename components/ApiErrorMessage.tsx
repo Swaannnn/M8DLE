@@ -1,6 +1,6 @@
 import { Text } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
-import { ApiError, translateApiError } from '@/utils/apiError'
+import { ApiError, translateApiError } from '@/utils/apiClient'
 
 /**
  * Message d'erreur inline (texte rouge), pour les erreurs API non-5xx.

@@ -1,11 +1,11 @@
-import { DatePicker, Portal, IconButton, Text, HStack, Box, parseDate } from '@chakra-ui/react'
+import { DatePicker, Portal, IconButton, Text, HStack, Box, parseDate, type BoxProps } from '@chakra-ui/react'
 import { LuCalendar, LuChevronLeft, LuChevronRight } from 'react-icons/lu'
 
 export type CustomDatePickerProps = {
     value?: string | null
     onChange: (value: string) => void
     required?: boolean
-    width?: any
+    width?: BoxProps['width']
 }
 
 export function CustomDatePicker({ value, onChange, required, width = 'full' }: CustomDatePickerProps) {

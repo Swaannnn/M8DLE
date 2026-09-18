@@ -49,7 +49,7 @@ export function PlayersTable({ players, onEdit, onDelete }: PlayersTableProps) {
                                 <Table.Cell p="2" textAlign="center">
                                     <Box mx="auto" w="80px" h="80px" position="relative" overflow="hidden" borderRadius="md" bg="gray.800">
                                         {player.imageUrl && (
-                                            <Image src={player.imageUrl} alt={player.name} fill style={{ objectFit: 'cover' }} />
+                                            <Image src={player.imageUrl} alt={player.name} fill sizes="80px" style={{ objectFit: 'cover' }} />
                                         )}
                                     </Box>
                                 </Table.Cell>
@@ -60,7 +60,7 @@ export function PlayersTable({ players, onEdit, onDelete }: PlayersTableProps) {
                                     {player.game?.imageUrl ? (
                                         <HStack justify="center">
                                             <Box w="30px" h="30px" position="relative">
-                                                <Image src={player.game.imageUrl} alt={player.game.name} fill style={{ objectFit: 'contain' }} />
+                                                <Image src={player.game.imageUrl} alt={player.game.name} fill sizes="30px" style={{ objectFit: 'contain' }} />
                                             </Box>
                                             <Text>{player.game.name}</Text>
                                         </HStack>
@@ -83,7 +83,7 @@ export function PlayersTable({ players, onEdit, onDelete }: PlayersTableProps) {
                                         <HStack justify="center">
                                             {org.imageUrl && (
                                                 <Box w="30px" h="30px" position="relative">
-                                                    <Image src={org.imageUrl} alt={org.name} fill style={{ objectFit: 'contain' }} />
+                                                    <Image src={org.imageUrl} alt={org.name} fill sizes="30px" style={{ objectFit: 'contain' }} />
                                                 </Box>
                                             )}
                                             <Text>{org.name}</Text>

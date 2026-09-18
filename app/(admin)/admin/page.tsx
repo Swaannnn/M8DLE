@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
-import { tuskerGrotesk } from '@/utils/fontUtils'
+import { tuskerGrotesk } from '@/lib/fonts'
 import { PlayersTab } from '@/components/admin/players/PlayersTab'
 import { OrganizationsTab } from '@/components/admin/organizations/OrganizationsTab'
 import { GamesTab } from '@/components/admin/games/GamesTab'

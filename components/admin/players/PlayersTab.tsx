@@ -7,9 +7,8 @@ import { PlayersTable } from '@/components/admin/players/PlayersTable'
 import { PlayerForm } from '@/components/admin/players/PlayerForm'
 import { ApiErrorMessage } from '@/components/ApiErrorMessage'
 import useSWR from 'swr'
-import { fetcher } from '@/utils/fetcher'
+import { fetcher, type ApiError } from '@/utils/apiClient'
 import type { Player } from '@/types/player'
-import type { ApiError } from '@/utils/apiError'
 import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
 export function PlayersTab() {

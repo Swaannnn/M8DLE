@@ -9,7 +9,7 @@ import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
 import { useColorMode } from './ui/color-mode'
 import { grey, lightGrey, pink } from '@/constants/colors'
 import { useTranslations } from 'next-intl'
-import { getCurrentOrganization, getPlayerJoinYear, getPreviousOrganization } from '@/utils/playerCompareUtils'
+import { getCurrentOrganization, getPlayerJoinYear, getPreviousOrganization } from '@/utils/player/compare'
 import { getAge } from '@/utils/dateUtils'
 import type { PlayedAttempt } from '@/hooks/use-m8dle-status'
 
@@ -177,21 +177,35 @@ const TablePlayers = ({ attempts }: TablePlayersProps) => {
                         >
                             <HStack key={player.id}>
                                 <RowItem isValid={cmp.player}>
-                                    <Image
-                                        src={player.imageUrl}
-                                        alt={player.name}
-                                        width={120}
-                                        height={120}
-                                    />
+                                    <Box
+                                        position="relative"
+                                        w="120px"
+                                        h="120px"
+                                    >
+                                        <Image
+                                            src={player.imageUrl}
+                                            alt={player.name}
+                                            fill
+                                            sizes="120px"
+                                            style={{ objectFit: 'contain' }}
+                                        />
+                                    </Box>
                                 </RowItem>
                                 <RowItem isValid={cmp.game}>
                                     {player.game?.imageUrl ? (
-                                        <Image
-                                            src={player.game.imageUrl}
-                                            alt={player.game.name}
-                                            width={80}
-                                            height={80}
-                                        />
+                                        <Box
+                                            position="relative"
+                                            w="80px"
+                                            h="80px"
+                                        >
+                                            <Image
+                                                src={player.game.imageUrl}
+                                                alt={player.game.name}
+                                                fill
+                                                sizes="80px"
+                                                style={{ objectFit: 'contain' }}
+                                            />
+                                        </Box>
                                     ) : (
                                         <Text
                                             textAlign="center"
@@ -220,24 +234,38 @@ const TablePlayers = ({ attempts }: TablePlayersProps) => {
                                 </RowNumber>
                                 <RowItem isValid={cmp.previousOrganization}>
                                     {prevOrg.imageUrl ? (
-                                        <Image
-                                            src={prevOrg.imageUrl}
-                                            alt={prevOrg.name}
-                                            width={80}
-                                            height={80}
-                                        />
+                                        <Box
+                                            position="relative"
+                                            w="80px"
+                                            h="80px"
+                                        >
+                                            <Image
+                                                src={prevOrg.imageUrl}
+                                                alt={prevOrg.name}
+                                                fill
+                                                sizes="80px"
+                                                style={{ objectFit: 'contain' }}
+                                            />
+                                        </Box>
                                     ) : (
                                         <Text textAlign="center">{prevOrg.name}</Text>
                                     )}
                                 </RowItem>
                                 <RowItem isValid={cmp.lastOrganization}>
                                     {currentOrg.imageUrl ? (
-                                        <Image
-                                            src={currentOrg.imageUrl}
-                                            alt={currentOrg.name}
-                                            width={80}
-                                            height={80}
-                                        />
+                                        <Box
+                                            position="relative"
+                                            w="80px"
+                                            h="80px"
+                                        >
+                                            <Image
+                                                src={currentOrg.imageUrl}
+                                                alt={currentOrg.name}
+                                                fill
+                                                sizes="80px"
+                                                style={{ objectFit: 'contain' }}
+                                            />
+                                        </Box>
                                     ) : (
                                         <Text textAlign="center">{currentOrg.name}</Text>
                                     )}

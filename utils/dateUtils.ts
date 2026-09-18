@@ -81,10 +81,11 @@ export function getMonthIndex(date: Date): number {
     return date.getFullYear() * 12 + date.getMonth()
 }
 
+/** Renvoie une nouvelle date au 1er du mois : l'argument n'est jamais modifié. */
 export function getFirstDayOfMonth(date: Date): Date {
-    const dateCopy = date
-    dateCopy.setDate(1)
-    return dateCopy
+    const firstDay = new Date(date)
+    firstDay.setDate(1)
+    return firstDay
 }
 
 /**

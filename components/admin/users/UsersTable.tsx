@@ -43,7 +43,7 @@ export function UsersTable({ users, onEdit, onDelete }: UsersTableProps) {
                             <Table.Cell p="2" textAlign="center">
                                 <Box mx="auto" w="45px" h="45px" position="relative" overflow="hidden" borderRadius="full" bg="gray.700">
                                     {user.avatar ? (
-                                        <Image src={getProfileAvatar({ discordId: user.discordId, avatar: user.avatar })} alt={user.username} fill style={{ objectFit: 'cover' }} />
+                                        <Image src={getProfileAvatar({ discordId: user.discordId, avatar: user.avatar })} alt={user.username} fill sizes="45px" style={{ objectFit: 'cover' }} />
                                     ) : (
                                         <Text lineHeight="45px" fontWeight="bold" color="gray.300">
                                             {user.username.charAt(0).toUpperCase()}

@@ -1,4 +1,4 @@
-import type { PlayerComparison } from '@/utils/playerCompareUtils'
+import type { PlayerComparison } from '@/utils/player/compare'
 import type { Player } from '@/types/player'
 
 /** Un essai et les indices calculés côté serveur. */

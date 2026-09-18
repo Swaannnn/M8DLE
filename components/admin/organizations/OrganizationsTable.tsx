@@ -33,7 +33,7 @@ export function OrganizationsTable({ organizations, onEdit, onDelete }: Organiza
                             <Table.Cell p="2" textAlign="center">
                                 <Box mx="auto" w="80px" h="80px" position="relative" overflow="hidden" borderRadius="md" bg="gray.800">
                                     {org.imageUrl && (
-                                        <Image src={org.imageUrl} alt={org.name} fill style={{ objectFit: 'contain', padding: '4px' }} />
+                                        <Image src={org.imageUrl} alt={org.name} fill sizes="80px" style={{ objectFit: 'contain', padding: '4px' }} />
                                     )}
                                 </Box>
                             </Table.Cell>

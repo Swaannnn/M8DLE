@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect } from 'react'
-import { Combobox, createListCollection, Portal, Box } from '@chakra-ui/react'
+import { useMemo, useState } from 'react'
+import { Combobox, createListCollection, Portal, Box, type BoxProps } from '@chakra-ui/react'
 import { LuCheck, LuChevronDown } from 'react-icons/lu'
 import { useTranslations } from 'next-intl'
 
@@ -8,7 +8,7 @@ export type SearchableSelectProps = {
     onChange: (value: string) => void
     options: { value: string; label: string }[]
     placeholder?: string
-    width?: any
+    width?: BoxProps['width']
 }
 
 export function SearchableSelect({ value, onChange, options, placeholder = 'Select...', width = 'full' }: SearchableSelectProps) {
@@ -19,21 +19,19 @@ export function SearchableSelect({ value, onChange, options, placeholder = 'Sele
     const [inputValue, setInputValue] = useState(selectedOption?.label || '')
     const [isOpen, setIsOpen] = useState(false)
 
-    useEffect(() => {
-        if (!isOpen) {
-            setInputValue(selectedOption?.label || '')
-        }
-    }, [selectedOption, isOpen])
+    // Une fois fermé, le champ réaffiche toujours le libellé sélectionné : la saisie en cours
+    // n'a de sens que pendant la recherche, et `value` peut changer de l'extérieur entre-temps.
+    const displayValue = isOpen ? inputValue : selectedOption?.label || ''
 
     const normalize = (str: string) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/gi, "").toLowerCase()
 
     const filteredOptions = useMemo(() => {
-        if (!inputValue) return options
-        if (inputValue === selectedOption?.label) return options
-        return options.filter(o => normalize(o.label).includes(normalize(inputValue)))
-    }, [options, inputValue, selectedOption])
+        if (!displayValue) return options
+        if (displayValue === selectedOption?.label) return options
+        return options.filter(o => normalize(o.label).includes(normalize(displayValue)))
+    }, [options, displayValue, selectedOption])
 
-    const showDefaultOption = !inputValue || inputValue === selectedOption?.label
+    const showDefaultOption = !displayValue || displayValue === selectedOption?.label
 
     const collection = useMemo(() => createListCollection({
         items: filteredOptions,
@@ -47,10 +45,14 @@ export function SearchableSelect({ value, onChange, options, placeholder = 'Sele
                 collection={collection}
                 value={value ? [value] : []}
                 onValueChange={(e) => onChange(e.value[0] || '')}
-                inputValue={inputValue}
+                inputValue={displayValue}
                 onInputValueChange={(e) => setInputValue(e.inputValue)}
                 open={isOpen}
-                onOpenChange={(e) => setIsOpen(e.open)}
+                onOpenChange={(e) => {
+                    // À l'ouverture, la recherche repart du libellé affiché.
+                    if (e.open) setInputValue(selectedOption?.label || '')
+                    setIsOpen(e.open)
+                }}
                 positioning={{ sameWidth: true }}
             >
                 <Combobox.Control position="relative" display="flex" w="full">
