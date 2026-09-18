@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Box, Button, VStack, Input, Text, Dialog, Portal, CloseButton } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
-import { ImageUpload } from '@/components/admin/players/ImageUpload'
+import { ImageUpload } from '@/components/ui/ImageUpload'
 import type { Organization } from '@prisma/client'
 import { toaster } from '@/components/ui/toaster'
 import { fetcher } from '@/utils/fetcher'

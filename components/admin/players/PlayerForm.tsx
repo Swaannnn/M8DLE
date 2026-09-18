@@ -11,7 +11,7 @@ import { formatDateForInput } from '@/utils/dateUtils'
 import { useCountries } from '@/utils/countries'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
-import { ImageUpload } from './ImageUpload'
+import { ImageUpload } from '@/components/ui/ImageUpload'
 import { toaster } from '@/components/ui/toaster'
 import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
