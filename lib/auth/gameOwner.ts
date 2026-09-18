@@ -1,5 +1,4 @@
 import 'server-only'
-import { prisma } from '@/lib/db'
 
 import { getSession } from '@/lib/auth/session'
 import { getGuestId, getOrCreateGuestId } from '@/lib/auth/guestSession'

@@ -1,16 +1,14 @@
 import { cookies, headers } from 'next/headers'
 import { getRequestConfig } from 'next-intl/server'
-
-const SUPPORTED_LOCALES = ['en', 'fr']
-const DEFAULT_LOCALE = 'en'
+import { DEFAULT_LOCALE, LOCALE_COOKIE_NAME, isSupportedLocale } from '@/constants/locales'
 
 export default getRequestConfig(async () => {
     const cookieStore = await cookies()
     const headerStore = await headers()
 
-    const cookieLocale = cookieStore.get('locale')?.value
+    const cookieLocale = cookieStore.get(LOCALE_COOKIE_NAME)?.value
 
-    if (cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale)) {
+    if (cookieLocale && isSupportedLocale(cookieLocale)) {
         return {
             locale: cookieLocale,
             messages: (await import(`../messages/${cookieLocale}.json`)).default,
@@ -22,7 +20,7 @@ export default getRequestConfig(async () => {
     if (acceptLanguage) {
         const browserLocale = acceptLanguage.split(',')[0].split('-')[0]
 
-        if (SUPPORTED_LOCALES.includes(browserLocale)) {
+        if (isSupportedLocale(browserLocale)) {
             return {
                 locale: browserLocale,
                 messages: (await import(`../messages/${browserLocale}.json`)).default,

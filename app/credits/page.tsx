@@ -1,6 +1,6 @@
 'use client'
 
-import { tuskerGrotesk } from '@/utils/fontUtils'
+import { tuskerGrotesk } from '@/lib/fonts'
 import { Heading, List, Stack, Text, VStack } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'

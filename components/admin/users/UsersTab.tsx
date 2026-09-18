@@ -4,9 +4,8 @@ import { useTranslations } from 'next-intl'
 import { UsersTable } from './UsersTable'
 import { UserForm } from './UserForm'
 import useSWR from 'swr'
-import { fetcher } from '@/utils/fetcher'
+import { fetcher, type ApiError } from '@/utils/apiClient'
 import type { User } from '@prisma/client'
-import type { ApiError } from '@/utils/apiError'
 import { ApiErrorMessage } from '@/components/ApiErrorMessage'
 import { useApiErrorToast, useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 
@@ -60,8 +59,16 @@ export function UsersTab() {
 
     return (
         <>
-            <VStack align="stretch" gap="1rem">
-                <Stack direction={{ base: 'column', lg: 'row' }} justify="space-between" mb="1rem" gap="1rem">
+            <VStack
+                align="stretch"
+                gap="1rem"
+            >
+                <Stack
+                    direction={{ base: 'column', lg: 'row' }}
+                    justify="space-between"
+                    mb="1rem"
+                    gap="1rem"
+                >
                     <Input
                         placeholder={t('searchUser')}
                         value={searchQuery}
@@ -74,7 +81,10 @@ export function UsersTab() {
                     <ApiErrorMessage error={error} />
                 ) : isLoading || !users ? (
                     <AbsoluteCenter>
-                        <Spinner marginTop="3rem" size="xl" />
+                        <Spinner
+                            marginTop="3rem"
+                            size="xl"
+                        />
                     </AbsoluteCenter>
                 ) : (
                     <UsersTable
@@ -110,10 +120,16 @@ export function UsersTab() {
                                 <Text>{t('deleteConfirmUserText')}</Text>
                             </Dialog.Body>
                             <Dialog.Footer mt="1rem">
-                                <Button variant="outline" onClick={() => setUserToDelete(null)}>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setUserToDelete(null)}
+                                >
                                     {t('cancel')}
                                 </Button>
-                                <Button colorPalette="red" onClick={confirmDelete}>
+                                <Button
+                                    colorPalette="red"
+                                    onClick={confirmDelete}
+                                >
                                     {t('deleteUser')}
                                 </Button>
                             </Dialog.Footer>

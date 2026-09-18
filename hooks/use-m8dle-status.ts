@@ -3,13 +3,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import type { Player } from '@/types/player'
-import type { ApiError } from '@/utils/apiError'
+import { type ApiError, fetcher } from '@/utils/apiClient'
 import type { AttemptResponse, M8dleStatus } from '@/types/m8dleStatus'
-import type { PlayerComparison } from '@/utils/playerCompareUtils'
-import { filterPlayersNotInAttempts } from '@/utils/playersUtils'
+import type { PlayerComparison } from '@/utils/player/compare'
+import { filterPlayersNotInAttempts } from '@/utils/player/filters'
 import { useAuth } from './use-auth'
 import { useShowApiErrorToast } from './use-api-error-toast'
-import { fetcher } from '@/utils/fetcher'
 
 /** Un essai joué, avec les indices calculés par le serveur. */
 export type PlayedAttempt = {
@@ -48,7 +47,7 @@ export const useM8dleStatus = () => {
 
     // Le serveur résout lui-même qui joue depuis les cookies ; `loggedOut` ne sert qu'à relire
     // le statut quand l'identité change. Le rattachement de la partie invité se fait à la
-    // création de session (voir utils/guestGameUtils.ts).
+    // création de session (voir lib/auth/guestGame.ts).
     useEffect(() => {
         if (authLoading || playersLoading) return
 

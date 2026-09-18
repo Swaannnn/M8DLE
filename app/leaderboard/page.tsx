@@ -15,16 +15,15 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
-import { fetcher } from '@/utils/fetcher'
+import { fetcher, ApiError } from '@/utils/apiClient'
 import useSWR from 'swr'
 import { LeaderboardData, LeaderboardUser } from '@/types/leaderboard'
-import { ApiError } from '@/utils/apiError'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
 import { ApiErrorMessage } from '@/components/ApiErrorMessage'
 import { useApiErrorToast } from '@/hooks/use-api-error-toast'
 import constantsParams from '@/constants/constantsParams'
 import { getProfileAvatar } from '@/utils/userUtils'
-import { tuskerGrotesk } from '@/utils/fontUtils'
+import { tuskerGrotesk } from '@/lib/fonts'
 import { useTranslations } from 'next-intl'
 
 const LeaderboardRow = ({ item, index, page }: { item: LeaderboardUser; index: number; page: number }) => {

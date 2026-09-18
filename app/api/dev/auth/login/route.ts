@@ -1,5 +1,5 @@
 import { createSession } from '@/lib/auth/session'
-import { claimGuestGame } from '@/utils/guestGameUtils'
+import { claimGuestGame } from '@/lib/auth/guestGame'
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import ApiErrorKey from '@/constants/apiErrorKeys'

@@ -3,7 +3,7 @@ import 'server-only'
 import { prisma } from '@/lib/db'
 import { deleteGuestSession, getGuestId } from '@/lib/auth/guestSession'
 import { getGameDate } from '@/utils/dateUtils'
-import { isUniqueConstraintViolation } from '@/utils/prismaUtils'
+import { isUniqueConstraintViolation } from '@/lib/prismaErrors'
 
 /**
  * Rattache au compte la partie du jour jouée en invité, puis ferme la session invité.
