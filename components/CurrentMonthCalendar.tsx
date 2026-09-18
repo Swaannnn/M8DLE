@@ -8,14 +8,20 @@ import { useTranslations } from 'next-intl'
 import { Tooltip } from './ui/tooltip'
 import { DailyM8DLEResultWithAttemptsCount } from '@/types/m8dleResults'
 
-const CurrentMonthCalendar = ({ results, loading, date }: { results: DailyM8DLEResultWithAttemptsCount[], loading: boolean, date: Date }) => {
+const CurrentMonthCalendar = ({
+    results,
+    loading,
+    date,
+}: {
+    results: DailyM8DLEResultWithAttemptsCount[]
+    loading: boolean
+    date: Date
+}) => {
     const { colorMode } = useColorMode()
     const t = useTranslations('calendar')
 
     if (loading) {
-        return (
-            <Spinner size="xl" />
-        )
+        return <Spinner size="xl" />
     }
 
     const firstDay = getFirstDayOfMonth(date).getDay()
@@ -75,7 +81,7 @@ const CurrentMonthCalendar = ({ results, loading, date }: { results: DailyM8DLER
                 return (
                     <GridItem key={day}>
                         <Tooltip
-                            content={`${attemptsCount} ${attemptsCount > 1 ? t('tries') : t('try') }`}
+                            content={`${attemptsCount} ${attemptsCount > 1 ? t('tries') : t('try')}`}
                             openDelay={50}
                             closeDelay={100}
                             showArrow

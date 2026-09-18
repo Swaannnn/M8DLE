@@ -26,7 +26,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
 
             const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
             if (!cloudName) {
-                console.error('La variable d\'environnement NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME n\'est pas définie.')
+                console.error("La variable d'environnement NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME n'est pas définie.")
                 setIsUploading(false)
                 return
             }
@@ -44,7 +44,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
                 console.error('Erreur Cloudinary:', data)
             }
         } catch (error) {
-            console.error('Erreur lors de l\'upload:', error)
+            console.error("Erreur lors de l'upload:", error)
         } finally {
             setIsUploading(false)
             if (fileInputRef.current) {
@@ -54,10 +54,25 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
     }
 
     return (
-        <VStack align="stretch" gap="1rem">
+        <VStack
+            align="stretch"
+            gap="1rem"
+        >
             {value ? (
-                <Box position="relative" borderRadius="md" overflow="hidden" borderWidth="1px">
-                    <Image src={value} alt="Uploaded preview" width="full" height="auto" objectFit="contain" maxH="200px" />
+                <Box
+                    position="relative"
+                    borderRadius="md"
+                    overflow="hidden"
+                    borderWidth="1px"
+                >
+                    <Image
+                        src={value}
+                        alt="Uploaded preview"
+                        width="full"
+                        height="auto"
+                        objectFit="contain"
+                        maxH="200px"
+                    />
                     <Button
                         position="absolute"
                         top="2"
@@ -87,8 +102,15 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
                 type="button"
                 disabled={isUploading}
             >
-                {isUploading ? <Spinner size="sm" mr={2} /> : <LuUpload />}
-                {isUploading ? 'Upload en cours...' : (value ? 'Changer l\'image' : 'Uploader une image')}
+                {isUploading ? (
+                    <Spinner
+                        size="sm"
+                        mr={2}
+                    />
+                ) : (
+                    <LuUpload />
+                )}
+                {isUploading ? 'Upload en cours...' : value ? "Changer l'image" : 'Uploader une image'}
             </Button>
         </VStack>
     )

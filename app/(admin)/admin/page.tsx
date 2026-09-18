@@ -20,7 +20,14 @@ export default function AdminPlayersPage() {
     const [activeTab, setActiveTab] = useState<string>(PLAYERS_TAB)
 
     return (
-        <VStack w="90vw" maxW="1200px" mx="auto" gap="1rem" align="stretch" py={{ base: '1rem', md: '2rem' }}>
+        <VStack
+            w="90vw"
+            maxW="1200px"
+            mx="auto"
+            gap="1rem"
+            align="stretch"
+            py={{ base: '1rem', md: '2rem' }}
+        >
             <Text
                 as="h1"
                 fontSize={{ base: '2.5rem', md: '4rem' }}
@@ -30,7 +37,12 @@ export default function AdminPlayersPage() {
                 {t('title')}
             </Text>
 
-            <HStack mb="2rem" borderBottomWidth="1px" pb="1rem" overflowX="auto">
+            <HStack
+                mb="2rem"
+                borderBottomWidth="1px"
+                pb="1rem"
+                overflowX="auto"
+            >
                 <Button
                     variant={activeTab === PLAYERS_TAB ? 'solid' : 'ghost'}
                     onClick={() => setActiveTab(PLAYERS_TAB)}

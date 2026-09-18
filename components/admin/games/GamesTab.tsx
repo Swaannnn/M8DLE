@@ -59,15 +59,27 @@ export function GamesTab() {
 
     return (
         <>
-            <VStack align="stretch" gap="1rem">
-                <Stack direction={{ base: 'column', lg: 'row' }} justify="space-between" mb="1rem" gap="1rem">
+            <VStack
+                align="stretch"
+                gap="1rem"
+            >
+                <Stack
+                    direction={{ base: 'column', lg: 'row' }}
+                    justify="space-between"
+                    mb="1rem"
+                    gap="1rem"
+                >
                     <Input
                         placeholder={t('searchGame')}
                         value={searchName}
                         onChange={(e) => setSearchName(e.target.value)}
                         maxW={{ base: 'full', lg: '400px' }}
                     />
-                    <Button variant="outline" onClick={openCreateForm} w={{ base: 'full', lg: 'auto' }}>
+                    <Button
+                        variant="outline"
+                        onClick={openCreateForm}
+                        w={{ base: 'full', lg: 'auto' }}
+                    >
                         <LuPlus /> {t('addGame')}
                     </Button>
                 </Stack>
@@ -76,7 +88,10 @@ export function GamesTab() {
                     <ApiErrorMessage error={error} />
                 ) : isLoading || !games ? (
                     <AbsoluteCenter>
-                        <Spinner marginTop="3rem" size="xl" />
+                        <Spinner
+                            marginTop="3rem"
+                            size="xl"
+                        />
                     </AbsoluteCenter>
                 ) : (
                     <GamesTable
@@ -112,10 +127,16 @@ export function GamesTab() {
                                 <Text>{t('deleteConfirmGameText')}</Text>
                             </Dialog.Body>
                             <Dialog.Footer mt="1rem">
-                                <Button variant="outline" onClick={() => setGameToDelete(null)}>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setGameToDelete(null)}
+                                >
                                     {t('cancel')}
                                 </Button>
-                                <Button colorPalette="red" onClick={confirmDelete}>
+                                <Button
+                                    colorPalette="red"
+                                    onClick={confirmDelete}
+                                >
                                     {t('deleteGame')}
                                 </Button>
                             </Dialog.Footer>

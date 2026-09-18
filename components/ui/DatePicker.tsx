@@ -22,7 +22,11 @@ export function CustomDatePicker({ value, onChange, required, width = 'full' }: 
                     return `${yyyy}-${mm}-${dd}`
                 }}
             >
-                <DatePicker.Control display="flex" w="full" position="relative">
+                <DatePicker.Control
+                    display="flex"
+                    w="full"
+                    position="relative"
+                >
                     <DatePicker.Input
                         required={required}
                         bg="bg.panel"
@@ -33,9 +37,17 @@ export function CustomDatePicker({ value, onChange, required, width = 'full' }: 
                         w="full"
                         cursor="pointer"
                     />
-                    <DatePicker.IndicatorGroup position="absolute" right="2" top="50%" transform="translateY(-50%)">
+                    <DatePicker.IndicatorGroup
+                        position="absolute"
+                        right="2"
+                        top="50%"
+                        transform="translateY(-50%)"
+                    >
                         <DatePicker.Trigger asChild>
-                            <IconButton variant="ghost" size="xs">
+                            <IconButton
+                                variant="ghost"
+                                size="xs"
+                            >
                                 <LuCalendar />
                             </IconButton>
                         </DatePicker.Trigger>
@@ -43,28 +55,59 @@ export function CustomDatePicker({ value, onChange, required, width = 'full' }: 
                 </DatePicker.Control>
                 <Portal>
                     <DatePicker.Positioner zIndex={1400}>
-                        <DatePicker.Content bg="bg.panel" p="4" borderRadius="md" boxShadow="lg" borderWidth="1px">
+                        <DatePicker.Content
+                            bg="bg.panel"
+                            p="4"
+                            borderRadius="md"
+                            boxShadow="lg"
+                            borderWidth="1px"
+                        >
                             <DatePicker.View view="day">
                                 <DatePicker.Context>
                                     {(datePicker) => (
                                         <>
                                             <DatePicker.Header mb="2">
-                                                <HStack justify="space-between" w="full">
+                                                <HStack
+                                                    justify="space-between"
+                                                    w="full"
+                                                >
                                                     <DatePicker.PrevTrigger asChild>
-                                                        <IconButton variant="ghost" size="sm"><LuChevronLeft /></IconButton>
+                                                        <IconButton
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <LuChevronLeft />
+                                                        </IconButton>
                                                     </DatePicker.PrevTrigger>
                                                     <Text fontWeight="bold">{datePicker.visibleRangeText.start}</Text>
                                                     <DatePicker.NextTrigger asChild>
-                                                        <IconButton variant="ghost" size="sm"><LuChevronRight /></IconButton>
+                                                        <IconButton
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <LuChevronRight />
+                                                        </IconButton>
                                                     </DatePicker.NextTrigger>
                                                 </HStack>
                                             </DatePicker.Header>
-                                            <DatePicker.Table w="full" style={{ borderCollapse: 'collapse' }}>
+                                            <DatePicker.Table
+                                                w="full"
+                                                style={{ borderCollapse: 'collapse' }}
+                                            >
                                                 <DatePicker.TableHead>
                                                     <DatePicker.TableRow>
                                                         {datePicker.weekDays.map((weekDay, id) => (
-                                                            <DatePicker.TableHeader key={id} textAlign="center" pb="2">
-                                                                <Text fontSize="sm" color="gray.500">{weekDay.short}</Text>
+                                                            <DatePicker.TableHeader
+                                                                key={id}
+                                                                textAlign="center"
+                                                                pb="2"
+                                                            >
+                                                                <Text
+                                                                    fontSize="sm"
+                                                                    color="gray.500"
+                                                                >
+                                                                    {weekDay.short}
+                                                                </Text>
                                                             </DatePicker.TableHeader>
                                                         ))}
                                                     </DatePicker.TableRow>
@@ -73,13 +116,21 @@ export function CustomDatePicker({ value, onChange, required, width = 'full' }: 
                                                     {datePicker.weeks.map((week, id) => (
                                                         <DatePicker.TableRow key={id}>
                                                             {week.map((day, id) => (
-                                                                <DatePicker.TableCell key={id} value={day} p="1">
+                                                                <DatePicker.TableCell
+                                                                    key={id}
+                                                                    value={day}
+                                                                    p="1"
+                                                                >
                                                                     <DatePicker.TableCellTrigger asChild>
-                                                                        <IconButton 
-                                                                            variant="ghost" 
+                                                                        <IconButton
+                                                                            variant="ghost"
                                                                             size="sm"
                                                                             w="100%"
-                                                                            _selected={{ bg: 'white', color: 'black', _hover: { bg: 'gray.200' } }}
+                                                                            _selected={{
+                                                                                bg: 'white',
+                                                                                color: 'black',
+                                                                                _hover: { bg: 'gray.200' },
+                                                                            }}
                                                                         >
                                                                             {day.day}
                                                                         </IconButton>

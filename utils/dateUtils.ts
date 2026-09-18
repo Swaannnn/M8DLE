@@ -7,20 +7,28 @@ dayjs.extend(timezone)
 
 const TZ = 'Europe/Paris'
 
+/** Heure (dans `TZ`) à laquelle le tirage du jour bascule. */
+const GAME_CUTOFF_HOUR = 2
+
+/** Bascule du tirage pour le jour de `now`. */
+const getCutoff = (now: dayjs.Dayjs) => now.hour(GAME_CUTOFF_HOUR).minute(0).second(0).millisecond(0)
+
 /**
  * Calcul et renvoi l'age d'une personne en y passant une date.
+ *
+ * La date de naissance est lue en UTC (c'est ainsi qu'elle est stockée) et « aujourd'hui »
+ * dans le fuseau de jeu. Sans cela le résultat dépendrait du fuseau de la machine : le
+ * serveur, qui compare les âges, pourrait ne pas tomber d'accord avec le navigateur, qui
+ * les affiche.
  */
 export function getAge(date: string): number {
-    const birthDate = new Date(date)
-    if (isNaN(birthDate.getTime())) return -1
+    const birthDate = dayjs.utc(date)
+    if (!birthDate.isValid()) return -1
 
-    const today = new Date()
-    let age = today.getFullYear() - birthDate.getFullYear()
+    const today = dayjs().tz(TZ)
+    let age = today.year() - birthDate.year()
 
-    if (
-        today.getMonth() < birthDate.getMonth() ||
-        (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())
-    ) {
+    if (today.month() < birthDate.month() || (today.month() === birthDate.month() && today.date() < birthDate.date())) {
         age--
     }
 
@@ -28,13 +36,12 @@ export function getAge(date: string): number {
 }
 
 /**
- * Renvoi l'année d'une date.
+ * Renvoi l'année d'une date, lue en UTC pour la même raison que `getAge`.
  */
 export function getYear(date: string): number {
-    const birthDate = new Date(date)
-    if (isNaN(birthDate.getTime())) return -1
+    const parsed = dayjs.utc(date)
 
-    return birthDate.getFullYear()
+    return parsed.isValid() ? parsed.year() : -1
 }
 
 /**
@@ -42,20 +49,22 @@ export function getYear(date: string): number {
  */
 export function getGameDate(): Date {
     const now = dayjs().tz(TZ)
-    const todayCutoff = now.hour(2).minute(0).second(0).millisecond(0)
-    const gameDate = now.isBefore(todayCutoff) ? todayCutoff.subtract(1, 'day') : todayCutoff
+    const cutoff = getCutoff(now)
 
-    return gameDate.toDate()
+    return (now.isBefore(cutoff) ? cutoff.subtract(1, 'day') : cutoff).toDate()
 }
 
 /**
- * Récupère la date du prochain tirage
+ * Récupère la date du prochain tirage.
+ *
+ * Entre minuit et la bascule, le prochain tirage est celui du jour même : ajouter un jour
+ * sans distinction ferait afficher un compte à rebours d'environ 25 h au lieu de moins de 2 h.
  */
 export function getNextGameDate(): Date {
-    const current = dayjs().tz(TZ)
-    const date = current.add(1, 'day').hour(2).minute(0).second(0).millisecond(0)
+    const now = dayjs().tz(TZ)
+    const cutoff = getCutoff(now)
 
-    return date.toDate()
+    return (now.isBefore(cutoff) ? cutoff : cutoff.add(1, 'day')).toDate()
 }
 
 /**

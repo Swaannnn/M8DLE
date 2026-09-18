@@ -38,7 +38,7 @@ export function PlayersTab() {
 
     const filteredPlayers = useMemo(() => {
         if (!players) return []
-        return players.filter(player => {
+        return players.filter((player) => {
             const matchesName = player.name.toLowerCase().includes(searchName.toLowerCase())
             const matchesGame = selectedGame ? player.gameId === selectedGame || player.game?.id === selectedGame : true
             return matchesName && matchesGame
@@ -67,9 +67,22 @@ export function PlayersTab() {
 
     return (
         <>
-            <VStack align="stretch" gap="1rem">
-                <Stack direction={{ base: 'column', lg: 'row' }} justify="space-between" mb="1rem" gap="1rem">
-                    <Stack direction={{ base: 'column', md: 'row' }} gap="0.5rem" flex="1" maxW={{ base: 'full', lg: '600px' }}>
+            <VStack
+                align="stretch"
+                gap="1rem"
+            >
+                <Stack
+                    direction={{ base: 'column', lg: 'row' }}
+                    justify="space-between"
+                    mb="1rem"
+                    gap="1rem"
+                >
+                    <Stack
+                        direction={{ base: 'column', md: 'row' }}
+                        gap="0.5rem"
+                        flex="1"
+                        maxW={{ base: 'full', lg: '600px' }}
+                    >
                         <Input
                             placeholder={t('searchPlayer')}
                             value={searchName}
@@ -79,11 +92,15 @@ export function PlayersTab() {
                             width={{ base: 'full', md: '350px' }}
                             value={selectedGame}
                             onChange={setSelectedGame}
-                            options={games?.map(g => ({ value: g.id, label: g.name })) || []}
+                            options={games?.map((g) => ({ value: g.id, label: g.name })) || []}
                             placeholder={t('allGames')}
                         />
                     </Stack>
-                    <Button variant="outline" onClick={openCreateForm} w={{ base: 'full', lg: 'auto' }}>
+                    <Button
+                        variant="outline"
+                        onClick={openCreateForm}
+                        w={{ base: 'full', lg: 'auto' }}
+                    >
                         <LuPlus /> {t('addPlayer')}
                     </Button>
                 </Stack>
@@ -92,7 +109,10 @@ export function PlayersTab() {
                     <ApiErrorMessage error={error} />
                 ) : isLoading || !players ? (
                     <AbsoluteCenter>
-                        <Spinner marginTop="3rem" size="xl" />
+                        <Spinner
+                            marginTop="3rem"
+                            size="xl"
+                        />
                     </AbsoluteCenter>
                 ) : (
                     <PlayersTable
@@ -127,10 +147,16 @@ export function PlayersTab() {
                                 <Text>{t('deleteConfirmText')}</Text>
                             </Dialog.Body>
                             <Dialog.Footer mt="1rem">
-                                <Button variant="outline" onClick={() => setPlayerToDelete(null)}>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setPlayerToDelete(null)}
+                                >
                                     {t('cancel')}
                                 </Button>
-                                <Button colorPalette="red" onClick={confirmDelete}>
+                                <Button
+                                    colorPalette="red"
+                                    onClick={confirmDelete}
+                                >
                                     {t('deletePlayer')}
                                 </Button>
                             </Dialog.Footer>
