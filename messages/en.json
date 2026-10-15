@@ -42,13 +42,16 @@
         "player": "Player",
         "victories": "Victories",
         "nbAttempts": "Average number of attempts",
-        "nbAttemptsShort": "Nb attempts"
+        "nbAttemptsShort": "Nb attempts",
+        "winstreak": "Streak"
     },
     "account": {
         "accountFullCaps": "MY ACCOUNT",
         "memberSince": "Member since",
         "logout": "Logout",
-        "myVictories": "My victories in"
+        "myVictories": "My victories in",
+        "winstreak": "Win streak",
+        "winstreakDays": "{count, plural, =0 {0 days} one {# day} other {# days}}"
     },
     "login": {
         "loginFullCaps": "LOGIN"

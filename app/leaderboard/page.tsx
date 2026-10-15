@@ -45,6 +45,7 @@ const LeaderboardRow = ({ item, index, page }: { item: LeaderboardUser; index: n
                 </HStack>
             </Table.Cell>
             <Table.Cell textAlign="center">{item.wins}</Table.Cell>
+            <Table.Cell textAlign="center">{item.winstreak > 0 ? `${item.winstreak}` : '—'}</Table.Cell>
             <Table.Cell textAlign="center">{item.averageAttempts}</Table.Cell>
         </Table.Row>
     )
@@ -107,6 +108,7 @@ const Leaderboard = () => {
                         <Table.ColumnHeader></Table.ColumnHeader>
                         <Table.ColumnHeader>{t('player')}</Table.ColumnHeader>
                         <Table.ColumnHeader textAlign="center">{t('victories')}</Table.ColumnHeader>
+                        <Table.ColumnHeader textAlign="center">{t('winstreak')}</Table.ColumnHeader>
                         <Table.ColumnHeader textAlign="center">
                             {isMobile ? t('nbAttemptsShort') : t('nbAttempts')}
                         </Table.ColumnHeader>
