@@ -14,6 +14,9 @@
         "createFailed": "Error while creating.",
         "updateFailed": "Error while updating.",
         "deleteFailed": "Error while deleting.",
+        "uploadFailed": "File upload failed.",
+        "invalidFileType": "This file format is not supported.",
+        "fileTooLarge": "The file is too large (4 MB maximum).",
         "internalError": "An internal error occurred."
     },
     "home": {
@@ -266,6 +269,10 @@
     },
     "ui": {
         "searchPlaceholder": "Search...",
-        "noResults": "No results"
+        "noResults": "No results",
+        "uploadImage": "Upload an image",
+        "changeImage": "Change image",
+        "uploadingImage": "Uploading...",
+        "removeImage": "Remove image"
     }
 }

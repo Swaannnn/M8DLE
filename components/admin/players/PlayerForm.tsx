@@ -10,10 +10,10 @@ import { CustomDatePicker } from '@/components/ui/DatePicker'
 import { formatDateForInput } from '@/utils/dateUtils'
 import { useCountries } from '@/utils/countries'
 import useSWR from 'swr'
-import { fetcher } from '@/utils/apiClient'
-import { ImageUpload } from './ImageUpload'
+import { ImageUpload } from '@/components/ui/ImageUpload'
 import { toaster } from '@/components/ui/toaster'
 import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
+import { fetcher } from '@/utils/apiClient'
 
 type PlayerFormProps = {
     open: boolean

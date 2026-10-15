@@ -14,6 +14,9 @@
         "createFailed": "Erreur lors de la création.",
         "updateFailed": "Erreur lors de la mise à jour.",
         "deleteFailed": "Erreur lors de la suppression.",
+        "uploadFailed": "Erreur lors de l'upload du fichier.",
+        "invalidFileType": "Ce format de fichier n'est pas accepté.",
+        "fileTooLarge": "Le fichier est trop volumineux (4 Mo maximum).",
         "internalError": "Une erreur interne est survenue."
     },
     "home": {
@@ -267,6 +270,10 @@
     },
     "ui": {
         "searchPlaceholder": "Rechercher...",
-        "noResults": "Aucun résultat"
+        "noResults": "Aucun résultat",
+        "uploadImage": "Uploader une image",
+        "changeImage": "Changer l'image",
+        "uploadingImage": "Upload en cours...",
+        "removeImage": "Supprimer l'image"
     }
 }

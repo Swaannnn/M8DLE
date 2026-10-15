@@ -2,7 +2,11 @@
 
 import { useRef, useState } from 'react'
 import { Box, Button, Image, VStack, Spinner } from '@chakra-ui/react'
+import { useTranslations } from 'next-intl'
 import { LuUpload, LuTrash } from 'react-icons/lu'
+import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
+import type { UploadedImage } from '@/types/storage'
+import { fetcher } from '@/utils/apiClient'
 
 interface ImageUploadProps {
     value: string
@@ -10,6 +14,8 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ value, onChange }: ImageUploadProps) {
+    const t = useTranslations('ui')
+    const showApiErrorToast = useShowApiErrorToast()
     const [isUploading, setIsUploading] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -22,29 +28,16 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
         try {
             const formData = new FormData()
             formData.append('file', file)
-            formData.append('upload_preset', 'm8dle_preset')
 
-            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-            if (!cloudName) {
-                console.error("La variable d'environnement NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME n'est pas définie.")
-                setIsUploading(false)
-                return
-            }
-
-            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+            // Pas de Content-Type manuel : le navigateur doit poser lui-même la boundary du multipart.
+            const uploaded = await fetcher<UploadedImage>('/api/storage', {
                 method: 'POST',
                 body: formData,
             })
 
-            const data = await response.json()
-
-            if (data.secure_url) {
-                onChange(data.secure_url)
-            } else {
-                console.error('Erreur Cloudinary:', data)
-            }
+            onChange(uploaded.url)
         } catch (error) {
-            console.error("Erreur lors de l'upload:", error)
+            showApiErrorToast(error)
         } finally {
             setIsUploading(false)
             if (fileInputRef.current) {
@@ -80,6 +73,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
                         size="sm"
                         colorPalette="red"
                         variant="solid"
+                        aria-label={t('removeImage')}
                         onClick={() => onChange('')}
                     >
                         <LuTrash />
@@ -110,7 +104,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
                 ) : (
                     <LuUpload />
                 )}
-                {isUploading ? 'Upload en cours...' : value ? "Changer l'image" : 'Uploader une image'}
+                {isUploading ? t('uploadingImage') : value ? t('changeImage') : t('uploadImage')}
             </Button>
         </VStack>
     )

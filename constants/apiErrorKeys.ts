@@ -16,6 +16,9 @@ const ApiErrorKey = {
     CREATE_FAILED: 'createFailed',
     UPDATE_FAILED: 'updateFailed',
     DELETE_FAILED: 'deleteFailed',
+    UPLOAD_FAILED: 'uploadFailed',
+    INVALID_FILE_TYPE: 'invalidFileType',
+    FILE_TOO_LARGE: 'fileTooLarge',
     INTERNAL_ERROR: 'internalError',
 } as const
 
