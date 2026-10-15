@@ -42,13 +42,16 @@
         "player": "Joueur",
         "victories": "Victoires",
         "nbAttempts": "Nombre d'essais moyen",
-        "nbAttemptsShort": "Nb essais"
+        "nbAttemptsShort": "Nb essais",
+        "winstreak": "Série"
     },
     "account": {
         "accountFullCaps": "MON COMPTE",
         "memberSince": "Membre depuis le",
         "logout": "Se déconnecter",
-        "myVictories": "Mes victoires en"
+        "myVictories": "Mes victoires en",
+        "winstreak": "Série de victoires",
+        "winstreakDays": "{count, plural, =0 {0 jour} one {# jour} other {# jours}}"
     },
     "login": {
         "loginFullCaps": "CONNEXION"

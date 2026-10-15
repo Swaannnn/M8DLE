@@ -4,6 +4,7 @@ import { LeaderboardUser } from '@/types/leaderboard'
 import { getNumberParamFromRequest } from '@/utils/requestUtils'
 import constantsParams from '@/constants/constantsParams'
 import ApiErrorKey from '@/constants/apiErrorKeys'
+import { computeWinstreak } from '@/utils/winstreakUtils'
 
 /**
  * Récupère la liste des utiliateurs dans le BDD.
@@ -27,9 +28,6 @@ export async function GET(request: NextRequest) {
                 username: true,
                 discordId: true,
                 avatar: true,
-                dailyResults: {
-                    select: { attempts: true, success: true },
-                },
                 totalWins: true,
                 totalAttempts: true,
                 averageAttempts: true,
@@ -46,17 +44,17 @@ export async function GET(request: NextRequest) {
             take: constantsParams.LEADERBOARD_PAGE_SIZE,
         })
 
-        const users: LeaderboardUser[] = rawUsers.map((user) => {
-            // Création du profile de leaderboard
-            return {
+        const users: LeaderboardUser[] = await Promise.all(
+            rawUsers.map(async (user) => ({
                 id: user.id,
                 username: user.username,
                 discordId: user.discordId,
                 avatar: user.avatar ?? '',
                 wins: user.totalWins,
                 averageAttempts: user.averageAttempts,
-            }
-        })
+                winstreak: await computeWinstreak(user.id),
+            }))
+        )
 
         return NextResponse.json({ total, users })
     } catch (error) {

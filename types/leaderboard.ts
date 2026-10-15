@@ -5,6 +5,7 @@ export type LeaderboardUser = {
     avatar: string
     wins: number
     averageAttempts: number
+    winstreak: number
 }
 
 export type LeaderboardData = {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/hooks/use-auth'
-import { AbsoluteCenter, Button, HStack, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
+import { AbsoluteCenter, Badge, Button, HStack, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
 import { fetcher, ApiError } from '@/utils/apiClient'
@@ -17,6 +17,7 @@ import { IconButton } from '@chakra-ui/react'
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
 import { DailyM8DLEResultWithAttemptsCount } from '@/types/m8dleResults'
 import { getMonthIndex } from '@/utils/dateUtils'
+import { lightPink, pink } from '@/constants/colors'
 
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
@@ -34,6 +35,11 @@ const AccountPage = () => {
         !userLoading && !loggedOut
             ? `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`
             : null,
+        fetcher
+    )
+
+    const { data: winstreakData, isLoading: winstreakLoading } = useSWR<{ winstreak: number }, ApiError>(
+        !userLoading && !loggedOut ? '/api/users/me/winstreak' : null,
         fetcher
     )
 
@@ -57,7 +63,7 @@ const AccountPage = () => {
         }
     }, [userLoading, loggedOut, router])
 
-    if (userLoading) {
+    if (userLoading || resultsLoading || winstreakLoading) {
         return (
             <AbsoluteCenter>
                 <Spinner size="xl" />
@@ -72,6 +78,8 @@ const AccountPage = () => {
     if (!user || loggedOut) return null
 
     const avatarUrl = getProfileAvatar(user)
+    const winstreak = winstreakData?.winstreak ?? 0
+
     return (
         <VStack
             w="90vw"
@@ -91,21 +99,32 @@ const AccountPage = () => {
                 direction={{ base: 'column', md: 'row' }}
                 align="center"
             >
-                <VStack>
-                    <Image
-                        src={avatarUrl}
-                        alt="user avatar"
-                        className="w-24 h-24 rounded-full"
-                    />
-                    <Text fontSize="lg">{user.username}</Text>
-                    <Text fontSize="sm">
-                        {t('memberSince')}{' '}
-                        {new Date(user.createdAt).toLocaleDateString(locale, {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                        })}
-                    </Text>
+                <VStack gap="2rem">
+                    <VStack>
+                        <Image
+                            src={avatarUrl}
+                            alt="user avatar"
+                            className="w-24 h-24 rounded-full"
+                        />
+                        <Text fontSize="lg">{user.username}</Text>
+                        <Text fontSize="sm">
+                            {t('memberSince')}{' '}
+                            {new Date(user.createdAt).toLocaleDateString(locale, {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            })}
+                        </Text>
+                    </VStack>
+                    <Badge
+                        size="lg"
+                        bg={lightPink}
+                        color="#5b2454"
+                        borderWidth="1px"
+                        borderColor={pink}
+                    >
+                        {t('winstreak')} - {t('winstreakDays', { count: winstreak })}
+                    </Badge>
                 </VStack>
                 <Separator />
                 <VStack
