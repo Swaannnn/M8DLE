@@ -115,6 +115,12 @@ model PlayerOtd {
   @@unique([date])
 }
 
+model AppConfig {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
 enum Role {
   USER
   ADMIN
