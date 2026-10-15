@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-import { ApiError, translateApiError } from '@/utils/apiError'
+import { ApiError, translateApiError } from '@/utils/apiClient'
 import { toaster } from '@/components/ui/toaster'
 
 /**

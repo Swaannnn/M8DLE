@@ -1,6 +1,6 @@
 'use client'
 
-import { CloseButton, Dialog, HStack, IconButton, Portal, Text, VStack } from '@chakra-ui/react'
+import { Box, CloseButton, Dialog, HStack, IconButton, Portal, Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import type { Player } from '@/types/player'
@@ -47,12 +47,19 @@ const DialogWin = ({ isOpen, onClose, nbPlayers, result, playerOfTheDay }: Dialo
                                     {t('winnerMessageSuffix')}
                                 </Text>
                                 {playerOfTheDay?.imageUrl && (
-                                    <Image
-                                        src={playerOfTheDay.imageUrl}
-                                        alt="player"
-                                        height={160}
-                                        width={160}
-                                    />
+                                    <Box
+                                        position="relative"
+                                        w="160px"
+                                        h="160px"
+                                    >
+                                        <Image
+                                            src={playerOfTheDay.imageUrl}
+                                            alt="player"
+                                            fill
+                                            sizes="160px"
+                                            style={{ objectFit: 'contain' }}
+                                        />
+                                    </Box>
                                 )}
                                 <Text>{t('attemptsMessage', { nbPlayers })}</Text>
 

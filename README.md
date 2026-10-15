@@ -64,18 +64,18 @@ npm run lint
 /data               Données locales (joueurs, images, etc.)
 /hooks              Hooks client (auth, statut du jeu)
 /i18n               Configuration de l'internationalisation
-/lib                Accès DB et auth
+/lib                Accès DB, auth et polices
 /messages           fichiers de traductions (en, fr)
 /prisma             Schema + migrations
 /public             Assets (images, icons)
 /types              Types partagés
-/utils              Helpers (date, fetcher, etc.)
+/utils              Helpers (date, client API, joueurs, etc.)
 ```
 
 ## Données et logique du jeu
 
-- La liste des joueurs est dans data/players.json.
-- Le joueur du jour est calculé via la date UTC et un index dans cette liste.
+- Les joueurs sont stockés en base (Prisma) ; data/players.json n'est qu'un jeu de données d'amorçage, il n'est plus lu par l'application.
+- Le joueur du jour est tiré au sort côté serveur à la première demande de la journée, puis persisté dans la table PlayerOtd (voir utils/player/playerOfTheDay.ts). Le tirage n'est volontairement pas reproductible côté client, et écarte les joueurs déjà sortis dans les 7 derniers jours.
 - Les essais sont persistés en base pour tous, invités compris (session invité via cookie) ; la partie invité est rattachée au compte à la connexion.
 
 ## Déploiement

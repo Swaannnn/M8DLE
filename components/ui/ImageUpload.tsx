@@ -4,9 +4,9 @@ import { useRef, useState } from 'react'
 import { Box, Button, Image, VStack, Spinner } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { LuUpload, LuTrash } from 'react-icons/lu'
-import { fetcher } from '@/utils/fetcher'
 import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 import type { UploadedImage } from '@/types/storage'
+import { fetcher } from '@/utils/apiClient'
 
 interface ImageUploadProps {
     value: string

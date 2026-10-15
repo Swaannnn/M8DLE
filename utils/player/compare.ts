@@ -1,4 +1,4 @@
-import { getAge, getYear } from './dateUtils'
+import { getAge, getYear } from '@/utils/dateUtils'
 import type { Player } from '@/types/player'
 
 const GENTLE_MATES = 'Gentle Mates'

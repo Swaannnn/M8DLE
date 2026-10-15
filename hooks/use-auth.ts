@@ -2,9 +2,8 @@
 
 import useSWR from 'swr'
 import { useRouter } from 'next/navigation'
-import { fetcher } from '@/utils/fetcher'
+import { fetcher, ApiError } from '@/utils/apiClient'
 import { UserProfile } from '@/types/userProfile'
-import { ApiError } from '@/utils/apiError'
 
 export function useAuth() {
     const { data, error, isLoading, mutate } = useSWR<UserProfile | null, ApiError>('/api/auth/me', fetcher)

@@ -190,7 +190,10 @@ const NavBar = () => {
                                 </Link>
                             </>
                         ) : (
-                            <Link onClick={() => setLoginOpen(true)} cursor="pointer">
+                            <Link
+                                onClick={() => setLoginOpen(true)}
+                                cursor="pointer"
+                            >
                                 {t('login')}
                             </Link>
                         )}
@@ -199,7 +202,10 @@ const NavBar = () => {
                     </HStack>
                 )}
             </HStack>
-            <LoginDialog open={loginOpen} onClose={() => setLoginOpen(false)} />
+            <LoginDialog
+                open={loginOpen}
+                onClose={() => setLoginOpen(false)}
+            />
         </>
     )
 }
