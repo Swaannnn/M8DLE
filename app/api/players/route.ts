@@ -7,6 +7,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 import ApiErrorKey from '@/constants/apiErrorKeys'
 
+async function setLastPlayerUpdate() {
+    await prisma.appConfig.upsert({
+        where: { key: 'lastPlayerUpdate' },
+        update: { value: new Date().toISOString() },
+        create: { key: 'lastPlayerUpdate', value: new Date().toISOString() },
+    })
+}
+
 export async function GET() {
     try {
         const players = await prisma.player.findMany({
@@ -57,6 +65,7 @@ export async function POST(req: NextRequest) {
             },
         })
 
+        await setLastPlayerUpdate()
         return NextResponse.json(created, { status: 201 })
     } catch (error) {
         if (error instanceof ZodError) {
@@ -104,6 +113,7 @@ export async function PATCH(req: NextRequest) {
             },
         })
 
+        await setLastPlayerUpdate()
         return NextResponse.json(updated)
     } catch (error) {
         if (error instanceof ZodError) {
@@ -133,6 +143,7 @@ export async function DELETE(req: NextRequest) {
 
         // Set DELETED_AT to NOW()
         await prisma.player.delete({ where: { id } })
+        await setLastPlayerUpdate()
 
         return NextResponse.json({ success: true })
     } catch (error) {

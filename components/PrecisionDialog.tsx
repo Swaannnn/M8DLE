@@ -4,7 +4,9 @@ import { Box, Button, CloseButton, Dialog, Heading, HStack, Portal, Stack, Text 
 import { grey, lightGrey, pink } from '@/constants/colors'
 import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu'
 import { useColorMode } from './ui/color-mode'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/apiClient'
 
 const FeedbackBox = ({ children, bg }: { children: React.ReactNode; bg: string }) => (
     <Box
@@ -29,6 +31,16 @@ const FeedbackBox = ({ children, bg }: { children: React.ReactNode; bg: string }
 const PrecisionDialog = () => {
     const { colorMode } = useColorMode()
     const t = useTranslations('precisions')
+    const locale = useLocale()
+
+    const { data: lastUpdateData } = useSWR<{ date: string | null }>('/api/config/last-update', fetcher)
+    const lastUpdateDate = lastUpdateData?.date
+        ? new Date(lastUpdateData.date).toLocaleDateString(locale, {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+          })
+        : null
 
     const invalidGrey = colorMode === 'light' ? lightGrey : grey
     const arrowColor = colorMode === 'light' ? grey : lightGrey
@@ -137,7 +149,11 @@ const PrecisionDialog = () => {
                                 </Stack>
                                 <Stack>
                                     <Heading size="md">{t('dataUpdateTitle')}</Heading>
-                                    <Text>{t('dataUpdateContent')}</Text>
+                                    <Text>
+                                        {lastUpdateDate
+                                            ? t('dataUpdateContent', { date: lastUpdateDate })
+                                            : t('dataUpdateContentUnknown')}
+                                    </Text>
                                 </Stack>
                                 <Stack>
                                     <Heading size="md">{t('displayingTeamsTitle')}</Heading>

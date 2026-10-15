@@ -102,7 +102,8 @@
         "upArrows": "<strong>Up arrows:</strong> the desired value is higher than the one suggested.",
         "downArrows": "<strong>Down arrows:</strong> the value you are looking for is lower than the one suggested.",
         "dataUpdateTitle": "2. Data update",
-        "dataUpdateContent": "The data was last updated on 20 February 2026. Please let us know if you notice any incorrect or inconsistent information so that we can correct it as soon as possible.",
+        "dataUpdateContent": "The data was last updated on {date}. Please let us know if you notice any incorrect or inconsistent information so that we can correct it as soon as possible.",
+        "dataUpdateContentUnknown": "The last data update date is unknown. Please let us know if you notice any incorrect or inconsistent information so that we can correct it as soon as possible.",
         "displayingTeamsTitle": "3. Displaying teams",
         "displayingTeamsContent": "The teams displayed correspond to the main organisations. For example, G2 Minnesota, Twisted Minds Orchid and Karmine Corp Blue will be listed under the names G2 Esports, Twisted Minds and Karmine Corp respectively.",
         "close": "Close"
