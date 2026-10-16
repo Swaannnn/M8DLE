@@ -29,10 +29,10 @@ const CurrentMonthCalendar = ({
     const days = getDaysOfMonth(date)
     const invalidGrey = colorMode === 'light' ? lightGrey : grey
     const daysOfWeek = t.raw('days') as string[]
-    const map = new Map<number, DailyM8DLEResultWithAttemptsCount | null>()
+    const resultsByDay = new Map<number, DailyM8DLEResultWithAttemptsCount>()
 
-    for (let i = 0; i < getDaysOfMonth(date); i++) {
-        map.set(i, results.find((r) => new Date(r.date).getDate() === i) ?? null)
+    for (const result of results) {
+        resultsByDay.set(new Date(result.date).getDate(), result)
     }
 
     return (
@@ -57,7 +57,7 @@ const CurrentMonthCalendar = ({
 
             {Array.from({ length: days }).map((_, index) => {
                 const day = index + 1
-                const result = map.get(day)
+                const result = resultsByDay.get(day)
                 const isVictory = result?.success ?? false
                 const attemptsCount = result?._count.attempts ?? 0
 
