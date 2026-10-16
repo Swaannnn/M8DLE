@@ -7,11 +7,8 @@ dayjs.extend(timezone)
 
 const TZ = 'Europe/Paris'
 
-/** Heure (dans `TZ`) à laquelle le tirage du jour bascule. */
-const GAME_CUTOFF_HOUR = 2
-
 /** Bascule du tirage pour le jour de `now`. */
-const getCutoff = (now: dayjs.Dayjs) => now.hour(GAME_CUTOFF_HOUR).minute(0).second(0).millisecond(0)
+const getCutoff = (now: dayjs.Dayjs) => now.hour(0).minute(0).second(0).millisecond(0)
 
 /**
  * Calcul et renvoi l'age d'une personne en y passant une date.
@@ -90,11 +87,9 @@ export function getMonthIndex(date: Date): number {
     return date.getFullYear() * 12 + date.getMonth()
 }
 
-/** Renvoie une nouvelle date au 1er du mois : l'argument n'est jamais modifié. */
+/** Renvoie une nouvelle date au 1er du mois à 00:00 : l'argument n'est jamais modifié. */
 export function getFirstDayOfMonth(date: Date): Date {
-    const firstDay = new Date(date)
-    firstDay.setDate(1)
-    return firstDay
+    return dayjs(date).tz(TZ).startOf('month').toDate()
 }
 
 /**
