@@ -3,6 +3,7 @@ import 'server-only'
 
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID!
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!
+const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN!
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/api/auth/callback'
 const GRANT_TYPE = 'authorization_code'
 const CONTENT_TYPE = 'application/x-www-form-urlencoded'
@@ -53,6 +54,22 @@ export async function getDiscordUser(accessToken: string) {
         username: string
         avatar: string | null
         email?: string
+    }>
+}
+
+export async function getDiscordUserById(userId: string) {
+    const response = await fetch(`${constantsApi.DISCORD_API_BASE}/users/${userId}`, {
+        headers: { Authorization: `Bot ${BOT_TOKEN}` },
+    })
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch Discord user ${userId}: ${response.status}`)
+    }
+
+    return response.json() as Promise<{
+        id: string
+        username: string
+        avatar: string | null
     }>
 }
 
