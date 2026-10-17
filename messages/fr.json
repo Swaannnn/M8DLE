@@ -90,7 +90,8 @@
         "arrival": "Arrivée",
         "beforeM8": "Avant M8",
         "currentClub": "Club actuel",
-        "age": "Age"
+        "age": "Age",
+        "none": "Aucun"
     },
     "precisions": {
         "precisions": "Précisions",

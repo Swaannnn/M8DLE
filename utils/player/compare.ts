@@ -35,8 +35,17 @@ const getGentleMatesEntry = (player: Player) => {
 
 /** Obtient l'organisation actuelle (Club Actuel) du joueur */
 export const getCurrentOrganization = (player: Player) => {
-    const entry = getGentleMatesEntry(player)
-    return entry ? entry.organization : { name: 'Inconnu', imageUrl: null }
+    const orgs = player.organizationPlayers ?? []
+    const activeOrgs = orgs.filter((op) => !op.end)
+
+    if (activeOrgs.length > 0) {
+        const latestActive = activeOrgs.sort(
+            (a, b) => new Date(b.start.toString()).getTime() - new Date(a.start.toString()).getTime()
+        )[0]
+        return latestActive.organization
+    }
+
+    return null
 }
 
 /**
@@ -58,10 +67,10 @@ export const getPreviousOrganization = (player: Player) => {
         }
     }
 
-    return previousOrganization ?? { name: 'Aucun', imageUrl: null }
+    return previousOrganization
 }
 
-/** Obtient l'année d'arrivée au club actuel (Gentle Mates) */
+/** Obtient l'année d'arrivée à Gentle Mates */
 export const getPlayerJoinYear = (player: Player): number => {
     const entry = getGentleMatesEntry(player)
     return entry ? getYear(entry.start.toString()) : -1
@@ -72,8 +81,9 @@ export const comparePlayer = (player: Player, target: Player): PlayerComparison 
     game: Boolean(player.game?.name && player.game.name === target.game?.name),
     nationality: player.nationality.toLowerCase() === target.nationality.toLowerCase(),
     joinDate: compareValues(getPlayerJoinYear(player), getPlayerJoinYear(target)),
-    previousOrganization: getPreviousOrganization(player).name === getPreviousOrganization(target).name,
-    lastOrganization: getCurrentOrganization(player).name === getCurrentOrganization(target).name,
+    previousOrganization:
+        (getPreviousOrganization(player)?.name ?? null) === (getPreviousOrganization(target)?.name ?? null),
+    lastOrganization: (getCurrentOrganization(player)?.name ?? null) === (getCurrentOrganization(target)?.name ?? null),
     age: compareValues(getAge(player.birthDate.toString()), getAge(target.birthDate.toString())),
 })
 
