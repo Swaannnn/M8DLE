@@ -37,6 +37,7 @@ export function OrganizationForm({ open, onClose, organization, onSuccess }: Org
                 <Dialog.Positioner>
                     <Dialog.Content
                         bg="bg.panel"
+                        color="fg"
                         p="4"
                     >
                         <OrganizationFormContent

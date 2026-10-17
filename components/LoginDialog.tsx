@@ -25,6 +25,7 @@ const LoginDialog = ({ open, onClose }: LoginDialogProps) => {
                     <Dialog.Content
                         p="4"
                         bg="bg.panel"
+                        color="fg"
                     >
                         <Dialog.Body>
                             <VStack

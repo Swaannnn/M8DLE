@@ -82,6 +82,9 @@ export function SearchableSelect({
                         py="2"
                         borderRadius="md"
                         borderWidth="1px"
+                        borderColor="border"
+                        bg="bg.panel"
+                        color="fg"
                     />
                     <Combobox.Trigger
                         position="absolute"
@@ -93,6 +96,8 @@ export function SearchableSelect({
                         cursor="pointer"
                         p="0"
                         display="flex"
+                        color="fg.muted"
+                        _hover={{ color: 'fg' }}
                     >
                         <LuChevronDown />
                     </Combobox.Trigger>
@@ -103,10 +108,12 @@ export function SearchableSelect({
                             maxH="250px"
                             overflowY="auto"
                             bg="bg.panel"
+                            color="fg"
                             p="1"
                             borderRadius="md"
                             boxShadow="lg"
                             borderWidth="1px"
+                            borderColor="border"
                         >
                             <Combobox.List>
                                 {showDefaultOption && (
@@ -115,7 +122,8 @@ export function SearchableSelect({
                                         px="3"
                                         py="2"
                                         borderRadius="sm"
-                                        _hover={{ bg: 'whiteAlpha.200' }}
+                                        color="fg"
+                                        _hover={{ bg: 'bg.muted' }}
                                         onMouseDown={(e) => {
                                             e.preventDefault()
                                             onChange('')
@@ -153,7 +161,8 @@ export function SearchableSelect({
                                         px="3"
                                         py="2"
                                         borderRadius="sm"
-                                        _hover={{ bg: 'whiteAlpha.200' }}
+                                        color="fg"
+                                        _hover={{ bg: 'bg.muted' }}
                                     >
                                         <Combobox.ItemText>{item.label}</Combobox.ItemText>
                                         <Combobox.ItemIndicator>

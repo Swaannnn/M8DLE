@@ -53,7 +53,11 @@ const PrecisionDialog = () => {
             <Portal>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <Dialog.Content height="80vh">
+                    <Dialog.Content
+                        height="80vh"
+                        bg="bg.panel"
+                        color="fg"
+                    >
                         <Dialog.Header>
                             <Dialog.Title>{t('precisions')}</Dialog.Title>
                         </Dialog.Header>

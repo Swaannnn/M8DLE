@@ -35,7 +35,10 @@ const DialogWin = ({ isOpen, onClose, nbPlayers, result, playerOfTheDay }: Dialo
             <Portal>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <Dialog.Content>
+                    <Dialog.Content
+                        bg="bg.panel"
+                        color="fg"
+                    >
                         <Dialog.Header>
                             <Dialog.Title>{t('title')}</Dialog.Title>
                         </Dialog.Header>

@@ -56,6 +56,7 @@ export function PlayerForm({ open, onClose, player, onSuccess }: PlayerFormProps
                 <Dialog.Positioner>
                     <Dialog.Content
                         bg="bg.panel"
+                        color="fg"
                         p="4"
                     >
                         <PlayerFormContent

@@ -139,7 +139,10 @@ export function PlayersTab() {
                 <Portal>
                     <Dialog.Backdrop />
                     <Dialog.Positioner>
-                        <Dialog.Content bg="bg.panel">
+                        <Dialog.Content
+                            bg="bg.panel"
+                            color="fg"
+                        >
                             <Dialog.Header>
                                 <Dialog.Title fontSize="xl">{t('deleteConfirmTitle')}</Dialog.Title>
                             </Dialog.Header>

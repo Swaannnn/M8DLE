@@ -124,7 +124,10 @@ export function OrganizationsTab() {
                 <Portal>
                     <Dialog.Backdrop />
                     <Dialog.Positioner>
-                        <Dialog.Content bg="bg.panel">
+                        <Dialog.Content
+                            bg="bg.panel"
+                            color="fg"
+                        >
                             <Dialog.Header>
                                 <Dialog.Title fontSize="xl">{t('deleteConfirmOrgTitle')}</Dialog.Title>
                             </Dialog.Header>
