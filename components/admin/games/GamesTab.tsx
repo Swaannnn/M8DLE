@@ -119,7 +119,10 @@ export function GamesTab() {
                 <Portal>
                     <Dialog.Backdrop />
                     <Dialog.Positioner>
-                        <Dialog.Content bg="bg.panel">
+                        <Dialog.Content
+                            bg="bg.panel"
+                            color="fg"
+                        >
                             <Dialog.Header>
                                 <Dialog.Title fontSize="xl">{t('deleteConfirmGameTitle')}</Dialog.Title>
                             </Dialog.Header>

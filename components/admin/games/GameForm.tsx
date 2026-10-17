@@ -37,6 +37,7 @@ export function GameForm({ open, onClose, game, onSuccess }: GameFormProps) {
                 <Dialog.Positioner>
                     <Dialog.Content
                         bg="bg.panel"
+                        color="fg"
                         p="4"
                     >
                         <GameFormContent

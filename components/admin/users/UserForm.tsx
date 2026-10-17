@@ -37,6 +37,7 @@ export function UserForm({ open, onClose, onSuccess, user }: UserFormProps) {
                 <Dialog.Positioner>
                     <Dialog.Content
                         bg="bg.panel"
+                        color="fg"
                         p="4"
                     >
                         <UserFormContent
