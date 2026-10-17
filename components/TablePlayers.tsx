@@ -233,7 +233,7 @@ const TablePlayers = ({ attempts }: TablePlayersProps) => {
                                     {joinYear}
                                 </RowNumber>
                                 <RowItem isValid={cmp.previousOrganization}>
-                                    {prevOrg.imageUrl ? (
+                                    {prevOrg?.imageUrl ? (
                                         <Box
                                             position="relative"
                                             w="80px"
@@ -248,11 +248,11 @@ const TablePlayers = ({ attempts }: TablePlayersProps) => {
                                             />
                                         </Box>
                                     ) : (
-                                        <Text textAlign="center">{prevOrg.name}</Text>
+                                        <Text textAlign="center">{prevOrg?.name ?? t('none')}</Text>
                                     )}
                                 </RowItem>
                                 <RowItem isValid={cmp.lastOrganization}>
-                                    {currentOrg.imageUrl ? (
+                                    {currentOrg?.imageUrl ? (
                                         <Box
                                             position="relative"
                                             w="80px"
@@ -267,7 +267,7 @@ const TablePlayers = ({ attempts }: TablePlayersProps) => {
                                             />
                                         </Box>
                                     ) : (
-                                        <Text textAlign="center">{currentOrg.name}</Text>
+                                        <Text textAlign="center">{currentOrg?.name ?? t('none')}</Text>
                                     )}
                                 </RowItem>
                                 <RowNumber
