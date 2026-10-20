@@ -89,7 +89,8 @@
         "arrival": "Arrival",
         "beforeM8": "Before M8",
         "currentClub": "Current club",
-        "age": "Age"
+        "age": "Age",
+        "none": "None"
     },
     "precisions": {
         "precisions": "Precisions",
