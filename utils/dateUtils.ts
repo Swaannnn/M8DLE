@@ -5,10 +5,8 @@ import timezone from 'dayjs/plugin/timezone'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-const TZ = 'Europe/Paris'
+export const TZ = 'Europe/Paris'
 
-/** Bascule du tirage pour le jour de `now`. */
-const getCutoff = (now: dayjs.Dayjs) => now.hour(0).minute(0).second(0).millisecond(0)
 
 /**
  * Calcul et renvoi l'age d'une personne en y passant une date.
@@ -42,26 +40,18 @@ export function getYear(date: string): number {
 }
 
 /**
- * Renvoi la date de début du tirage actuel
+ * Renvoie la date du tirage actuel, normalisée à 00:00:00 UTC pour la journée en cours dans `TZ`.
+ * Ainsi, en base de données, la date est toujours stockée à 00:00:00 (et non 22:00:00 ou 23:00:00).
  */
 export function getGameDate(): Date {
-    const now = dayjs().tz(TZ)
-    const cutoff = getCutoff(now)
-
-    return (now.isBefore(cutoff) ? cutoff.subtract(1, 'day') : cutoff).toDate()
+    return dayjs().tz(TZ).startOf('day').utc(true).toDate()
 }
 
 /**
- * Récupère la date du prochain tirage.
- *
- * Entre minuit et la bascule, le prochain tirage est celui du jour même : ajouter un jour
- * sans distinction ferait afficher un compte à rebours d'environ 25 h au lieu de moins de 2 h.
+ * Récupère la date du prochain tirage (normalisée à 00:00:00 UTC).
  */
 export function getNextGameDate(): Date {
-    const now = dayjs().tz(TZ)
-    const cutoff = getCutoff(now)
-
-    return (now.isBefore(cutoff) ? cutoff : cutoff.add(1, 'day')).toDate()
+    return dayjs.utc(getGameDate()).add(1, 'day').toDate()
 }
 
 /**
@@ -87,9 +77,9 @@ export function getMonthIndex(date: Date): number {
     return date.getFullYear() * 12 + date.getMonth()
 }
 
-/** Renvoie une nouvelle date au 1er du mois à 00:00 : l'argument n'est jamais modifié. */
+/** Renvoie une nouvelle date au 1er du mois à 00:00:00 UTC : l'argument n'est jamais modifié. */
 export function getFirstDayOfMonth(date: Date): Date {
-    return dayjs(date).tz(TZ).startOf('month').toDate()
+    return dayjs(date).tz(TZ).startOf('month').utc(true).toDate()
 }
 
 /**
