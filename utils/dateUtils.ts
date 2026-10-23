@@ -48,10 +48,11 @@ export function getGameDate(): Date {
 }
 
 /**
- * Récupère la date du prochain tirage (normalisée à 00:00:00 UTC).
+ * Récupère l'instant (Date) du prochain tirage à 00:00:00 dans le fuseau de jeu (`TZ`).
+ * Utilisé pour le compte à rebours sur la page d'accueil.
  */
 export function getNextGameDate(): Date {
-    return dayjs.utc(getGameDate()).add(1, 'day').toDate()
+    return dayjs().tz(TZ).add(1, 'day').startOf('day').toDate()
 }
 
 /**
