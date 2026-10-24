@@ -1,9 +1,9 @@
 'use client'
 
-import { CloseButton, Dialog, HStack, IconButton, Portal, Text, VStack } from '@chakra-ui/react'
+import { Box, CloseButton, Dialog, HStack, IconButton, Portal, Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { getPlayerOfTheDay } from '@/utils/playersUtils'
+import type { Player } from '@/types/player'
 import LoginDiscord from './LoginDiscord'
 import { useAuth } from '@/hooks/use-auth'
 import TwitterIcon from './icons/TwitterIcon'
@@ -16,12 +16,12 @@ type DialogWinProps = {
     onClose: () => void
     nbPlayers: number
     result: string
+    playerOfTheDay?: Player | null
 }
 
-const DialogWin = ({ isOpen, onClose, nbPlayers, result }: DialogWinProps) => {
+const DialogWin = ({ isOpen, onClose, nbPlayers, result, playerOfTheDay }: DialogWinProps) => {
     const t = useTranslations('dialogWin')
     const { loggedOut } = useAuth()
-    const playerOfTheDay = getPlayerOfTheDay()
     const shareText = t('shareText', { nbPlayers, m8dleUrl: constantsUrl.M8DLE_URL, result: result })
 
     if (!isOpen) return null
@@ -35,7 +35,10 @@ const DialogWin = ({ isOpen, onClose, nbPlayers, result }: DialogWinProps) => {
             <Portal>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <Dialog.Content>
+                    <Dialog.Content
+                        bg="bg.panel"
+                        color="fg"
+                    >
                         <Dialog.Header>
                             <Dialog.Title>{t('title')}</Dialog.Title>
                         </Dialog.Header>
@@ -43,15 +46,24 @@ const DialogWin = ({ isOpen, onClose, nbPlayers, result }: DialogWinProps) => {
                         <Dialog.Body>
                             <VStack gap="4">
                                 <Text fontSize="lg">
-                                    {t('winnerMessagePrefix')} <strong>{playerOfTheDay.name}</strong>{' '}
+                                    {t('winnerMessagePrefix')} <strong>{playerOfTheDay?.name ?? t('playerOtd')}</strong>{' '}
                                     {t('winnerMessageSuffix')}
                                 </Text>
-                                <Image
-                                    src={playerOfTheDay.image}
-                                    alt="player"
-                                    height={160}
-                                    width={160}
-                                />
+                                {playerOfTheDay?.imageUrl && (
+                                    <Box
+                                        position="relative"
+                                        w="160px"
+                                        h="160px"
+                                    >
+                                        <Image
+                                            src={playerOfTheDay.imageUrl}
+                                            alt="player"
+                                            fill
+                                            sizes="160px"
+                                            style={{ objectFit: 'contain' }}
+                                        />
+                                    </Box>
+                                )}
                                 <Text>{t('attemptsMessage', { nbPlayers })}</Text>
 
                                 <VStack>

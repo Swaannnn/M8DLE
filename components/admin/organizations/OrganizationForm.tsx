@@ -1,0 +1,154 @@
+'use client'
+
+import { useState } from 'react'
+import { Box, Button, VStack, Input, Text, Dialog, Portal, CloseButton } from '@chakra-ui/react'
+import { useTranslations } from 'next-intl'
+import { ImageUpload } from '@/components/ui/ImageUpload'
+import type { Organization } from '@prisma/client'
+import { toaster } from '@/components/ui/toaster'
+import { fetcher } from '@/utils/apiClient'
+import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
+
+type OrganizationFormProps = {
+    open: boolean
+    onClose: () => void
+    organization?: Organization | null
+    onSuccess: () => void
+}
+
+/**
+ * `lazyMount` + `unmountOnExit` démontent le contenu à la fermeture (une fois l'animation
+ * de sortie terminée) : les champs repartent des valeurs de `organization` à chaque
+ * ouverture, sans effet de synchronisation.
+ */
+export function OrganizationForm({ open, onClose, organization, onSuccess }: OrganizationFormProps) {
+    return (
+        <Dialog.Root
+            open={open}
+            onOpenChange={(details) => !details.open && onClose()}
+            size="lg"
+            scrollBehavior="inside"
+            closeOnInteractOutside={false}
+            lazyMount
+            unmountOnExit
+        >
+            <Portal>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                    <Dialog.Content
+                        bg="bg.panel"
+                        color="fg"
+                        p="4"
+                    >
+                        <OrganizationFormContent
+                            organization={organization}
+                            onClose={onClose}
+                            onSuccess={onSuccess}
+                        />
+                    </Dialog.Content>
+                </Dialog.Positioner>
+            </Portal>
+        </Dialog.Root>
+    )
+}
+
+function OrganizationFormContent({ onClose, organization, onSuccess }: Omit<OrganizationFormProps, 'open'>) {
+    const t = useTranslations('admin')
+    const showApiErrorToast = useShowApiErrorToast()
+    const [name, setName] = useState(organization?.name || '')
+    const [imageUrl, setImageUrl] = useState(organization?.imageUrl || '')
+    const [loading, setLoading] = useState(false)
+
+    const handleSubmit = async (e: React.SubmitEvent) => {
+        e.preventDefault()
+        setLoading(true)
+
+        try {
+            const url = '/api/organizations'
+            const method = organization ? 'PATCH' : 'POST'
+            const body = {
+                id: organization?.id,
+                name,
+                imageUrl,
+            }
+
+            await fetcher(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+            })
+
+            toaster.create({
+                description: organization ? t('organizationUpdated') : t('organizationCreated'),
+                type: 'info',
+                closable: true,
+            })
+            onSuccess()
+        } catch (error) {
+            showApiErrorToast(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        <>
+            <Dialog.Header>
+                <Dialog.Title fontSize="2xl">
+                    {organization ? t('editOrganization') : t('addOrganization')}
+                </Dialog.Title>
+            </Dialog.Header>
+
+            <Dialog.Body>
+                <form
+                    id="organization-form"
+                    onSubmit={handleSubmit}
+                >
+                    <VStack
+                        align="stretch"
+                        gap="1rem"
+                        maxW="600px"
+                    >
+                        <Box>
+                            <Text mb="0.5rem">{t('name')}</Text>
+                            <Input
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </Box>
+
+                        <Box>
+                            <Text mb="0.5rem">{t('imageUrl')}</Text>
+                            <ImageUpload
+                                value={imageUrl}
+                                onChange={setImageUrl}
+                            />
+                        </Box>
+                    </VStack>
+                </form>
+            </Dialog.Body>
+
+            <Dialog.Footer mt="1rem">
+                <Button
+                    variant="outline"
+                    disabled={loading}
+                    onClick={onClose}
+                >
+                    {t('cancel')}
+                </Button>
+                <Button
+                    type="submit"
+                    form="organization-form"
+                    disabled={loading || !name.trim() || !imageUrl}
+                >
+                    {organization ? t('editOrganization') : t('addOrganization')}
+                </Button>
+            </Dialog.Footer>
+
+            <Dialog.CloseTrigger asChild>
+                <CloseButton size="sm" />
+            </Dialog.CloseTrigger>
+        </>
+    )
+}

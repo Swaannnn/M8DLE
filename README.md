@@ -64,19 +64,19 @@ npm run lint
 /data               Données locales (joueurs, images, etc.)
 /hooks              Hooks client (auth, statut du jeu)
 /i18n               Configuration de l'internationalisation
-/lib                Accès DB et auth
+/lib                Accès DB, auth et polices
 /messages           fichiers de traductions (en, fr)
 /prisma             Schema + migrations
 /public             Assets (images, icons)
 /types              Types partagés
-/utils              Helpers (date, fetcher, etc.)
+/utils              Helpers (date, client API, joueurs, etc.)
 ```
 
 ## Données et logique du jeu
 
-- La liste des joueurs est dans data/players.json.
-- Le joueur du jour est calculé via la date UTC et un index dans cette liste.
-- Les invités stockent leurs essais dans localStorage; les comptes connectés sont persistés en base.
+- Les joueurs sont stockés en base (Prisma).
+- Le joueur du jour est tiré au sort côté serveur à la première demande de la journée, puis persisté dans la table PlayerOtd (voir utils/player/playerOfTheDay.ts). Le tirage n'est volontairement pas reproductible côté client, et écarte les joueurs déjà sortis dans les 7 derniers jours.
+- Les essais sont persistés en base pour tous, invités compris (session invité via cookie) ; la partie invité est rattachée au compte à la connexion.
 
 ## Déploiement
 
@@ -85,6 +85,8 @@ npx prisma migrate deploy
 npm run build
 npm run start
 ```
+
+Un Cron Job Vercel (voir vercel.json) nettoie quotidiennement les parties invité jamais rattachées à un compte. Il nécessite la variable d'environnement `CRON_SECRET` (voir .env.example) sur le projet Vercel — Vercel l'ajoute automatiquement en en-tête `Authorization` sur ces appels.
 
 ## À améliorer
 

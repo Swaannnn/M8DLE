@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { getGameDate, getNextGameDate } from '@/utils/dateUtils'
+import { getGameDate } from '@/utils/dateUtils'
+import ApiErrorKey from '@/constants/apiErrorKeys'
+import dayjs from 'dayjs'
 
 export async function GET() {
     try {
         const startOfDay = getGameDate()
-        const endOfDay = getNextGameDate()
+        const endOfDay = dayjs.utc(startOfDay).add(1, 'day').toDate()
 
         const count = await prisma.dailyM8DLEResult.count({
             where: {
@@ -18,8 +20,8 @@ export async function GET() {
         })
 
         return NextResponse.json({ successCount: count })
-    } catch (err) {
-        console.error(err)
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    } catch (error) {
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorKey.INTERNAL_ERROR }, { status: 500 })
     }
 }

@@ -1,15 +1,37 @@
 {
+    "error": {
+        "unauthorized": "You must be logged in to perform this action.",
+        "badRequest": "The request is invalid.",
+        "missingParameter": "A required parameter is missing.",
+        "notFound": "Item not found.",
+        "alreadyExists": "This item already exists.",
+        "alreadySuccess": "You have already found the player of the day.",
+        "alreadyAttempted": "This player has already been guessed.",
+        "conflict": "Another action is already in progress. Please try again.",
+        "methodNotAllowed": "Method not allowed.",
+        "authFailed": "Authentication failed.",
+        "fetchFailed": "Error while fetching data.",
+        "createFailed": "Error while creating.",
+        "updateFailed": "Error while updating.",
+        "deleteFailed": "Error while deleting.",
+        "uploadFailed": "File upload failed.",
+        "invalidFileType": "This file format is not supported.",
+        "fileTooLarge": "The file is too large (4 MB maximum).",
+        "internalError": "An internal error occurred."
+    },
     "home": {
         "nextDraw": "Next drawing in",
         "count0": "No one has found the player of the day yet.",
         "count": "{count, plural, one {# person has} other {# people have}} already found the player of the day.",
-        "findedMessage": "Well done! Come back tomorrow for the next player."
+        "findedMessage": "Well done! Come back tomorrow for the next player.",
+        "unavailable": "The game is temporarily unavailable. Please try again in a moment."
     },
     "header": {
         "home": "Home",
         "leaderboard": "Leaderboard",
         "myAccount": "My account",
         "login": "Login",
+        "admin": "Admin",
         "credits": "Credits",
         "privacyPolicy": "Privacy Policy",
         "legalNotice": "Legal Notice"
@@ -20,12 +42,16 @@
         "player": "Player",
         "victories": "Victories",
         "nbAttempts": "Average number of attempts",
-        "nbAttemptsShort": "Nb attempts"
+        "nbAttemptsShort": "Nb attempts",
+        "winstreak": "Streak"
     },
     "account": {
         "accountFullCaps": "MY ACCOUNT",
         "memberSince": "Member since",
-        "logout": "Logout"
+        "logout": "Logout",
+        "myVictories": "My victories in",
+        "winstreak": "Win streak",
+        "winstreakDays": "{count, plural, =0 {0 days} one {# day} other {# days}}"
     },
     "login": {
         "loginFullCaps": "LOGIN"
@@ -38,6 +64,7 @@
         "title": "Well done!",
         "winnerMessagePrefix": "The player of the day was",
         "winnerMessageSuffix": "!",
+        "playerOtd": "Player of the day",
         "attemptsMessage": "You found it in {nbPlayers} tries.",
         "share": "Share :",
         "copyText": "Copy the text",
@@ -47,8 +74,9 @@
         "twitterHashtags": "\n\n#M8WIN #M8DLE"
     },
     "calendar": {
-        "myVictories": "My victories in",
-        "days": ["M", "T", "W", "J", "F", "S", "D"]
+        "days": ["M", "T", "W", "T", "F", "S", "S"],
+        "try": "try",
+        "tries": "tries"
     },
     "input": {
         "playersPlaceholder": "Type to search",
@@ -61,7 +89,8 @@
         "arrival": "Arrival",
         "beforeM8": "Before M8",
         "currentClub": "Current club",
-        "age": "Age"
+        "age": "Age",
+        "none": "None"
     },
     "precisions": {
         "precisions": "Precisions",
@@ -74,7 +103,8 @@
         "upArrows": "<strong>Up arrows:</strong> the desired value is higher than the one suggested.",
         "downArrows": "<strong>Down arrows:</strong> the value you are looking for is lower than the one suggested.",
         "dataUpdateTitle": "2. Data update",
-        "dataUpdateContent": "The data was last updated on 20 February 2026. Please let us know if you notice any incorrect or inconsistent information so that we can correct it as soon as possible.",
+        "dataUpdateContent": "The data was last updated on {date}. Please let us know if you notice any incorrect or inconsistent information so that we can correct it as soon as possible.",
+        "dataUpdateContentUnknown": "The last data update date is unknown. Please let us know if you notice any incorrect or inconsistent information so that we can correct it as soon as possible.",
         "displayingTeamsTitle": "3. Displaying teams",
         "displayingTeamsContent": "The teams displayed correspond to the main organisations. For example, G2 Minnesota, Twisted Minds Orchid and Karmine Corp Blue will be listed under the names G2 Esports, Twisted Minds and Karmine Corp respectively.",
         "close": "Close"
@@ -170,9 +200,88 @@
         "lawTitle": "7. Governing Law",
         "lawText": "This site is governed by French law. In the event of a dispute, the French courts shall have exclusive jurisdiction."
     },
+    "maintenance": {
+        "title": "MAINTENANCE",
+        "message": "The site is currently under maintenance. We are working on improving it and will be back shortly!"
+    },
     "metadata": {
         "title": "M8DLE - Guess the Gentle Mates Player of the Day",
         "description": "M8DLE is a daily game inspired by Wordle and set in the Gentle Mates universe. Guess the player of the day and compare your score with the community.",
         "keywords": ["gentlemates", "m8dle", "jeu gentlemates", "gentlemates wordle", "dle"]
+    },
+    "admin": {
+        "title": "ADMINISTRATION",
+        "addPlayer": "Add Player",
+        "searchPlayer": "Search Player",
+        "allGames": "All games",
+        "name": "Name",
+        "game": "Game",
+        "nationality": "Nationality",
+        "currentTeam": "Current team",
+        "actions": "Actions",
+        "editPlayer": "Edit player",
+        "deletePlayer": "Delete",
+        "deleteConfirmTitle": "Confirm deletion",
+        "deleteConfirmText": "Are you sure you want to delete this player?",
+        "playerCreated": "Player created",
+        "playerUpdated": "Player updated",
+        "playerDeleted": "Player deleted",
+        "error": "An error occurred",
+        "playersTab": "Players",
+        "usersTab": "Users",
+        "organizationsTab": "Organizations",
+        "gamesTab": "Games",
+        "addOrg": "Add Org",
+        "start": "Start",
+        "end": "End",
+        "none": "None",
+        "select": "Select...",
+        "organizations": "Organizations",
+        "imageUrl": "Image URL",
+        "birthDate": "Birth Date",
+        "nationalityInput": "Nationality",
+        "orgNotAvailable": "Organizations management is not available yet.",
+        "gamesNotAvailable": "Games management is not available yet.",
+        "usersNotAvailable": "Users management is not available yet.",
+        "noneTeam": "None",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "addOrganization": "Add Organization",
+        "searchOrganization": "Search Organization...",
+        "editOrganization": "Edit Organization",
+        "deleteOrganization": "Delete",
+        "deleteConfirmOrgTitle": "Confirm organization deletion",
+        "deleteConfirmOrgText": "Are you sure you want to delete this organization?",
+        "organizationCreated": "Organization created",
+        "organizationUpdated": "Organization updated",
+        "addGame": "Add Game",
+        "searchGame": "Search Game...",
+        "editGame": "Edit Game",
+        "deleteGame": "Delete",
+        "deleteConfirmGameTitle": "Confirm game deletion",
+        "deleteConfirmGameText": "Are you sure you want to delete this game?",
+        "gameCreated": "Game created",
+        "gameUpdated": "Game updated",
+        "searchUser": "Search User (username, email, discord ID)...",
+        "editUser": "Edit User",
+        "deleteUser": "Delete",
+        "deleteConfirmUserTitle": "Confirm user deletion",
+        "deleteConfirmUserText": "Are you sure you want to delete this user and all their attempts history?",
+        "userUpdated": "User updated",
+        "username": "Username",
+        "discordId": "Discord ID",
+        "email": "Email",
+        "role": "Role",
+        "totalWins": "Wins",
+        "totalAttempts": "Attempts",
+        "image": "Image"
+    },
+    "ui": {
+        "searchPlaceholder": "Search...",
+        "noResults": "No results",
+        "uploadImage": "Upload an image",
+        "changeImage": "Change image",
+        "uploadingImage": "Uploading...",
+        "removeImage": "Remove image"
     }
 }

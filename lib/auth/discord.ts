@@ -51,7 +51,6 @@ export async function getDiscordUser(accessToken: string) {
     return response.json() as Promise<{
         id: string
         username: string
-        discriminator: string
         avatar: string | null
         email?: string
     }>

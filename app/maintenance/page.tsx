@@ -1,29 +1,29 @@
 'use client'
 
-import LoginDiscord from '@/components/LoginDiscord'
-import { tuskerGrotesk } from '@/utils/fontUtils'
+import { tuskerGrotesk } from '@/lib/fonts'
 import { Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 
-const LoginPage = () => {
-    const t = useTranslations('login')
+const MaintenancePage = () => {
+    const t = useTranslations('maintenance')
 
     return (
         <VStack
-            gap="1rem"
-            w="90vw"
+            w={{ base: '90vw', md: '50vw' }}
             mx="auto"
+            gap="1rem"
         >
             <Text
                 as="h1"
                 fontSize={{ base: '2.5rem', md: '4rem' }}
                 className={tuskerGrotesk.className}
+                textAlign="center"
             >
-                {t('loginFullCaps')}
+                {t('title')}
             </Text>
-            <LoginDiscord />
+            <Text textAlign="center">{t('message')}</Text>
         </VStack>
     )
 }
 
-export default LoginPage
+export default MaintenancePage

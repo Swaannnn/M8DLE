@@ -2,9 +2,8 @@
 
 import useSWR from 'swr'
 import { useRouter } from 'next/navigation'
-import { fetcher } from '@/utils/fetcher'
+import { fetcher, ApiError } from '@/utils/apiClient'
 import { UserProfile } from '@/types/userProfile'
-import { ApiError } from 'next/dist/server/api-utils'
 
 export function useAuth() {
     const { data, error, isLoading, mutate } = useSWR<UserProfile | null, ApiError>('/api/auth/me', fetcher)
@@ -12,7 +11,7 @@ export function useAuth() {
 
     const user = data ?? null
     const loading = isLoading
-    const loggedOut = error || !user
+    const loggedOut = Boolean(error) || !user
 
     const logout = async () => {
         await fetch('/api/auth/logout', { method: 'POST' })

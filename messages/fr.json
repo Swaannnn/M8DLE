@@ -1,15 +1,37 @@
 {
+    "error": {
+        "unauthorized": "Vous devez être connecté pour effectuer cette action.",
+        "badRequest": "La requête est invalide.",
+        "missingParameter": "Un paramètre requis est manquant.",
+        "notFound": "Élément introuvable.",
+        "alreadyExists": "Cet élément existe déjà.",
+        "alreadySuccess": "Vous avez déjà trouvé le joueur du jour.",
+        "alreadyAttempted": "Ce joueur a déjà été proposé.",
+        "conflict": "Une autre action est déjà en cours. Réessayez.",
+        "methodNotAllowed": "Méthode non autorisée.",
+        "authFailed": "L'authentification a échoué.",
+        "fetchFailed": "Erreur lors de la récupération des données.",
+        "createFailed": "Erreur lors de la création.",
+        "updateFailed": "Erreur lors de la mise à jour.",
+        "deleteFailed": "Erreur lors de la suppression.",
+        "uploadFailed": "Erreur lors de l'upload du fichier.",
+        "invalidFileType": "Ce format de fichier n'est pas accepté.",
+        "fileTooLarge": "Le fichier est trop volumineux (4 Mo maximum).",
+        "internalError": "Une erreur interne est survenue."
+    },
     "home": {
         "nextDraw": "Prochain tirage dans",
         "count0": "Personne n'a encore trouvé le joueur du jour",
         "count": "{count, plural, one {# personne a} other {# personnes ont}} déjà trouvé le joueur du jour.",
-        "findedMessage": "Bravo ! Revenez demain pour le prochain joueur."
+        "findedMessage": "Bravo ! Revenez demain pour le prochain joueur.",
+        "unavailable": "Le jeu est momentanément indisponible. Réessayez dans quelques instants."
     },
     "header": {
         "home": "Accueil",
         "leaderboard": "Classement",
         "myAccount": "Mon Compte",
         "login": "Se connecter",
+        "admin": "Admin",
         "credits": "Crédits",
         "privacyPolicy": "Politique de confidentialité",
         "legalNotice": "Mentions légales"
@@ -20,12 +42,16 @@
         "player": "Joueur",
         "victories": "Victoires",
         "nbAttempts": "Nombre d'essais moyen",
-        "nbAttemptsShort": "Nb essais"
+        "nbAttemptsShort": "Nb essais",
+        "winstreak": "Série"
     },
     "account": {
         "accountFullCaps": "MON COMPTE",
         "memberSince": "Membre depuis le",
-        "logout": "Se déconnecter"
+        "logout": "Se déconnecter",
+        "myVictories": "Mes victoires en",
+        "winstreak": "Série de victoires",
+        "winstreakDays": "{count, plural, =0 {0 jour} one {# jour} other {# jours}}"
     },
     "login": {
         "loginFullCaps": "CONNEXION"
@@ -36,8 +62,9 @@
     },
     "dialogWin": {
         "title": "Bravo !",
-        "winnerMessagePrefix": "Le joueur du jour était",
+        "winnerMessagePrefix": "Le·la joueur·euse du jour était",
         "winnerMessageSuffix": "!",
+        "playerOtd": "Joueur du jour",
         "playerImageAlt": "Image du joueur du jour",
         "attemptsMessage": "Tu l'as trouvé en {nbPlayers} essais.",
         "share": "Partager :",
@@ -48,8 +75,9 @@
         "twitterHashtags": "\n\n#M8WIN #M8DLE"
     },
     "calendar": {
-        "myVictories": "Mes victoires en",
-        "days": ["L", "M", "M", "J", "V", "S", "D"]
+        "days": ["L", "M", "M", "J", "V", "S", "D"],
+        "try": "essai",
+        "tries": "essais"
     },
     "input": {
         "playersPlaceholder": "Tapez pour rechercher",
@@ -62,7 +90,8 @@
         "arrival": "Arrivée",
         "beforeM8": "Avant M8",
         "currentClub": "Club actuel",
-        "age": "Age"
+        "age": "Age",
+        "none": "Aucun"
     },
     "precisions": {
         "precisions": "Précisions",
@@ -75,7 +104,8 @@
         "upArrows": "<strong>Flèches vers le haut :</strong> la valeur recherchée est supérieure à celle proposée.",
         "downArrows": "<strong>Flèches vers le bas :</strong> la valeur recherchée est inférieure à celle proposée.",
         "dataUpdateTitle": "2. Mise à jour des données",
-        "dataUpdateContent": "La dernière mise à jour des données a été effectuée le 20 février 2026. Nous vous invitons à nous faire part de tout retour si vous constatez une information erronée ou incohérente, afin que nous puissions la corriger dans les plus brefs délais.",
+        "dataUpdateContent": "La dernière mise à jour des données a été effectuée le {date}. Nous vous invitons à nous faire part de tout retour si vous constatez une information erronée ou incohérente, afin que nous puissions la corriger dans les plus brefs délais.",
+        "dataUpdateContentUnknown": "La date de dernière mise à jour des données est inconnue. Nous vous invitons à nous faire part de tout retour si vous constatez une information erronée ou incohérente, afin que nous puissions la corriger dans les plus brefs délais.",
         "displayingTeamsTitle": "3. Affichage des équipes",
         "displayingTeamsContent": "Les équipes affichées correspondent aux structures principales. Par exemple, G2 Minnesota, Twisted Minds Orchid ou Karmine Corp Blue seront respectivement présentées sous les noms G2 Esports, Twisted Minds et Karmine Corp.",
         "close": "Fermer"
@@ -171,9 +201,88 @@
         "lawTitle": "7. Loi applicable",
         "lawText": "Le présent site est soumis au droit français. En cas de litige, les tribunaux français seront seuls compétents."
     },
+    "maintenance": {
+        "title": "MAINTENANCE",
+        "message": "Le site est actuellement en maintenance. Nous travaillons à son amélioration et serons de retour très bientôt !"
+    },
     "metadata": {
         "title": "M8DLE - Devine le joueur Gentle Mates du jour",
         "description": "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
         "keywords": ["gentlemates", "m8dle", "jeu gentlemates", "gentlemates wordle", "dle"]
+    },
+    "admin": {
+        "title": "ADMINISTRATION",
+        "addPlayer": "Ajouter un joueur",
+        "searchPlayer": "Rechercher un joueur",
+        "allGames": "Tous les jeux",
+        "name": "Nom",
+        "game": "Jeu",
+        "nationality": "Nationalité",
+        "currentTeam": "Équipe actuelle",
+        "actions": "Actions",
+        "editPlayer": "Modifier le joueur",
+        "deletePlayer": "Supprimer",
+        "deleteConfirmTitle": "Confirmer la suppression",
+        "deleteConfirmText": "Êtes-vous sûr de vouloir supprimer ce joueur ?",
+        "playerCreated": "Joueur créé",
+        "playerUpdated": "Joueur mis à jour",
+        "playerDeleted": "Joueur supprimé",
+        "error": "Une erreur est survenue",
+        "playersTab": "Joueurs",
+        "usersTab": "Utilisateurs",
+        "organizationsTab": "Organisations",
+        "gamesTab": "Jeux",
+        "addOrg": "Ajouter",
+        "start": "Début",
+        "end": "Fin",
+        "none": "Aucun",
+        "select": "Sélectionner...",
+        "organizations": "Organisations",
+        "imageUrl": "Image URL",
+        "birthDate": "Date de naissance",
+        "nationalityInput": "Nationalité",
+        "orgNotAvailable": "La gestion des organisations n'est pas encore disponible.",
+        "gamesNotAvailable": "La gestion des jeux n'est pas encore disponible.",
+        "usersNotAvailable": "La gestion des utilisateurs n'est pas encore disponible.",
+        "noneTeam": "Aucune",
+        "confirm": "Confirmer",
+        "cancel": "Annuler",
+        "addOrganization": "Ajouter une organisation",
+        "searchOrganization": "Rechercher une organisation...",
+        "editOrganization": "Modifier l'organisation",
+        "deleteOrganization": "Supprimer",
+        "deleteConfirmOrgTitle": "Confirmer la suppression de l'organisation",
+        "deleteConfirmOrgText": "Êtes-vous sûr de vouloir supprimer cette organisation ?",
+        "organizationCreated": "Organisation créée",
+        "organizationUpdated": "Organisation mise à jour",
+        "addGame": "Ajouter un jeu",
+        "searchGame": "Rechercher un jeu...",
+        "editGame": "Modifier le jeu",
+        "deleteGame": "Supprimer",
+        "deleteConfirmGameTitle": "Confirmer la suppression du jeu",
+        "deleteConfirmGameText": "Êtes-vous sûr de vouloir supprimer ce jeu ?",
+        "gameCreated": "Jeu créé",
+        "gameUpdated": "Jeu mis à jour",
+        "searchUser": "Rechercher un utilisateur (pseudo, email, ID discord)...",
+        "editUser": "Modifier l'utilisateur",
+        "deleteUser": "Supprimer",
+        "deleteConfirmUserTitle": "Confirmer la suppression de l'utilisateur",
+        "deleteConfirmUserText": "Êtes-vous sûr de vouloir supprimer cet utilisateur et tout son historique de parties ?",
+        "userUpdated": "Utilisateur mis à jour",
+        "username": "Nom d'utilisateur",
+        "discordId": "ID Discord",
+        "email": "Email",
+        "role": "Rôle",
+        "totalWins": "Victoires",
+        "totalAttempts": "Essais",
+        "image": "Image"
+    },
+    "ui": {
+        "searchPlaceholder": "Rechercher...",
+        "noResults": "Aucun résultat",
+        "uploadImage": "Uploader une image",
+        "changeImage": "Changer l'image",
+        "uploadingImage": "Upload en cours...",
+        "removeImage": "Supprimer l'image"
     }
 }

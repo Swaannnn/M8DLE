@@ -5,22 +5,25 @@ import timezone from 'dayjs/plugin/timezone'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-const TZ = 'Europe/Paris'
+export const TZ = 'Europe/Paris'
+
 
 /**
  * Calcul et renvoi l'age d'une personne en y passant une date.
+ *
+ * La date de naissance est lue en UTC (c'est ainsi qu'elle est stockée) et « aujourd'hui »
+ * dans le fuseau de jeu. Sans cela le résultat dépendrait du fuseau de la machine : le
+ * serveur, qui compare les âges, pourrait ne pas tomber d'accord avec le navigateur, qui
+ * les affiche.
  */
 export function getAge(date: string): number {
-    const birthDate = new Date(date)
-    if (isNaN(birthDate.getTime())) return -1
+    const birthDate = dayjs.utc(date)
+    if (!birthDate.isValid()) return -1
 
-    const today = new Date()
-    let age = today.getFullYear() - birthDate.getFullYear()
+    const today = dayjs().tz(TZ)
+    let age = today.year() - birthDate.year()
 
-    if (
-        today.getMonth() < birthDate.getMonth() ||
-        (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())
-    ) {
+    if (today.month() < birthDate.month() || (today.month() === birthDate.month() && today.date() < birthDate.date())) {
         age--
     }
 
@@ -28,32 +31,28 @@ export function getAge(date: string): number {
 }
 
 /**
- * Renvoi l'année d'une date.
+ * Renvoi l'année d'une date, lue en UTC pour la même raison que `getAge`.
  */
 export function getYear(date: string): number {
-    const birthDate = new Date(date)
-    if (isNaN(birthDate.getTime())) return -1
+    const parsed = dayjs.utc(date)
 
-    return birthDate.getFullYear()
+    return parsed.isValid() ? parsed.year() : -1
 }
 
 /**
- * Renvoi la date de début du tirage actuel
+ * Renvoie la date du tirage actuel, normalisée à 00:00:00 UTC pour la journée en cours dans `TZ`.
+ * Ainsi, en base de données, la date est toujours stockée à 00:00:00 (et non 22:00:00 ou 23:00:00).
  */
 export function getGameDate(): Date {
-    const now = dayjs().tz(TZ).hour(2).minute(0).second(0).millisecond(0)
-
-    return now.toDate()
+    return dayjs().tz(TZ).startOf('day').utc(true).toDate()
 }
 
 /**
- * Récupère la date du prochain tirage
+ * Récupère l'instant (Date) du prochain tirage à 00:00:00 dans le fuseau de jeu (`TZ`).
+ * Utilisé pour le compte à rebours sur la page d'accueil.
  */
 export function getNextGameDate(): Date {
-    const current = dayjs().tz(TZ)
-    const date = current.add(1, 'day').hour(2).minute(0).second(0).millisecond(0)
-
-    return date.toDate()
+    return dayjs().tz(TZ).add(1, 'day').startOf('day').toDate()
 }
 
 /**
@@ -71,8 +70,32 @@ export function getDaysOfMonth(date: Date): number {
     return dayjs(date).daysInMonth()
 }
 
+/**
+ * Renvoi un index comparable année+mois (ex: 2026-01 < 2026-02 < 2027-01),
+ * pour comparer deux dates par mois sans tenir compte du jour.
+ */
+export function getMonthIndex(date: Date): number {
+    return date.getFullYear() * 12 + date.getMonth()
+}
+
+/** Renvoie une nouvelle date au 1er du mois à 00:00:00 UTC : l'argument n'est jamais modifié. */
 export function getFirstDayOfMonth(date: Date): Date {
-    const dateCopy = date
-    dateCopy.setDate(1)
-    return dateCopy
+    return dayjs(date).tz(TZ).startOf('month').utc(true).toDate()
+}
+
+/**
+ * Formate une date (chaîne ISO ou objet Date) dans un format adapté pour <input type="date" /> (YYYY-MM-DD)
+ * @param date - La date à formater
+ * @returns La chaîne de date formatée, ou une chaîne vide si invalide/nulle
+ */
+export function formatDateForInput(date: string | Date | null | undefined): string {
+    if (!date) return ''
+    try {
+        if (typeof date === 'string') {
+            return date.split('T')[0]
+        }
+        return date.toISOString().split('T')[0]
+    } catch {
+        return ''
+    }
 }

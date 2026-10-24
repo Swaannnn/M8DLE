@@ -15,14 +15,15 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
-import { fetcher } from '@/utils/fetcher'
+import { fetcher, ApiError } from '@/utils/apiClient'
 import useSWR from 'swr'
 import { LeaderboardData, LeaderboardUser } from '@/types/leaderboard'
-import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast } from '@/hooks/use-api-error-toast'
 import constantsParams from '@/constants/constantsParams'
 import { getProfileAvatar } from '@/utils/userUtils'
-import { tuskerGrotesk } from '@/utils/fontUtils'
+import { tuskerGrotesk } from '@/lib/fonts'
 import { useTranslations } from 'next-intl'
 
 const LeaderboardRow = ({ item, index, page }: { item: LeaderboardUser; index: number; page: number }) => {
@@ -44,6 +45,7 @@ const LeaderboardRow = ({ item, index, page }: { item: LeaderboardUser; index: n
                 </HStack>
             </Table.Cell>
             <Table.Cell textAlign="center">{item.wins}</Table.Cell>
+            <Table.Cell textAlign="center">{item.winstreak > 0 ? `${item.winstreak}` : '—'}</Table.Cell>
             <Table.Cell textAlign="center">{item.averageAttempts}</Table.Cell>
         </Table.Row>
     )
@@ -54,6 +56,8 @@ const Leaderboard = () => {
     const { data, error, isLoading } = useSWR<LeaderboardData, ApiError>(`/api/m8dle/leaderboard?page=${page}`, fetcher)
     const isMobile = useBreakpointValue({ base: true, md: false })
     const t = useTranslations('leaderboard')
+
+    useApiErrorToast(error)
 
     const OnPaginationClick = (page: number) => {
         setPage(page)
@@ -71,7 +75,7 @@ const Leaderboard = () => {
         )
     }
 
-    if (error) {
+    if (error && error.statusCode >= 500) {
         return <ApiErrorContainer error={error} />
     }
 
@@ -93,6 +97,7 @@ const Leaderboard = () => {
                 {t('leaderboardFullCaps')}
             </Text>
             <Text>{t('leaderboardDescription')}</Text>
+            {error && <ApiErrorMessage error={error} />}
             <Table.Root
                 size="sm"
                 variant="outline"
@@ -103,6 +108,7 @@ const Leaderboard = () => {
                         <Table.ColumnHeader></Table.ColumnHeader>
                         <Table.ColumnHeader>{t('player')}</Table.ColumnHeader>
                         <Table.ColumnHeader textAlign="center">{t('victories')}</Table.ColumnHeader>
+                        <Table.ColumnHeader textAlign="center">{t('winstreak')}</Table.ColumnHeader>
                         <Table.ColumnHeader textAlign="center">
                             {isMobile ? t('nbAttemptsShort') : t('nbAttempts')}
                         </Table.ColumnHeader>

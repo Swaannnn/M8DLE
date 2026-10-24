@@ -1,36 +1,69 @@
 'use client'
 
 import { useAuth } from '@/hooks/use-auth'
-import { AbsoluteCenter, Button, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
+import { AbsoluteCenter, Badge, Button, HStack, Image, Separator, Spinner, Stack, Text, VStack } from '@chakra-ui/react'
 import CurrentMonthCalendar from '@/components/CurrentMonthCalendar'
 import useSWR from 'swr'
-import { fetcher } from '@/utils/fetcher'
-import { ApiError } from 'next/dist/server/api-utils'
+import { fetcher, ApiError } from '@/utils/apiClient'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
-import { useEffect } from 'react'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast } from '@/hooks/use-api-error-toast'
+import { useEffect, useState } from 'react'
 import { getProfileAvatar } from '@/utils/userUtils'
-import { DailyM8DLEResult } from '@prisma/client'
-import { tuskerGrotesk } from '@/utils/fontUtils'
+import { tuskerGrotesk } from '@/lib/fonts'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { IconButton } from '@chakra-ui/react'
+import { LuChevronLeft, LuChevronRight } from 'react-icons/lu'
+import { DailyM8DLEResultWithAttemptsCount } from '@/types/m8dleResults'
+import { getMonthIndex } from '@/utils/dateUtils'
+import { lightPink, pink } from '@/constants/colors'
 
 const AccountPage = () => {
     const { user, loading: userLoading, logout, loggedOut } = useAuth()
     const t = useTranslations('account')
     const locale = useLocale()
     const router = useRouter()
-    const { data, error, isLoading } = useSWR<DailyM8DLEResult[], ApiError>(
-        !userLoading && !loggedOut ? '/api/users/me/results' : null,
+    const now = new Date()
+    now.setDate(1)
+    const [selectedDate, setSelectedDate] = useState(now)
+    const {
+        data,
+        error,
+        isLoading: resultsLoading,
+    } = useSWR<DailyM8DLEResultWithAttemptsCount[], ApiError>(
+        !userLoading && !loggedOut
+            ? `/api/users/me/results?date=${encodeURIComponent(selectedDate.toISOString())}`
+            : null,
         fetcher
     )
 
+    const { data: winstreakData, isLoading: winstreakLoading } = useSWR<{ winstreak: number }, ApiError>(
+        !userLoading && !loggedOut ? '/api/users/me/winstreak' : null,
+        fetcher
+    )
+
+    useApiErrorToast(error)
+
+    const monthName = selectedDate.toLocaleString(locale, { month: 'long' })
+    const year = selectedDate.getFullYear()
+
+    const handleNav = (offset: number) => {
+        setSelectedDate((prevDate) => {
+            const newDate = new Date(prevDate)
+            newDate.setDate(1)
+            newDate.setMonth(newDate.getMonth() + offset)
+            return newDate
+        })
+    }
+
     useEffect(() => {
         if (!userLoading && loggedOut) {
-            router.push('/login')
+            router.push('/')
         }
     }, [userLoading, loggedOut, router])
 
-    if (userLoading || isLoading) {
+    if (userLoading || resultsLoading || winstreakLoading) {
         return (
             <AbsoluteCenter>
                 <Spinner size="xl" />
@@ -45,6 +78,8 @@ const AccountPage = () => {
     if (!user || loggedOut) return null
 
     const avatarUrl = getProfileAvatar(user)
+    const winstreak = winstreakData?.winstreak ?? 0
+
     return (
         <VStack
             w="90vw"
@@ -64,24 +99,67 @@ const AccountPage = () => {
                 direction={{ base: 'column', md: 'row' }}
                 align="center"
             >
-                <VStack>
-                    <Image
-                        src={avatarUrl}
-                        alt="user avatar"
-                        className="w-24 h-24 rounded-full"
-                    />
-                    <Text fontSize="lg">{user.username}</Text>
-                    <Text fontSize="sm">
-                        {t('memberSince')}{' '}
-                        {new Date(user.createdAt).toLocaleDateString(locale, {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                        })}
-                    </Text>
+                <VStack gap="2rem">
+                    <VStack>
+                        <Image
+                            src={avatarUrl}
+                            alt="user avatar"
+                            className="w-24 h-24 rounded-full"
+                        />
+                        <Text fontSize="lg">{user.username}</Text>
+                        <Text fontSize="sm">
+                            {t('memberSince')}{' '}
+                            {new Date(user.createdAt).toLocaleDateString(locale, {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            })}
+                        </Text>
+                    </VStack>
+                    <Badge
+                        size="lg"
+                        bg={lightPink}
+                        color="#5b2454"
+                        borderWidth="1px"
+                        borderColor={pink}
+                    >
+                        {t('winstreak')} - {t('winstreakDays', { count: winstreak })}
+                    </Badge>
                 </VStack>
                 <Separator />
-                <CurrentMonthCalendar results={data ?? []} />
+                <VStack
+                    width="350px"
+                    height="350px"
+                >
+                    {error && <ApiErrorMessage error={error} />}
+                    <HStack
+                        width="100%"
+                        justifyContent="space-between"
+                    >
+                        <IconButton
+                            variant="ghost"
+                            disabled={getMonthIndex(selectedDate) <= getMonthIndex(new Date(user.createdAt))}
+                            onClick={() => handleNav(-1)}
+                        >
+                            <LuChevronLeft />
+                        </IconButton>
+                        <Text>
+                            {t('myVictories')} {monthName} {year}
+                        </Text>
+                        <IconButton
+                            variant="ghost"
+                            disabled={getMonthIndex(selectedDate) >= getMonthIndex(now)}
+                            onClick={() => handleNav(1)}
+                        >
+                            <LuChevronRight />
+                        </IconButton>
+                    </HStack>
+                    <CurrentMonthCalendar
+                        results={data ?? []}
+                        loading={resultsLoading}
+                        date={selectedDate}
+                    />
+                </VStack>
             </Stack>
 
             <Button

@@ -1,148 +1,127 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import playersData from '@/data/players.json'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import useSWR from 'swr'
 import type { Player } from '@/types/player'
-import { filterPlayersByAttempts, filterPlayersNotInAttempts, getPlayerOfTheDay } from '@/utils/playersUtils'
-import { getGameDate } from '@/utils/dateUtils'
+import { type ApiError, fetcher } from '@/utils/apiClient'
+import type { AttemptResponse, M8dleStatus } from '@/types/m8dleStatus'
+import type { PlayerComparison } from '@/utils/player/compare'
+import { filterPlayersNotInAttempts } from '@/utils/player/filters'
 import { useAuth } from './use-auth'
-import { M8dleStatus } from '@/types/M8dleStatus'
-import { fetcher } from '@/utils/fetcher'
+import { useShowApiErrorToast } from './use-api-error-toast'
 
-const M8DLE_KEY = 'm8dle'
+/** Un essai joué, avec les indices calculés par le serveur. */
+export type PlayedAttempt = {
+    player: Player
+    comparison: PlayerComparison
+}
+
+const EMPTY_STATE = {
+    win: false,
+    attempts: [] as PlayedAttempt[],
+    playerOfTheDay: null as Player | null,
+}
 
 export const useM8dleStatus = () => {
-    const { loggedOut } = useAuth()
-    const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
-    const [availablePlayers, setAvailablePlayers] = useState<Player[]>(playersData)
-    const [win, setWin] = useState(false)
+    const { loggedOut, loading: authLoading } = useAuth()
+    const {
+        data: players,
+        error: playersError,
+        isLoading: playersLoading,
+    } = useSWR<Player[], ApiError>('/api/players', fetcher)
+    // Référence stable : sinon un échec de /api/players recrée un tableau à chaque rendu et
+    // relance l'effet en boucle.
+    const allPlayers = useMemo(() => players ?? [], [players])
+    const [state, setState] = useState(EMPTY_STATE)
     const [statusLoading, setStatusLoading] = useState(true)
+    const showApiErrorToast = useShowApiErrorToast()
 
-    /**
-     * Mets à jour les données stocké dans le local
-     * storage de l'utilisateur dans son user stocké
-     * en base de données.
-     *
-     * @param state status
-     */
-    const syncLocalToUser = async (state: M8dleStatus) => {
-        if (state.attempts.length > 0 || state.isWin) {
-            await fetcher('/api/m8dle/attempt', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    attempts: state.attempts,
-                    isWin: state.isWin,
-                }),
-            })
+    const availablePlayers = useMemo(
+        () =>
+            filterPlayersNotInAttempts(
+                allPlayers,
+                state.attempts.map((attempt) => attempt.player.id)
+            ),
+        [allPlayers, state.attempts]
+    )
 
-            localStorage.removeItem(M8DLE_KEY)
-        }
-    }
-
-    /**
-     * Vérifie si dans le local storage on
-     * retrouve bien le status M8DLE
-     *
-     * @returns status s'il existe
-     */
-    const getLocalStatus = (): M8dleStatus | null => {
-        const storage = localStorage.getItem(M8DLE_KEY)
-        if (storage) {
-            const json = JSON.parse(storage)
-            if (!json.date || new Date(json.date).getTime() !== getGameDate().getTime()) {
-                localStorage.removeItem(M8DLE_KEY)
-                return null
-            }
-
-            const status: M8dleStatus = {
-                date: new Date(json.date),
-                isWin: json.isWin,
-                attempts: json.attempts,
-            }
-
-            return status
-        }
-
-        return null
-    }
-
-    /**
-     * Créer et stocker un M8dleStatus vide
-     * dans le local storage du navigateur.
-     *
-     * @returns status
-     */
-    const createLocalStatus = (): M8dleStatus => {
-        const status: M8dleStatus = { attempts: [], isWin: false, date: getGameDate() }
-        localStorage.setItem(M8DLE_KEY, JSON.stringify(status))
-
-        return status
-    }
-
-    /**
-     * Ajoute un essai à l'utilisateur.
-     *
-     * @param player
-     */
-    const addAttempt = async (player: Player) => {
-        const isWin = player.name === getPlayerOfTheDay().name
-
-        if (!loggedOut) {
-            await fetcher('/api/m8dle/attempt', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ attempts: [player.name], isWin }),
-            })
-        } else {
-            const storage = getLocalStatus() ?? createLocalStatus()
-            const attempts = [...storage.attempts, player.name]
-
-            localStorage.setItem(M8DLE_KEY, JSON.stringify({ attempts, isWin, date: getGameDate() }))
-        }
-
-        setWin(isWin)
-        setSelectedPlayers((prev) => [...prev, player])
-        setAvailablePlayers((prev) => filterPlayersNotInAttempts(prev, [player.name]))
-    }
-
+    // Le serveur résout lui-même qui joue depuis les cookies ; `loggedOut` ne sert qu'à relire
+    // le statut quand l'identité change. Le rattachement de la partie invité se fait à la
+    // création de session (voir lib/auth/guestGame.ts).
     useEffect(() => {
+        if (authLoading || playersLoading) return
+
+        let cancelled = false
+
         const loadStatus = async () => {
             setStatusLoading(true)
-            const guestState = getLocalStatus()
-            let isWin: boolean
-            let attempts: string[]
 
-            if (!loggedOut) {
-                if (guestState) await syncLocalToUser(guestState)
+            let loaded = EMPTY_STATE
 
-                try {
-                    const data = await fetcher<M8dleStatus>('/api/m8dle/status')
-                    attempts = data.attempts
-                    isWin = data.isWin
-                } catch (error) {
-                    console.error('Erreur lors de la récupération du statut:', error)
-                    attempts = []
-                    isWin = false
+            try {
+                const status = await fetcher<M8dleStatus>('/api/m8dle/status')
+                const playersById = new Map(allPlayers.map((player) => [player.id, player]))
+
+                loaded = {
+                    win: status.success,
+                    playerOfTheDay: status.playerOfTheDay,
+                    attempts: status.attempts.flatMap(({ playerId, comparison }) => {
+                        const player = playersById.get(playerId)
+                        return player ? [{ player, comparison }] : []
+                    }),
                 }
-            } else {
-                if (!guestState) {
-                    const status = createLocalStatus()
-                    isWin = status.isWin
-                    attempts = status.attempts
-                } else {
-                    attempts = guestState.attempts
-                    isWin = guestState.isWin
-                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération du statut:', error)
             }
 
-            setWin(isWin)
-            setSelectedPlayers(filterPlayersByAttempts(attempts))
-            setAvailablePlayers(filterPlayersNotInAttempts(playersData, attempts))
+            if (cancelled) return
+            setState(loaded)
             setStatusLoading(false)
         }
-        loadStatus().catch(console.error)
-    }, [loggedOut])
 
-    return { selectedPlayers, availablePlayers, win, addAttempt, statusLoading }
+        loadStatus().catch(console.error)
+
+        return () => {
+            cancelled = true
+        }
+    }, [loggedOut, authLoading, allPlayers, playersLoading])
+
+    /**
+     * Ajoute un essai. Les indices et la victoire viennent du serveur, seule source fiable.
+     * En cas d'échec l'essai n'est pas affiché et l'erreur part en toast : l'appelant n'attend
+     * pas la promesse.
+     */
+    const addAttempt = useCallback(
+        async (player: Player) => {
+            let result: AttemptResponse
+            try {
+                result = await fetcher<AttemptResponse>('/api/m8dle/attempt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ attempt: player.id }),
+                })
+            } catch (error) {
+                showApiErrorToast(error)
+                return
+            }
+
+            setState((prev) => ({
+                win: result.success,
+                playerOfTheDay: result.playerOfTheDay,
+                attempts: [...prev.attempts, { player, comparison: result.comparison }],
+            }))
+        },
+        [showApiErrorToast]
+    )
+
+    return {
+        allPlayers,
+        playersError,
+        attempts: state.attempts,
+        availablePlayers,
+        win: state.win,
+        playerOfTheDay: state.playerOfTheDay,
+        addAttempt,
+        statusLoading: statusLoading || playersLoading,
+    }
 }

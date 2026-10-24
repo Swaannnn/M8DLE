@@ -67,7 +67,7 @@ const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected }: Props)
                     ) : (
                         filteredPlayers.map((player) => (
                             <Box
-                                key={player.name}
+                                key={player.id}
                                 onClick={() => selectPlayer(player)}
                                 padding="0.5rem"
                                 width="100%"

@@ -1,36 +1,48 @@
 import { getSession } from '@/lib/auth/session'
 import { prisma } from '@/lib/db'
+import { Role } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 /** Récupère un utilisateur via son identifiant */
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const session = await getSession()
+    if (!session || session.role != Role.ADMIN) {
+        return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
+    }
+
     const id = (await params).id
     if (!id) {
-        return NextResponse.json({ error: 'Paramter "id" is required' }, { status: 400 })
+        return NextResponse.json({ error: ApiErrorKey.MISSING_PARAMETER }, { status: 400 })
     }
 
     const user = await prisma.user.findUnique({ where: { id } })
     if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 })
+        return NextResponse.json({ error: ApiErrorKey.NOT_FOUND }, { status: 404 })
     }
 
     return NextResponse.json(user)
 }
 
-/** Modifie un utilisateur via son identifiant,*/
+/** Modifie un utilisateur via son identifiant */
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await getSession()
-    if (!session || session.role != 'ADMIN') {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!session || session.role != Role.ADMIN) {
+        return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
     }
 
     const id = (await params).id
     if (!id) {
-        return NextResponse.json({ error: 'Parameter "id" is required' }, { status: 400 })
+        return NextResponse.json({ error: ApiErrorKey.MISSING_PARAMETER }, { status: 400 })
     }
 
     try {
         const body = await request.json()
+        if (body.role !== Role.ADMIN && body.role !== Role.USER) {
+            // FIXME: temp fix, need a better and reusable solution
+            return NextResponse.json({ error: ApiErrorKey.BAD_REQUEST }, { status: 400 })
+        }
+
         const user = await prisma.user.update({
             where: { id },
             data: {
@@ -39,27 +51,27 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         })
         return NextResponse.json(user)
     } catch (error) {
-        console.error('Error updating user:', error)
-        return NextResponse.json({ error: 'Failed to update user' }, { status: 500 })
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorKey.UPDATE_FAILED }, { status: 500 })
     }
 }
 
 /** Supprime un utilisateur via son identifiant */
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await getSession()
-    if (!session || session.role != 'ADMIN') {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!session || session.role != Role.ADMIN) {
+        return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
     }
 
     const id = (await params).id
     if (!id) {
-        return NextResponse.json({ error: 'Parameter "id" is required' }, { status: 400 })
+        return NextResponse.json({ error: ApiErrorKey.MISSING_PARAMETER }, { status: 400 })
     }
 
     try {
         const user = await prisma.user.findUnique({ where: { id } })
         if (!user) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 })
+            return NextResponse.json({ error: ApiErrorKey.NOT_FOUND }, { status: 404 })
         }
 
         const deleted = await prisma.user.delete({ where: { id }, select: { discordId: true, username: true } })
@@ -67,6 +79,6 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id:
         return NextResponse.json(deleted)
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 })
+        return NextResponse.json({ error: ApiErrorKey.DELETE_FAILED }, { status: 500 })
     }
 }

@@ -2,21 +2,40 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { getSession } from '@/lib/auth/session'
 import { getFirstDayOfMonth } from '@/utils/dateUtils'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        const now = new Date()
         const session = await getSession()
         if (!session || !session.userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+            return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
+
+        const { searchParams } = new URL(request.url)
+        const dateParam = searchParams.get('date')
+
+        const targetDate = dateParam ? new Date(dateParam) : new Date()
+
+        if (isNaN(targetDate.getTime())) {
+            return NextResponse.json({ error: ApiErrorKey.BAD_REQUEST }, { status: 400 })
+        }
+
+        const firstDayOfMonth = getFirstDayOfMonth(targetDate)
+        const firstDayOfNextMonth = new Date(firstDayOfMonth)
+        firstDayOfNextMonth.setMonth(firstDayOfNextMonth.getMonth() + 1)
 
         const results = await prisma.dailyM8DLEResult.findMany({
             where: {
                 userId: session.userId,
                 success: true,
                 date: {
-                    gte: getFirstDayOfMonth(now),
+                    gte: firstDayOfMonth,
+                    lt: firstDayOfNextMonth,
+                },
+            },
+            include: {
+                _count: {
+                    select: { attempts: true },
                 },
             },
             orderBy: {
@@ -26,7 +45,7 @@ export async function GET() {
 
         return NextResponse.json(results)
     } catch (error) {
-        console.error('Error fetching user results:', error)
-        return NextResponse.json({ error: 'Erreur lors de la récupération des résultats' }, { status: 500 })
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorKey.FETCH_FAILED }, { status: 500 })
     }
 }

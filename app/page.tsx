@@ -3,49 +3,53 @@
 import { AbsoluteCenter, Spinner, Text, VStack } from '@chakra-ui/react'
 import InputPlayersAutocomplete from '@/components/InputPlayersAutocomplete'
 import TablePlayers from '@/components/TablePlayers'
-import { getPlayerOfTheDay } from '@/utils/playersUtils'
 import { useM8dleStatus } from '@/hooks/use-m8dle-status'
 import { useAuth } from '@/hooks/use-auth'
 import PrecisionDialog from '@/components/PrecisionDialog'
 import useSWR from 'swr'
-import { fetcher } from '@/utils/fetcher'
+import { fetcher, ApiError } from '@/utils/apiClient'
 import { pink } from '@/constants/colors'
-import { ApiError } from 'next/dist/server/api-utils'
 import { ApiErrorContainer } from '@/components/ApiErrorContainer'
-import { desirableCalligraphy, tuskerGrotesk } from '@/utils/fontUtils'
+import { ApiErrorMessage } from '@/components/ApiErrorMessage'
+import { useApiErrorToast } from '@/hooks/use-api-error-toast'
+import { desirableCalligraphy, tuskerGrotesk } from '@/lib/fonts'
 import { useTranslations } from 'next-intl'
 import DialogWin from '@/components/DialogWin'
 import { useEffect, useState } from 'react'
 import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
 import { useWinDialog } from '@/hooks/use-win-dialog'
-import { comparePlayer, toEmojiRow } from '@/utils/playerCompareUtils'
+import { toEmojiRow } from '@/utils/player/compare'
 
 const Home = () => {
     const { loading } = useAuth()
-    const { selectedPlayers, availablePlayers, win, addAttempt, statusLoading } = useM8dleStatus()
+    const { allPlayers, playersError, attempts, availablePlayers, win, playerOfTheDay, addAttempt, statusLoading } =
+        useM8dleStatus()
     const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>(
         '/api/m8dle/dailywinners',
         fetcher
     )
     const t = useTranslations('home')
-    const nextGameDateTime = getNextGameDate().getTime()
-    const [timeLeft, setTimeLeft] = useState(getTimeLeft(nextGameDateTime))
+    const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(getNextGameDate().getTime()))
     const { isOpen, closeDialog } = useWinDialog(win)
 
-    const playerOfTheDay = getPlayerOfTheDay()
+    useApiErrorToast(error)
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTimeLeft(getTimeLeft(nextGameDateTime))
+            setTimeLeft(getTimeLeft(getNextGameDate().getTime()))
         }, 1000)
 
         return () => clearInterval(interval)
-    }, [nextGameDateTime])
+    }, [])
 
-    const timer = new Date(timeLeft)
-    const hours = timer.getUTCHours().toString().padStart(2, '0')
-    const minutes = timer.getUTCMinutes().toString().padStart(2, '0')
-    const seconds = timer.getUTCSeconds().toString().padStart(2, '0')
+    const totalSeconds = Math.max(0, Math.floor(timeLeft / 1000))
+    const hours = Math.floor(totalSeconds / 3600)
+        .toString()
+        .padStart(2, '0')
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+        .toString()
+        .padStart(2, '0')
+    const seconds = (totalSeconds % 60).toString().padStart(2, '0')
 
     useEffect(() => {
         if (win) {
@@ -61,16 +65,29 @@ const Home = () => {
         )
     }
 
-    if (error) {
-        return <ApiErrorContainer error={error} />
+    const fatalError = [playersError, error].find((candidate) => candidate && candidate.statusCode >= 500)
+    if (fatalError) {
+        return <ApiErrorContainer error={fatalError} />
+    }
+
+    // Chargement terminé mais aucun joueur à proposer : catalogue vide ou /api/players en
+    // échec. On l'affiche explicitement plutôt que de laisser tourner un spinner sans fin.
+    if (allPlayers.length === 0) {
+        return (
+            <AbsoluteCenter>
+                <VStack gap="1rem">
+                    {playersError && <ApiErrorMessage error={playersError} />}
+                    <Text>{t('unavailable')}</Text>
+                </VStack>
+            </AbsoluteCenter>
+        )
     }
 
     const dailyWinners = data?.successCount ?? 0
     const dailyWinnerText = dailyWinners === 0 ? t('count0') : t('count', { count: dailyWinners })
 
-    const comparisons = selectedPlayers.map((player) => comparePlayer(player, playerOfTheDay))
-
-    const result = comparisons
+    const result = attempts
+        .map((attempt) => attempt.comparison)
         // si plus que 12 essais, couper le début pour la limite des posts de twitter
         .slice(-12)
         .reverse()
@@ -109,6 +126,8 @@ const Home = () => {
 
             <PrecisionDialog />
 
+            {error && <ApiErrorMessage error={error} />}
+
             {win ? (
                 <Text
                     fontSize="2xl"
@@ -125,16 +144,14 @@ const Home = () => {
 
             <Text>{dailyWinnerText}</Text>
 
-            <TablePlayers
-                playerOfTheDay={playerOfTheDay}
-                players={selectedPlayers}
-            />
+            <TablePlayers attempts={attempts} />
 
             <DialogWin
                 isOpen={isOpen}
                 onClose={closeDialog}
-                nbPlayers={selectedPlayers.length}
+                nbPlayers={attempts.length}
                 result={result}
+                playerOfTheDay={playerOfTheDay}
             />
         </VStack>
     )

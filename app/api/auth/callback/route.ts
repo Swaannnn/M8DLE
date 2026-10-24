@@ -1,7 +1,9 @@
 import { exchangeCodeForToken, getDiscordUser } from '@/lib/auth/discord'
 import { createSession } from '@/lib/auth/session'
+import { claimGuestGame } from '@/lib/auth/guestGame'
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
+import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function GET(request: NextRequest) {
     const redirection = new URL('/', request.url)
@@ -18,14 +20,12 @@ export async function GET(request: NextRequest) {
             where: { discordId: discordUser.id },
             update: {
                 username: discordUser.username,
-                discriminator: discordUser.discriminator,
                 avatar: discordUser.avatar,
                 email: discordUser.email,
             },
             create: {
                 discordId: discordUser.id,
                 username: discordUser.username,
-                discriminator: discordUser.discriminator,
                 avatar: discordUser.avatar,
                 email: discordUser.email,
             },
@@ -33,9 +33,17 @@ export async function GET(request: NextRequest) {
 
         await createSession(user.id, user.discordId, user.role)
 
+        // Rattachement de la partie invité en cours. Non bloquant : un échec ici ne doit
+        // jamais empêcher la connexion d'aboutir.
+        try {
+            await claimGuestGame(user.id)
+        } catch (error) {
+            console.error('Erreur lors du rattachement de la partie invité:', error)
+        }
+
         return NextResponse.redirect(redirection)
     } catch (error) {
-        console.error('Auth Error:', error)
-        return NextResponse.json({ error: 'Authentication failed' }, { status: 500 })
+        console.error(error)
+        return NextResponse.json({ error: ApiErrorKey.AUTH_FAILED }, { status: 500 })
     }
 }
