@@ -12,6 +12,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getTranslations } from 'next-intl/server'
 import { get } from '@vercel/global-config'
 import { connection } from 'next/server'
+import { getSession } from '@/lib/auth/session'
+import { Role } from '@prisma/client'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -72,8 +74,9 @@ async function getIsInMaintenance() {
 }
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+    const session = await getSession()
     await connection()
-    const maintenance = await getIsInMaintenance()
+    const maintenance = (await getIsInMaintenance()) && !(session?.role === Role.ADMIN)
 
     return (
         <html
