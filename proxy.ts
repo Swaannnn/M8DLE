@@ -12,7 +12,7 @@ export default async function middleware(req: NextRequest) {
 
     const isInMaintenanceMode = await get('isInMaintenanceMode')
 
-    if (isInMaintenanceMode) {
+    if (isInMaintenanceMode && process.env.NODE_ENV !== 'development') {
         return NextResponse.rewrite(new URL('/maintenance', req.url), { status: 503 })
     } else if (path === '/maintenance') {
         return NextResponse.redirect(new URL('/', req.url))
