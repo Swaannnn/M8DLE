@@ -11,7 +11,48 @@ import { useTranslations } from 'next-intl'
 import { Role } from '@prisma/client'
 import LoginDialog from './LoginDialog'
 
-const NavBar = () => {
+type NavItemProps = {
+    href?: string
+    label: string
+    disabled?: boolean
+    onClick?: () => void
+}
+
+const NavItem = ({ href, label, disabled, onClick }: NavItemProps) => {
+    if (disabled) {
+        return (
+            <Text
+                color="fg.muted"
+                cursor="not-allowed"
+                aria-disabled="true"
+            >
+                {label}
+            </Text>
+        )
+    }
+
+    if (href) {
+        return (
+            <Link
+                onClick={onClick}
+                asChild
+            >
+                <NextLink href={href}>{label}</NextLink>
+            </Link>
+        )
+    }
+
+    return (
+        <Link
+            onClick={onClick}
+            cursor="pointer"
+        >
+            {label}
+        </Link>
+    )
+}
+
+const NavBar = ({ maintenance = false }: { maintenance?: boolean }) => {
     const { user, loading } = useAuth()
     const isMobile = useBreakpointValue({ base: true, md: false })
     const t = useTranslations('header')
@@ -98,45 +139,43 @@ const NavBar = () => {
                                                     align="start"
                                                     w="100%"
                                                 >
-                                                    <Link
+                                                    <NavItem
+                                                        href="/"
+                                                        label={t('home')}
                                                         onClick={handleClose}
-                                                        asChild
-                                                    >
-                                                        <NextLink href="/">{t('home')}</NextLink>
-                                                    </Link>
-                                                    <Link
+                                                    />
+                                                    <NavItem
+                                                        href="/leaderboard"
+                                                        label={t('leaderboard')}
+                                                        disabled={maintenance}
                                                         onClick={handleClose}
-                                                        asChild
-                                                    >
-                                                        <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
-                                                    </Link>
+                                                    />
                                                     {user ? (
                                                         <>
                                                             {user.role === Role.ADMIN && (
-                                                                <Link
+                                                                <NavItem
+                                                                    href="/admin"
+                                                                    label={t('admin')}
+                                                                    disabled={maintenance}
                                                                     onClick={handleClose}
-                                                                    asChild
-                                                                >
-                                                                    <NextLink href="/admin">{t('admin')}</NextLink>
-                                                                </Link>
+                                                                />
                                                             )}
-                                                            <Link
+                                                            <NavItem
+                                                                href="/account"
+                                                                label={t('myAccount')}
+                                                                disabled={maintenance}
                                                                 onClick={handleClose}
-                                                                asChild
-                                                            >
-                                                                <NextLink href="/account">{t('myAccount')}</NextLink>
-                                                            </Link>
+                                                            />
                                                         </>
                                                     ) : (
-                                                        <Link
+                                                        <NavItem
+                                                            label={t('login')}
+                                                            disabled={maintenance}
                                                             onClick={() => {
                                                                 handleClose()
                                                                 setLoginOpen(true)
                                                             }}
-                                                            cursor="pointer"
-                                                        >
-                                                            {t('login')}
-                                                        </Link>
+                                                        />
                                                     )}
                                                 </VStack>
                                             </VStack>
@@ -147,24 +186,18 @@ const NavBar = () => {
                                                 borderTopWidth="1px"
                                                 w="100%"
                                             >
-                                                <Link
-                                                    onClick={handleClose}
-                                                    asChild
-                                                >
-                                                    <NextLink href="/credits">{t('credits')}</NextLink>
-                                                </Link>
-                                                <Link
-                                                    onClick={handleClose}
-                                                    asChild
-                                                >
-                                                    <NextLink href="/privacy">{t('privacyPolicy')}</NextLink>
-                                                </Link>
-                                                <Link
-                                                    onClick={handleClose}
-                                                    asChild
-                                                >
-                                                    <NextLink href="/legal">{t('legalNotice')}</NextLink>
-                                                </Link>
+                                                <NavItem
+                                                    href="/credits"
+                                                    label={t('credits')}
+                                                />
+                                                <NavItem
+                                                    href="/privacy"
+                                                    label={t('privacyPolicy')}
+                                                />
+                                                <NavItem
+                                                    href="/legal"
+                                                    label={t('legalNotice')}
+                                                />
                                                 <Text p="1rem 0">© 2026 M8DLE</Text>
                                             </VStack>
                                         </VStack>
@@ -175,27 +208,32 @@ const NavBar = () => {
                     </Drawer.Root>
                 ) : (
                     <HStack gap="1rem">
-                        <Link asChild>
-                            <NextLink href="/leaderboard">{t('leaderboard')}</NextLink>
-                        </Link>
+                        <NavItem
+                            href="/leaderboard"
+                            label={t('leaderboard')}
+                            disabled={maintenance}
+                        />
                         {user ? (
                             <>
                                 {user.role === Role.ADMIN && (
-                                    <Link asChild>
-                                        <NextLink href="/admin">{t('admin')}</NextLink>
-                                    </Link>
+                                    <NavItem
+                                        href="/admin"
+                                        label={t('admin')}
+                                        disabled={maintenance}
+                                    />
                                 )}
-                                <Link asChild>
-                                    <NextLink href="/account">{t('myAccount')}</NextLink>
-                                </Link>
+                                <NavItem
+                                    href="/account"
+                                    label={t('myAccount')}
+                                    disabled={maintenance}
+                                />
                             </>
                         ) : (
-                            <Link
+                            <NavItem
+                                label={t('login')}
+                                disabled={maintenance}
                                 onClick={() => setLoginOpen(true)}
-                                cursor="pointer"
-                            >
-                                {t('login')}
-                            </Link>
+                            />
                         )}
                         <LangSwitcher />
                         <ColorModeButton />
@@ -203,7 +241,7 @@ const NavBar = () => {
                 )}
             </HStack>
             <LoginDialog
-                open={loginOpen}
+                open={loginOpen && !maintenance}
                 onClose={() => setLoginOpen(false)}
             />
         </>

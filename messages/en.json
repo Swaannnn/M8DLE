@@ -200,6 +200,10 @@
         "lawTitle": "7. Governing Law",
         "lawText": "This site is governed by French law. In the event of a dispute, the French courts shall have exclusive jurisdiction."
     },
+    "maintenance": {
+        "title": "MAINTENANCE",
+        "message": "The site is currently under maintenance. We are working on improving it and will be back shortly!"
+    },
     "metadata": {
         "title": "M8DLE - Guess the Gentle Mates Player of the Day",
         "description": "M8DLE is a daily game inspired by Wordle and set in the Gentle Mates universe. Guess the player of the day and compare your score with the community.",

@@ -201,6 +201,10 @@
         "lawTitle": "7. Loi applicable",
         "lawText": "Le présent site est soumis au droit français. En cas de litige, les tribunaux français seront seuls compétents."
     },
+    "maintenance": {
+        "title": "MAINTENANCE",
+        "message": "Le site est actuellement en maintenance. Nous travaillons à son amélioration et serons de retour très bientôt !"
+    },
     "metadata": {
         "title": "M8DLE - Devine le joueur Gentle Mates du jour",
         "description": "M8DLE est un jeu quotidien inspiré de Wordle basé sur l'univers Gentle Mates. Devine le joueur du jour et compare ton score avec la communauté.",
