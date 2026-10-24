@@ -2,6 +2,8 @@
 import { decrypt } from '@/lib/auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { get } from '@vercel/global-config'
+import { getSession } from './lib/auth/session'
+import { Role } from '@prisma/client'
 
 // 1. Specify protected routes
 const protectedRoutes = ['/api/users']
@@ -10,9 +12,10 @@ export default async function middleware(req: NextRequest) {
     // 2. Check if the current route is protected
     const path = req.nextUrl.pathname
 
+    const session = await getSession()
     const isInMaintenanceMode = await get('isInMaintenanceMode')
 
-    if (isInMaintenanceMode && process.env.NODE_ENV !== 'development') {
+    if (isInMaintenanceMode && !(session?.role === Role.ADMIN)) {
         return NextResponse.rewrite(new URL('/maintenance', req.url), { status: 503 })
     } else if (path === '/maintenance') {
         return NextResponse.redirect(new URL('/', req.url))
