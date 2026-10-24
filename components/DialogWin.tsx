@@ -2,7 +2,7 @@
 
 import { Box, CloseButton, Dialog, HStack, IconButton, Portal, Text, VStack } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
-import Image from 'next/image'
+import Image from '@/components/ui/OptimizedImage'
 import type { Player } from '@/types/player'
 import LoginDiscord from './LoginDiscord'
 import { useAuth } from '@/hooks/use-auth'

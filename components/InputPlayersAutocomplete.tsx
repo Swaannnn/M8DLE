@@ -2,23 +2,29 @@
 
 import { Box, Input, VStack } from '@chakra-ui/react'
 import type { Player } from '@/types/player'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
 import { useTranslations } from 'next-intl'
 
 type Props = {
     availablePlayers: Player[]
     onPlayerSelected: (player: Player) => void
+    /** Essai en cours d'envoi : la saisie reste possible, mais pas la sélection. */
+    disabled?: boolean
 }
 
-const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected }: Props) => {
+const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected, disabled = false }: Props) => {
     const t = useTranslations('input')
 
     const [value, setValue] = useState('')
 
-    const filteredPlayers = availablePlayers.filter((p) => p.name.toLowerCase().includes(value.toLowerCase()))
+    const filteredPlayers = useMemo(() => {
+        const search = value.toLowerCase()
+        return availablePlayers.filter((p) => p.name.toLowerCase().includes(search))
+    }, [availablePlayers, value])
 
     const selectPlayer = (player: Player) => {
+        if (disabled) return
         onPlayerSelected(player)
         setValue('')
     }
@@ -74,7 +80,8 @@ const InputPlayersAutocomplete = ({ availablePlayers, onPlayerSelected }: Props)
                                 border="solid 1px #ccc"
                                 borderRadius="0.2rem"
                                 bg="bg"
-                                cursor="pointer"
+                                cursor={disabled ? 'progress' : 'pointer'}
+                                opacity={disabled ? 0.5 : 1}
                             >
                                 {player.name}
                             </Box>

@@ -1,5 +1,5 @@
 import { Box, HStack, Table, Text, IconButton } from '@chakra-ui/react'
-import Image from 'next/image'
+import Image from '@/components/ui/OptimizedImage'
 import { LuPencil, LuTrash } from 'react-icons/lu'
 import { useTranslations } from 'next-intl'
 import type { Game } from '@prisma/client'
