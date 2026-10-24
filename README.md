@@ -74,7 +74,7 @@ npm run lint
 
 ## Données et logique du jeu
 
-- Les joueurs sont stockés en base (Prisma) ; data/players.json n'est qu'un jeu de données d'amorçage, il n'est plus lu par l'application.
+- Les joueurs sont stockés en base (Prisma).
 - Le joueur du jour est tiré au sort côté serveur à la première demande de la journée, puis persisté dans la table PlayerOtd (voir utils/player/playerOfTheDay.ts). Le tirage n'est volontairement pas reproductible côté client, et écarte les joueurs déjà sortis dans les 7 derniers jours.
 - Les essais sont persistés en base pour tous, invités compris (session invité via cookie) ; la partie invité est rattachée au compte à la connexion.
 
