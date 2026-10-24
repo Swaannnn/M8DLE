@@ -8,6 +8,11 @@ import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function GET() {
     try {
+        const session = await getSession()
+        if (!session || session.role != Role.ADMIN) {
+            return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
+        }
+
         const users = await prisma.user.findMany({
             orderBy: { createdAt: 'desc' },
         })

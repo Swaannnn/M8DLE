@@ -42,6 +42,7 @@ model DailyM8DLEResult {
 
   @@unique([userId, date])
   @@unique([guestId, date])
+  @@index([date, success])
 }
 
 model Attempt {
@@ -57,6 +58,8 @@ model Attempt {
   createdAt DateTime @default(now())
 
   @@unique([dailyResultId, attemptNumber])
+  @@unique([dailyResultId, playerId])
+  @@index([playerId])
 }
 
 model Game {
@@ -86,6 +89,8 @@ model OrganizationPlayer {
 
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
+
+  @@index([playerId])
 }
 
 model Player {
@@ -113,6 +118,7 @@ model PlayerOtd {
   playerId String
 
   @@unique([date])
+  @@index([playerId])
 }
 
 model AppConfig {

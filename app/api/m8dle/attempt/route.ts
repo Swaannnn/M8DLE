@@ -7,9 +7,9 @@ import { getGameDate } from '@/utils/dateUtils'
 import { isUniqueConstraintViolation } from '@/lib/prismaErrors'
 import { AttemptDto } from '@/dto/AttemptDto'
 import { ZodError } from 'zod'
-import { getOrGeneratePlayerOfTheDay } from '@/utils/player/playerOfTheDay'
+import { getPlayerOfTheDay } from '@/utils/player/playerOfTheDay'
+import { getCatalogueWith } from '@/utils/player/catalogue'
 import { comparePlayer } from '@/utils/player/compare'
-import { playerWithRelationsInclude } from '@/types/player'
 import type { AttemptResponse } from '@/types/m8dleStatus'
 import ApiErrorKey from '@/constants/apiErrorKeys'
 
@@ -20,60 +20,68 @@ type RecordAttemptResult =
     | { errorKey: (typeof ApiErrorKey)[keyof typeof ApiErrorKey]; status: number }
 
 /**
- * Lit l'état du jour puis écrit la tentative. En cas d'écriture concurrente, la contrainte
- * unique rejette la nôtre : on relit l'état réel et on retente.
+ * Écrit la tentative en deux allers-retours vers la base : une lecture (deux requêtes en
+ * parallèle), puis une écriture. En cas d'écriture concurrente, une contrainte unique rejette
+ * la nôtre : on relit l'état réel et on retente.
  */
 async function recordAttempt(owner: GameOwner, gameDate: Date, playerId: string, isWin: boolean) {
+    const dailyResultWhere = { ...owner, date: gameDate }
+
     for (let retry = 0; retry < MAX_ATTEMPT_RETRIES; retry++) {
-        const dailyResult = await prisma.dailyM8DLEResult.findFirst({
-            where: { ...owner, date: gameDate },
-            select: {
-                id: true,
-                success: true,
-                attempts: {
-                    select: { playerId: true, attemptNumber: true },
-                    orderBy: { attemptNumber: 'asc' },
-                },
-            },
-        })
+        const [dailyResult, attempts] = await Promise.all([
+            prisma.dailyM8DLEResult.findFirst({
+                where: dailyResultWhere,
+                select: { id: true, success: true },
+            }),
+            prisma.attempt.findMany({
+                where: { dailyResult: dailyResultWhere },
+                select: { playerId: true, attemptNumber: true },
+            }),
+        ])
 
         try {
-            if (dailyResult) {
-                if (dailyResult.success) {
-                    return { errorKey: ApiErrorKey.ALREADY_SUCCESS, status: 400 } satisfies RecordAttemptResult
-                }
-
-                if (dailyResult.attempts.some((a) => a.playerId === playerId)) {
-                    return { errorKey: ApiErrorKey.ALREADY_ATTEMPTED, status: 400 } satisfies RecordAttemptResult
-                }
-
-                await prisma.dailyM8DLEResult.update({
-                    where: { id: dailyResult.id },
+            if (!dailyResult) {
+                await prisma.dailyM8DLEResult.create({
                     data: {
+                        ...dailyResultWhere,
                         success: isWin,
-                        attempts: {
-                            create: {
-                                playerId,
-                                attemptNumber:
-                                    (dailyResult.attempts[dailyResult.attempts.length - 1]?.attemptNumber ?? 0) + 1,
-                            },
-                        },
+                        attempts: { create: { attemptNumber: 1, playerId } },
                     },
+                    select: { id: true },
                 })
 
-                return { success: isWin, created: false } satisfies RecordAttemptResult
+                return { success: isWin, created: true } satisfies RecordAttemptResult
             }
 
-            await prisma.dailyM8DLEResult.create({
-                data: {
-                    ...owner,
-                    date: gameDate,
-                    success: isWin,
-                    attempts: { create: { attemptNumber: 1, playerId } },
-                },
-            })
+            if (dailyResult.success) {
+                return { errorKey: ApiErrorKey.ALREADY_SUCCESS, status: 400 } satisfies RecordAttemptResult
+            }
 
-            return { success: isWin, created: true } satisfies RecordAttemptResult
+            if (attempts.some((a) => a.playerId === playerId)) {
+                return { errorKey: ApiErrorKey.ALREADY_ATTEMPTED, status: 400 } satisfies RecordAttemptResult
+            }
+
+            const attempt = {
+                playerId,
+                attemptNumber: Math.max(0, ...attempts.map((a) => a.attemptNumber)) + 1,
+            }
+
+            if (isWin) {
+                // `success` n'est écrit qu'à la victoire : le trigger de statistiques sur
+                // DailyM8DLEResult ne se déclenche pas à chaque tentative.
+                await prisma.dailyM8DLEResult.update({
+                    where: { id: dailyResult.id },
+                    data: { success: true, attempts: { create: attempt } },
+                    select: { id: true },
+                })
+            } else {
+                await prisma.attempt.create({
+                    data: { ...attempt, dailyResultId: dailyResult.id },
+                    select: { id: true },
+                })
+            }
+
+            return { success: isWin, created: false } satisfies RecordAttemptResult
         } catch (error) {
             if (!isUniqueConstraintViolation(error)) throw error
         }
@@ -95,13 +103,12 @@ export async function POST(req: NextRequest) {
         const owner = await resolveGameOwner()
         const gameDate = getGameDate()
 
-        const [playerOtd, attemptedPlayer] = await Promise.all([
-            getOrGeneratePlayerOfTheDay(gameDate),
-            prisma.player.findUnique({
-                where: { id: payload.attempt },
-                include: playerWithRelationsInclude,
-            }),
+        // Joueur du jour et joueur tenté viennent du cache de l'instance : aucune requête à chaud.
+        const [playerOtd, catalogue] = await Promise.all([
+            getPlayerOfTheDay(gameDate),
+            getCatalogueWith([payload.attempt]),
         ])
+        const attemptedPlayer = catalogue.get(payload.attempt)
 
         if (!playerOtd || !attemptedPlayer) {
             return NextResponse.json({ error: ApiErrorKey.NOT_FOUND }, { status: 404 })
