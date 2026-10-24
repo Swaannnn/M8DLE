@@ -10,6 +10,8 @@ import { Toaster } from '@/components/ui/toaster'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getTranslations } from 'next-intl/server'
+import { get } from '@vercel/global-config'
+import { connection } from 'next/server'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -61,7 +63,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 }
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+async function getIsInMaintenance() {
+    try {
+        return (await get<boolean>('isInMaintenanceMode')) === true
+    } catch {
+        return false
+    }
+}
+
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+    await connection()
+    const maintenance = await getIsInMaintenance()
+
     return (
         <html
             lang="fr"
@@ -77,7 +90,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                             color="fg"
                             minHeight="calc(100vh)"
                         >
-                            <NavBar />
+                            <NavBar maintenance={maintenance} />
                             <main style={{ paddingBottom: '4rem', paddingTop: '6rem' }}>{children}</main>
                             <Footer />
                         </Box>

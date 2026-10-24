@@ -1,5 +1,7 @@
+// proxy.ts
 import { decrypt } from '@/lib/auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+import { get } from '@vercel/global-config'
 
 // 1. Specify protected routes
 const protectedRoutes = ['/api/users']
@@ -7,6 +9,15 @@ const protectedRoutes = ['/api/users']
 export default async function middleware(req: NextRequest) {
     // 2. Check if the current route is protected
     const path = req.nextUrl.pathname
+
+    const isInMaintenanceMode = await get('isInMaintenanceMode')
+
+    if (isInMaintenanceMode && process.env.NODE_ENV !== 'development') {
+        return NextResponse.rewrite(new URL('/maintenance', req.url), { status: 503 })
+    } else if (path === '/maintenance') {
+        return NextResponse.redirect(new URL('/', req.url))
+    }
+
     const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route))
 
     if (isProtectedRoute) {
@@ -25,5 +36,5 @@ export default async function middleware(req: NextRequest) {
 
 // Routes Middleware should not run on
 export const config = {
-    matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+    matcher: ['/((?!_next/static|_next/image|favicon.ico|credits|privacy|legal).*)'],
 }
