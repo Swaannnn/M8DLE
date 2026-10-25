@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr'
 import type { Player } from '@/types/player'
 import { type ApiError, fetcher } from '@/utils/apiClient'
@@ -16,11 +16,7 @@ export type PlayedAttempt = {
     comparison: PlayerComparison
 }
 
-const EMPTY_STATE = {
-    win: false,
-    attempts: [] as PlayedAttempt[],
-    playerOfTheDay: null as Player | null,
-}
+const EMPTY_STATUS: M8dleStatus = { success: false, attempts: [], playerOfTheDay: null }
 
 export const useM8dleStatus = () => {
     const { loggedOut, loading: authLoading } = useAuth()
@@ -29,98 +25,99 @@ export const useM8dleStatus = () => {
         error: playersError,
         isLoading: playersLoading,
     } = useSWR<Player[], ApiError>('/api/players', fetcher)
-    // Référence stable : sinon un échec de /api/players recrée un tableau à chaque rendu et
-    // relance l'effet en boucle.
-    const allPlayers = useMemo(() => players ?? [], [players])
-    const [state, setState] = useState(EMPTY_STATE)
-    const [statusLoading, setStatusLoading] = useState(true)
+    // Le statut part en même temps que le catalogue : le serveur résout lui-même qui joue
+    // depuis les cookies, il n'a besoin ni de /api/auth/me ni de /api/players.
+    const {
+        data: status,
+        error: statusError,
+        isLoading: statusLoading,
+        mutate: mutateStatus,
+    } = useSWR<M8dleStatus, ApiError>('/api/m8dle/status', fetcher)
+    const [pendingPlayer, setPendingPlayer] = useState<Player | null>(null)
+    // Verrou synchrone : l'état React ne serait vu qu'au rendu suivant, trop tard pour un double clic.
+    const isSubmitting = useRef(false)
     const showApiErrorToast = useShowApiErrorToast()
+
+    useEffect(() => {
+        if (statusError) console.error('Erreur lors de la récupération du statut:', statusError)
+    }, [statusError])
+
+    // L'identité change sans navigation complète (déconnexion) : on relit le statut. La
+    // connexion, elle, recharge la page et rattache la partie invité côté serveur
+    // (voir lib/auth/guestGame.ts).
+    const lastLoggedOut = useRef<boolean | null>(null)
+    useEffect(() => {
+        if (authLoading) return
+        if (lastLoggedOut.current !== null && lastLoggedOut.current !== loggedOut) mutateStatus()
+        lastLoggedOut.current = loggedOut
+    }, [loggedOut, authLoading, mutateStatus])
+
+    // Référence stable : sinon un échec de /api/players recrée un tableau à chaque rendu.
+    const allPlayers = useMemo(() => players ?? [], [players])
+    const currentStatus = status ?? EMPTY_STATUS
+
+    const attempts = useMemo(() => {
+        const playersById = new Map(allPlayers.map((player) => [player.id, player]))
+        return currentStatus.attempts.flatMap(({ playerId, comparison }): PlayedAttempt[] => {
+            const player = playersById.get(playerId)
+            return player ? [{ player, comparison }] : []
+        })
+    }, [allPlayers, currentStatus.attempts])
 
     const availablePlayers = useMemo(
         () =>
-            filterPlayersNotInAttempts(
-                allPlayers,
-                state.attempts.map((attempt) => attempt.player.id)
-            ),
-        [allPlayers, state.attempts]
+            filterPlayersNotInAttempts(allPlayers, [
+                ...currentStatus.attempts.map((attempt) => attempt.playerId),
+                ...(pendingPlayer ? [pendingPlayer.id] : []),
+            ]),
+        [allPlayers, currentStatus.attempts, pendingPlayer]
     )
 
-    // Le serveur résout lui-même qui joue depuis les cookies ; `loggedOut` ne sert qu'à relire
-    // le statut quand l'identité change. Le rattachement de la partie invité se fait à la
-    // création de session (voir lib/auth/guestGame.ts).
-    useEffect(() => {
-        if (authLoading || playersLoading) return
-
-        let cancelled = false
-
-        const loadStatus = async () => {
-            setStatusLoading(true)
-
-            let loaded = EMPTY_STATE
-
-            try {
-                const status = await fetcher<M8dleStatus>('/api/m8dle/status')
-                const playersById = new Map(allPlayers.map((player) => [player.id, player]))
-
-                loaded = {
-                    win: status.success,
-                    playerOfTheDay: status.playerOfTheDay,
-                    attempts: status.attempts.flatMap(({ playerId, comparison }) => {
-                        const player = playersById.get(playerId)
-                        return player ? [{ player, comparison }] : []
-                    }),
-                }
-            } catch (error) {
-                console.error('Erreur lors de la récupération du statut:', error)
-            }
-
-            if (cancelled) return
-            setState(loaded)
-            setStatusLoading(false)
-        }
-
-        loadStatus().catch(console.error)
-
-        return () => {
-            cancelled = true
-        }
-    }, [loggedOut, authLoading, allPlayers, playersLoading])
-
     /**
-     * Ajoute un essai. Les indices et la victoire viennent du serveur, seule source fiable.
-     * En cas d'échec l'essai n'est pas affiché et l'erreur part en toast : l'appelant n'attend
-     * pas la promesse.
+     * Ajoute un essai. Le joueur est affiché tout de suite en attente ; les indices et la
+     * victoire viennent du serveur, seule source fiable. En cas d'échec l'erreur part en toast
+     * et le statut est relu pour rester aligné sur le serveur : l'appelant n'attend pas la promesse.
      */
     const addAttempt = useCallback(
         async (player: Player) => {
-            let result: AttemptResponse
+            if (isSubmitting.current) return
+            isSubmitting.current = true
+            setPendingPlayer(player)
+
             try {
-                result = await fetcher<AttemptResponse>('/api/m8dle/attempt', {
+                const result = await fetcher<AttemptResponse>('/api/m8dle/attempt', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ attempt: player.id }),
                 })
+
+                await mutateStatus(
+                    (prev = EMPTY_STATUS) => ({
+                        success: result.success,
+                        playerOfTheDay: result.playerOfTheDay,
+                        attempts: [...prev.attempts, { playerId: player.id, comparison: result.comparison }],
+                    }),
+                    { revalidate: false }
+                )
             } catch (error) {
                 showApiErrorToast(error)
-                return
+                mutateStatus()
+            } finally {
+                isSubmitting.current = false
+                setPendingPlayer(null)
             }
-
-            setState((prev) => ({
-                win: result.success,
-                playerOfTheDay: result.playerOfTheDay,
-                attempts: [...prev.attempts, { player, comparison: result.comparison }],
-            }))
         },
-        [showApiErrorToast]
+        [mutateStatus, showApiErrorToast]
     )
 
     return {
         allPlayers,
         playersError,
-        attempts: state.attempts,
+        attempts,
         availablePlayers,
-        win: state.win,
-        playerOfTheDay: state.playerOfTheDay,
+        pendingPlayer,
+        win: currentStatus.success,
+        playerOfTheDay: currentStatus.playerOfTheDay,
         addAttempt,
         statusLoading: statusLoading || playersLoading,
     }

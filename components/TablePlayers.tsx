@@ -1,8 +1,9 @@
 'use client'
 
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { memo } from 'react'
 import ReactCountryFlag from 'react-country-flag'
-import Image from 'next/image'
+import Image from '@/components/ui/OptimizedImage'
 import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu'
 import { motion, type Variants } from 'framer-motion'
 import { TABLE_PLAYERS_WIDTH } from '@/constants/sizes'
@@ -12,6 +13,7 @@ import { useTranslations } from 'next-intl'
 import { getCurrentOrganization, getPlayerJoinYear, getPreviousOrganization } from '@/utils/player/compare'
 import { getAge } from '@/utils/dateUtils'
 import type { PlayedAttempt } from '@/hooks/use-m8dle-status'
+import type { Player } from '@/types/player'
 
 const containerVariants: Variants = {
     hidden: {},
@@ -138,11 +140,28 @@ const RowItem = ({ isValid = false, children }: RowItemProps) => {
     )
 }
 
+const PlayerPhoto = ({ player }: { player: Player }) => (
+    <Box
+        position="relative"
+        w="120px"
+        h="120px"
+    >
+        <Image
+            src={player.imageUrl}
+            alt={player.name}
+            fill
+            sizes="120px"
+            style={{ objectFit: 'contain' }}
+        />
+    </Box>
+)
+
 type TablePlayersProps = {
     attempts: PlayedAttempt[]
+    pendingPlayer?: Player | null
 }
 
-const TablePlayers = ({ attempts }: TablePlayersProps) => {
+const TablePlayers = ({ attempts, pendingPlayer }: TablePlayersProps) => {
     const t = useTranslations('tablePlayers')
 
     return (
@@ -177,19 +196,7 @@ const TablePlayers = ({ attempts }: TablePlayersProps) => {
                         >
                             <HStack key={player.id}>
                                 <RowItem isValid={cmp.player}>
-                                    <Box
-                                        position="relative"
-                                        w="120px"
-                                        h="120px"
-                                    >
-                                        <Image
-                                            src={player.imageUrl}
-                                            alt={player.name}
-                                            fill
-                                            sizes="120px"
-                                            style={{ objectFit: 'contain' }}
-                                        />
-                                    </Box>
+                                    <PlayerPhoto player={player} />
                                 </RowItem>
                                 <RowItem isValid={cmp.game}>
                                     {player.game?.imageUrl ? (
@@ -286,4 +293,5 @@ const TablePlayers = ({ attempts }: TablePlayersProps) => {
     )
 }
 
-export default TablePlayers
+// La page se re-rend sans que les essais changent (fin de chargement, dialogue de victoire...).
+export default memo(TablePlayers)

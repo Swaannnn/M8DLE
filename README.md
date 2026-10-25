@@ -61,13 +61,12 @@ npm run lint
 /app                Pages et API routes (App Router Next.js)
 /components         UI et composants métier
 /constants          Constantes globales
-/data               Données locales (joueurs, images, etc.)
 /hooks              Hooks client (auth, statut du jeu)
 /i18n               Configuration de l'internationalisation
 /lib                Accès DB, auth et polices
 /messages           fichiers de traductions (en, fr)
 /prisma             Schema + migrations
-/public             Assets (images, icons)
+/public             Assets (avatar par défaut, image de partage)
 /types              Types partagés
 /utils              Helpers (date, client API, joueurs, etc.)
 ```
@@ -76,6 +75,7 @@ npm run lint
 
 - Les joueurs sont stockés en base (Prisma).
 - Le joueur du jour est tiré au sort côté serveur à la première demande de la journée, puis persisté dans la table PlayerOtd (voir utils/player/playerOfTheDay.ts). Le tirage n'est volontairement pas reproductible côté client, et écarte les joueurs déjà sortis dans les 7 derniers jours.
+- Le catalogue des joueurs et le joueur du jour sont mis en cache en mémoire par instance serveur (voir utils/player/catalogue.ts) : une modification admin est visible sous 60 s sur les autres instances.
 - Les essais sont persistés en base pour tous, invités compris (session invité via cookie) ; la partie invité est rattachée au compte à la connexion.
 
 ## Déploiement
@@ -91,7 +91,7 @@ Un Cron Job Vercel (voir vercel.json) nettoie quotidiennement les parties invit�
 ## À améliorer
 
 - Si vous avez de meilleures photos, n'hésitez pas à proposer des remplacements.
-- Si vous avez des images manquantes, elles sont les bienvenues dans public/images/players.
+- Si vous avez des images manquantes, elles sont les bienvenues (elles sont hébergées sur Cloudinary et ajoutées depuis l'administration).
 
 Photos à trouver ou à remplacer si vous en avez :
 

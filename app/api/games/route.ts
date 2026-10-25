@@ -6,6 +6,7 @@ import { Role } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 import ApiErrorKey from '@/constants/apiErrorKeys'
+import { invalidateCatalogue } from '@/utils/player/catalogue'
 
 export async function GET() {
     try {
@@ -62,6 +63,7 @@ export async function PATCH(req: NextRequest) {
             },
         })
 
+        invalidateCatalogue()
         return NextResponse.json(updated)
     } catch (error) {
         if (error instanceof ZodError) {
@@ -96,6 +98,7 @@ export async function DELETE(req: NextRequest) {
         })
 
         await prisma.game.delete({ where: { id } })
+        invalidateCatalogue()
 
         return NextResponse.json({ success: true })
     } catch (error) {

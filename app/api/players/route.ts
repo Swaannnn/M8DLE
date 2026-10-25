@@ -6,8 +6,10 @@ import { Role } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 import ApiErrorKey from '@/constants/apiErrorKeys'
+import { getCatalogue, invalidateCatalogue } from '@/utils/player/catalogue'
 
 async function setLastPlayerUpdate() {
+    invalidateCatalogue()
     await prisma.appConfig.upsert({
         where: { key: 'lastPlayerUpdate' },
         update: { value: new Date().toISOString() },
@@ -17,22 +19,12 @@ async function setLastPlayerUpdate() {
 
 export async function GET() {
     try {
-        const players = await prisma.player.findMany({
-            orderBy: { id: 'asc' },
-            include: {
-                game: true,
-                organizationPlayers: {
-                    include: {
-                        organization: true,
-                    },
-                    orderBy: {
-                        start: 'asc',
-                    },
-                },
-            },
-        })
+        // Les admins relisent la base pour voir leurs modifications aussitôt, quelle que soit l'instance.
+        const session = await getSession()
+        if (session?.role === Role.ADMIN) invalidateCatalogue()
 
-        return NextResponse.json(players)
+        const players = await getCatalogue()
+        return NextResponse.json([...players.values()])
     } catch (error) {
         console.error(error)
         return NextResponse.json({ error: ApiErrorKey.FETCH_FAILED }, { status: 500 })
