@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Role } from '@prisma/client'
 import { prisma } from '@/lib/db'
-import { getSession } from '@/lib/auth/session'
+import { getCurrentAdmin } from '@/lib/auth/currentUser'
 import { resolveGameOwner, type GameOwner } from '@/lib/auth/gameOwner'
 import { getGameDate } from '@/utils/dateUtils'
 import { isUniqueConstraintViolation } from '@/lib/prismaErrors'
@@ -141,8 +140,7 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
     try {
-        const session = await getSession()
-        if (!session?.userId || session?.role !== Role.ADMIN) {
+        if (!(await getCurrentAdmin())) {
             return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 

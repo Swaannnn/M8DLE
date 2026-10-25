@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
             },
         })
 
-        await createSession(user.id, user.discordId, user.role)
+        await createSession(user.id, user.discordId, user.role, user.sessionVersion)
 
         // Rattachement de la partie invité en cours. Non bloquant : un échec ici ne doit
         // jamais empêcher la connexion d'aboutir.

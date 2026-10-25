@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { getSession } from '@/lib/auth/session'
+import { getCurrentUser } from '@/lib/auth/currentUser'
 import { getFirstDayOfMonth } from '@/utils/dateUtils'
 import ApiErrorKey from '@/constants/apiErrorKeys'
 
 export async function GET(request: Request) {
     try {
-        const session = await getSession()
-        if (!session || !session.userId) {
+        const user = await getCurrentUser()
+        if (!user) {
             return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 
         const results = await prisma.dailyM8DLEResult.findMany({
             where: {
-                userId: session.userId,
+                userId: user.id,
                 success: true,
                 date: {
                     gte: firstDayOfMonth,

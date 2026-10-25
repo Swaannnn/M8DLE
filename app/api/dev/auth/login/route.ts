@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
                 username: true,
                 discordId: true,
                 role: true,
+                sessionVersion: true,
             },
         })
 
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: ApiErrorKey.NOT_FOUND }, { status: 404 })
         }
 
-        await createSession(id, user.discordId, user.role)
+        await createSession(id, user.discordId, user.role, user.sessionVersion)
 
         // Même rattachement de la partie invité que sur la connexion Discord, pour que le
         // comportement en développement soit identique à la production.
