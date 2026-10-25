@@ -15,41 +15,32 @@ import { useApiErrorToast } from '@/hooks/use-api-error-toast'
 import { desirableCalligraphy, tuskerGrotesk } from '@/lib/fonts'
 import { useTranslations } from 'next-intl'
 import DialogWin from '@/components/DialogWin'
-import { useEffect, useState } from 'react'
-import { getNextGameDate, getTimeLeft } from '@/utils/dateUtils'
+import { useEffect } from 'react'
+import Countdown from '@/components/Countdown'
 import { useWinDialog } from '@/hooks/use-win-dialog'
 import { toEmojiRow } from '@/utils/player/compare'
 
 const Home = () => {
     const { loading } = useAuth()
-    const { allPlayers, playersError, attempts, availablePlayers, win, playerOfTheDay, addAttempt, statusLoading } =
-        useM8dleStatus()
+    const {
+        allPlayers,
+        playersError,
+        attempts,
+        availablePlayers,
+        pendingPlayer,
+        win,
+        playerOfTheDay,
+        addAttempt,
+        statusLoading,
+    } = useM8dleStatus()
     const { data, error, isLoading, mutate } = useSWR<{ successCount: number }, ApiError>(
         '/api/m8dle/dailywinners',
         fetcher
     )
     const t = useTranslations('home')
-    const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(getNextGameDate().getTime()))
     const { isOpen, closeDialog } = useWinDialog(win)
 
     useApiErrorToast(error)
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTimeLeft(getTimeLeft(getNextGameDate().getTime()))
-        }, 1000)
-
-        return () => clearInterval(interval)
-    }, [])
-
-    const totalSeconds = Math.max(0, Math.floor(timeLeft / 1000))
-    const hours = Math.floor(totalSeconds / 3600)
-        .toString()
-        .padStart(2, '0')
-    const minutes = Math.floor((totalSeconds % 3600) / 60)
-        .toString()
-        .padStart(2, '0')
-    const seconds = (totalSeconds % 60).toString().padStart(2, '0')
 
     useEffect(() => {
         if (win) {
@@ -119,10 +110,7 @@ const Home = () => {
                 M8dle
             </Text>
 
-            <Text>
-                {t('nextDraw')}
-                {` ${hours}:${minutes}:${seconds}`}
-            </Text>
+            <Countdown />
 
             <PrecisionDialog />
 
@@ -139,12 +127,16 @@ const Home = () => {
                 <InputPlayersAutocomplete
                     onPlayerSelected={addAttempt}
                     availablePlayers={availablePlayers}
+                    disabled={pendingPlayer !== null}
                 />
             )}
 
             <Text>{dailyWinnerText}</Text>
 
-            <TablePlayers attempts={attempts} />
+            <TablePlayers
+                attempts={attempts}
+                pendingPlayer={pendingPlayer}
+            />
 
             <DialogWin
                 isOpen={isOpen}

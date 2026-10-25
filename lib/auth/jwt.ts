@@ -1,4 +1,4 @@
-import { SignJWT, jwtVerify } from 'jose'
+import { SignJWT, errors, jwtVerify } from 'jose'
 
 const SECRET_KEY = process.env.AUTH_SECRET
 const encodedKey = new TextEncoder().encode(SECRET_KEY)
@@ -26,7 +26,8 @@ export async function decrypt(session: string | undefined) {
         })
         return payload as unknown as SessionPayload
     } catch (error) {
-        console.error('JWT verification failed:', error)
+        // Jeton expiré ou invalide : cas normal, le visiteur repasse simplement en anonyme.
+        if (!(error instanceof errors.JOSEError)) console.error('JWT verification failed:', error)
         return null
     }
 }

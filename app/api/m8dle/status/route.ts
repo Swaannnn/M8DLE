@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { findGameOwner } from '@/lib/auth/gameOwner'
 import { getGameDate } from '@/utils/dateUtils'
-import { getOrGeneratePlayerOfTheDay } from '@/utils/player/playerOfTheDay'
+import { getPlayerOfTheDay } from '@/utils/player/playerOfTheDay'
+import { getCatalogueWith } from '@/utils/player/catalogue'
 import { comparePlayer } from '@/utils/player/compare'
-import { playerWithRelationsInclude } from '@/types/player'
 import type { M8dleStatus } from '@/types/m8dleStatus'
 import ApiErrorKey from '@/constants/apiErrorKeys'
 
@@ -17,30 +17,30 @@ export async function GET() {
         if (!owner) return NextResponse.json(EMPTY_STATUS)
 
         const gameDate = getGameDate()
-        const dailyResult = await prisma.dailyM8DLEResult.findFirst({
-            where: { ...owner, date: gameDate },
-            select: {
-                success: true,
-                attempts: {
-                    select: { playerId: true },
-                    orderBy: { attemptNumber: 'asc' },
-                },
-            },
-        })
+        const dailyResultWhere = { ...owner, date: gameDate }
 
-        if (!dailyResult || dailyResult.attempts.length === 0) {
+        const [dailyResult, attempts] = await Promise.all([
+            prisma.dailyM8DLEResult.findFirst({
+                where: dailyResultWhere,
+                select: { success: true },
+            }),
+            prisma.attempt.findMany({
+                where: { dailyResult: dailyResultWhere },
+                select: { playerId: true },
+                orderBy: { attemptNumber: 'asc' },
+            }),
+        ])
+
+        if (!dailyResult || attempts.length === 0) {
             return NextResponse.json(dailyResult ? { ...EMPTY_STATUS, success: dailyResult.success } : EMPTY_STATUS)
         }
 
-        const playerOfTheDay = await getOrGeneratePlayerOfTheDay(gameDate)
+        const attemptedIds = attempts.map((a) => a.playerId)
+        const [playerOfTheDay, playersById] = await Promise.all([
+            getPlayerOfTheDay(gameDate),
+            getCatalogueWith(attemptedIds),
+        ])
         if (!playerOfTheDay) return NextResponse.json(EMPTY_STATUS)
-
-        const attemptedIds = dailyResult.attempts.map((a) => a.playerId)
-        const attemptedPlayers = await prisma.player.findMany({
-            where: { id: { in: attemptedIds } },
-            include: playerWithRelationsInclude,
-        })
-        const playersById = new Map(attemptedPlayers.map((player) => [player.id, player]))
 
         const status: M8dleStatus = {
             success: dailyResult.success,
