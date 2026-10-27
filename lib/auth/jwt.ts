@@ -7,6 +7,7 @@ export type SessionPayload = {
     userId: string
     discordId: string
     role: string
+    sessionVersion?: number
     expiresAt: Date
 }
 

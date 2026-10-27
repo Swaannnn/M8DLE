@@ -49,6 +49,7 @@
         "accountFullCaps": "MON COMPTE",
         "memberSince": "Membre depuis le",
         "logout": "Se déconnecter",
+        "logoutAll": "Déconnecter tous les appareils",
         "myVictories": "Mes victoires en",
         "winstreak": "Série de victoires",
         "winstreakDays": "{count, plural, =0 {0 jour} one {# jour} other {# jours}}"
