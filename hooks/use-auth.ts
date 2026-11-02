@@ -13,18 +13,22 @@ export function useAuth() {
     const loading = isLoading
     const loggedOut = Boolean(error) || !user
 
-    const logout = async () => {
-        await fetch('/api/auth/logout', { method: 'POST' })
+    const endSession = async (endpoint: string) => {
+        await fetch(endpoint, { method: 'POST' })
         mutate(null, false)
         router.push('/')
         router.refresh()
     }
+
+    const logout = () => endSession('/api/auth/logout')
+    const logoutAll = () => endSession('/api/auth/logout-all')
 
     return {
         user,
         loading,
         loggedOut,
         logout,
+        logoutAll,
         mutate,
     }
 }

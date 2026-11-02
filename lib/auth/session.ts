@@ -3,8 +3,8 @@ import { cookies } from 'next/headers'
 import { encrypt, decrypt } from '@/lib/auth/jwt'
 import { redirect } from 'next/navigation'
 
-export async function createSession(userId: string, discordId: string, role: string) {
-    const session = await encrypt({ userId, discordId, role })
+export async function createSession(userId: string, discordId: string, role: string, sessionVersion: number) {
+    const session = await encrypt({ userId, discordId, role, sessionVersion })
     const cookieStore = await cookies()
 
     cookieStore.set('session', session, {

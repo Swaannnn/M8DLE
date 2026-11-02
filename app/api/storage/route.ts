@@ -1,7 +1,6 @@
 import ApiErrorKey from '@/constants/apiErrorKeys'
-import { getSession } from '@/lib/auth/session'
+import { getCurrentAdmin } from '@/lib/auth/currentUser'
 import { ALLOWED_IMAGE_MIME_TYPES, MAX_IMAGE_SIZE, uploadImage } from '@/lib/storage/cloudinary'
-import { Role } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -10,8 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 export async function POST(req: NextRequest) {
     try {
-        const session = await getSession()
-        if (!session || session.role != Role.ADMIN) {
+        if (!(await getCurrentAdmin())) {
             return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 

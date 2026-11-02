@@ -17,6 +17,8 @@ model User {
   email     String?
   role      Role    @default(USER)
 
+  sessionVersion Int @default(0)
+
   totalWins       Int   @default(0)
   totalAttempts   Int   @default(0)
   averageAttempts Float @default(0)

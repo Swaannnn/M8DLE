@@ -1,8 +1,7 @@
 import { CreatePlayerDto } from '@/dto/CreatePlayerDto'
 import { UpdatePlayerDto } from '@/dto/UpdatePlayerDto'
-import { getSession } from '@/lib/auth/session'
+import { getCurrentAdmin } from '@/lib/auth/currentUser'
 import { prisma } from '@/lib/db'
-import { Role } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 import ApiErrorKey from '@/constants/apiErrorKeys'
@@ -20,8 +19,7 @@ async function setLastPlayerUpdate() {
 export async function GET() {
     try {
         // Les admins relisent la base pour voir leurs modifications aussitôt, quelle que soit l'instance.
-        const session = await getSession()
-        if (session?.role === Role.ADMIN) invalidateCatalogue()
+        if (await getCurrentAdmin()) invalidateCatalogue()
 
         const players = await getCatalogue()
         return NextResponse.json([...players.values()])
@@ -33,8 +31,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
     try {
-        const session = await getSession()
-        if (!session || session.role != Role.ADMIN) {
+        if (!(await getCurrentAdmin())) {
             return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 
@@ -71,8 +68,7 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
     try {
-        const session = await getSession()
-        if (!session || session.role != Role.ADMIN) {
+        if (!(await getCurrentAdmin())) {
             return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 
@@ -119,8 +115,7 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
     try {
-        const session = await getSession()
-        if (!session || session.role != Role.ADMIN) {
+        if (!(await getCurrentAdmin())) {
             return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
         }
 

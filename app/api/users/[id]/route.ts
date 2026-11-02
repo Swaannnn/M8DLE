@@ -1,4 +1,4 @@
-import { getSession } from '@/lib/auth/session'
+import { getCurrentAdmin } from '@/lib/auth/currentUser'
 import { prisma } from '@/lib/db'
 import { Role } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
@@ -6,8 +6,7 @@ import ApiErrorKey from '@/constants/apiErrorKeys'
 
 /** Récupère un utilisateur via son identifiant */
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const session = await getSession()
-    if (!session || session.role != Role.ADMIN) {
+    if (!(await getCurrentAdmin())) {
         return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
     }
 
@@ -26,8 +25,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
 
 /** Modifie un utilisateur via son identifiant */
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const session = await getSession()
-    if (!session || session.role != Role.ADMIN) {
+    if (!(await getCurrentAdmin())) {
         return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
     }
 
@@ -58,8 +56,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
 /** Supprime un utilisateur via son identifiant */
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const session = await getSession()
-    if (!session || session.role != Role.ADMIN) {
+    if (!(await getCurrentAdmin())) {
         return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
     }
 

@@ -20,7 +20,7 @@ import { getMonthIndex } from '@/utils/dateUtils'
 import { lightPink, pink } from '@/constants/colors'
 
 const AccountPage = () => {
-    const { user, loading: userLoading, logout, loggedOut } = useAuth()
+    const { user, loading: userLoading, logout, logoutAll, loggedOut } = useAuth()
     const t = useTranslations('account')
     const locale = useLocale()
     const router = useRouter()
@@ -162,14 +162,26 @@ const AccountPage = () => {
                 </VStack>
             </Stack>
 
-            <Button
-                size="sm"
-                onClick={logout}
+            <HStack
                 position={{ base: 'relative', md: 'absolute' }}
                 right={{ md: '4rem' }}
+                wrap="wrap"
+                justify="center"
             >
-                {t('logout')}
-            </Button>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={logoutAll}
+                >
+                    {t('logoutAll')}
+                </Button>
+                <Button
+                    size="sm"
+                    onClick={logout}
+                >
+                    {t('logout')}
+                </Button>
+            </HStack>
         </VStack>
     )
 }
