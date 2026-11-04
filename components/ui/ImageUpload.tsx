@@ -5,15 +5,16 @@ import { Box, Button, Image, VStack, Spinner } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { LuUpload, LuTrash } from 'react-icons/lu'
 import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
-import type { UploadedImage } from '@/types/storage'
+import type { UploadedImage, UploadFolder } from '@/types/storage'
 import { fetcher } from '@/utils/apiClient'
 
 interface ImageUploadProps {
     value: string
     onChange: (url: string) => void
+    folder?: UploadFolder
 }
 
-export function ImageUpload({ value, onChange }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, folder }: ImageUploadProps) {
     const t = useTranslations('ui')
     const showApiErrorToast = useShowApiErrorToast()
     const [isUploading, setIsUploading] = useState(false)
@@ -28,6 +29,9 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
         try {
             const formData = new FormData()
             formData.append('file', file)
+            if (folder) {
+                formData.append('folder', folder)
+            }
 
             // Pas de Content-Type manuel : le navigateur doit poser lui-même la boundary du multipart.
             const uploaded = await fetcher<UploadedImage>('/api/storage', {

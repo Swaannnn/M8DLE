@@ -1,11 +1,13 @@
 import ApiErrorKey from '@/constants/apiErrorKeys'
 import { getCurrentAdmin } from '@/lib/auth/currentUser'
 import { ALLOWED_IMAGE_MIME_TYPES, MAX_IMAGE_SIZE, uploadImage } from '@/lib/storage/cloudinary'
+import { UploadFolder } from '@/types/storage'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
  * Upload d'une image sur Cloudinary. Attend un corps `multipart/form-data`
- * contenant le champ `file`, et renvoie `{ url, publicId }`.
+ * contenant le champ `file` et optionnellement `folder` (UploadFolder),
+ * et renvoie `{ url, publicId }`.
  */
 export async function POST(req: NextRequest) {
     try {
@@ -33,7 +35,13 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: ApiErrorKey.FILE_TOO_LARGE }, { status: 413 })
         }
 
-        const uploaded = await uploadImage(file)
+        const folder = formData.get('folder') as UploadFolder | null
+
+        if (folder && !Object.values(UploadFolder).includes(folder)) {
+            return NextResponse.json({ error: ApiErrorKey.BAD_REQUEST }, { status: 400 })
+        }
+
+        const uploaded = await uploadImage(file, folder ?? undefined)
 
         return NextResponse.json(uploaded, { status: 201 })
     } catch (error) {

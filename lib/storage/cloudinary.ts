@@ -1,6 +1,6 @@
 import 'server-only'
 import { createHash } from 'node:crypto'
-import type { UploadedImage } from '@/types/storage'
+import type { UploadedImage, UploadFolder } from '@/types/storage'
 
 const CLOUDINARY_API_BASE = 'https://api.cloudinary.com/v1_1'
 
@@ -58,14 +58,19 @@ function sign(params: Record<string, string>, apiSecret: string): string {
  * doit être authentifié (voir app/api/storage/route.ts).
  *
  * @param file Fichier à envoyer
+ * @param folder Dossier de destination sur Cloudinary (ex: UploadFolder.PLAYERS)
  * @returns URL publique et public_id de l'image créée
  */
-export async function uploadImage(file: File): Promise<UploadedImage> {
+export async function uploadImage(file: File, folder?: UploadFolder): Promise<UploadedImage> {
     const { cloudName, apiKey, apiSecret } = getConfig()
 
-    const signedParams = {
+    const signedParams: Record<string, string> = {
         timestamp: Math.floor(Date.now() / 1000).toString(),
         use_filename_as_display_name: 'true',
+    }
+
+    if (folder) {
+        signedParams.folder = folder
     }
 
     const formData = new FormData()

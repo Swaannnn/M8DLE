@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Box, Button, VStack, Input, Text, Dialog, Portal, CloseButton } from '@chakra-ui/react'
 import { useTranslations } from 'next-intl'
 import { ImageUpload } from '@/components/ui/ImageUpload'
+import { UploadFolder } from '@/types/storage'
 import type { Organization } from '@prisma/client'
 import { toaster } from '@/components/ui/toaster'
 import { fetcher } from '@/utils/apiClient'
@@ -123,6 +124,7 @@ function OrganizationFormContent({ onClose, organization, onSuccess }: Omit<Orga
                             <ImageUpload
                                 value={imageUrl}
                                 onChange={setImageUrl}
+                                folder={UploadFolder.TEAMS}
                             />
                         </Box>
                     </VStack>
