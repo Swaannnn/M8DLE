@@ -10,9 +10,9 @@ import { Toaster } from '@/components/ui/toaster'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getTranslations } from 'next-intl/server'
-import { get } from '@vercel/global-config'
 import { connection } from 'next/server'
 import { getCurrentAdmin } from '@/lib/auth/currentUser'
+import { isInMaintenanceMode } from '@/lib/maintenance'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -64,17 +64,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 }
 
-async function getIsInMaintenance() {
-    try {
-        return (await get<boolean>('isInMaintenanceMode')) === true
-    } catch {
-        return false
-    }
-}
-
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
     await connection()
-    const maintenance = (await getIsInMaintenance()) && !(await getCurrentAdmin())
+    const maintenance = isInMaintenanceMode() && !(await getCurrentAdmin())
 
     return (
         <html
