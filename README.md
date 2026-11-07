@@ -88,6 +88,8 @@ npm run start
 
 Un Cron Job Vercel (voir vercel.json) nettoie quotidiennement les parties invité jamais rattachées à un compte. Il nécessite la variable d'environnement `CRON_SECRET` (voir .env.example) sur le projet Vercel — Vercel l'ajoute automatiquement en en-tête `Authorization` sur ces appels.
 
+Le mode maintenance est activé avec la variable d'environnement `MAINTENANCE_MODE=true` (voir .env.example). Sur Vercel, un redéploiement est nécessaire pour qu'un changement de valeur soit pris en compte.
+
 ## À améliorer
 
 - Si vous avez de meilleures photos, n'hésitez pas à proposer des remplacements.
