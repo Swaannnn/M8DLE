@@ -7,7 +7,9 @@ WORKDIR /app
 # --- Dépendances ---
 FROM base AS deps
 COPY package.json package-lock.json ./
-RUN npm ci
+# --include=dev : Coolify peut injecter NODE_ENV=production au build, ce qui ferait sauter
+# les devDependencies nécessaires au build (typescript, tailwind, prisma...).
+RUN npm ci --include=dev
 
 # --- Build ---
 FROM base AS builder
