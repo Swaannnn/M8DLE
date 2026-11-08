@@ -49,20 +49,29 @@ export const getCurrentOrganization = (player: Player) => {
 }
 
 /**
- * Obtient l'organisation précédente (Avant M8) du joueur : parmi les organisations qu'il a
- * quittées (date de fin renseignée) et hors Gentle Mates, celle dont la fin est la plus récente.
+ * Obtient l'organisation précédente (Avant M8) du joueur : hors Gentle Mates, la dernière
+ * organisation rejointe avant sa (première) arrivée chez Gentle Mates. On se base sur la date
+ * de début et non de fin, car un joueur peut rejoindre M8 avant la fin officielle de son
+ * contrat précédent. Les équipes rejointes après M8 sont ignorées.
  */
 export const getPreviousOrganization = (player: Player) => {
+    const orgs = player.organizationPlayers ?? []
+    // Les organisations arrivent triées par date de début : `find` donne la première arrivée chez M8.
+    const gentleMatesEntry = orgs.find((op) => op.organization.name === GENTLE_MATES)
+    if (!gentleMatesEntry) return null
+
+    // `.toString()` car la date peut arriver sérialisée en chaîne depuis l'API.
+    const joinTime = new Date(gentleMatesEntry.start.toString()).getTime()
+
     let previousOrganization = null
-    let latestEnd = -Infinity
+    let latestStart = -Infinity
 
-    for (const op of player.organizationPlayers ?? []) {
-        if (!op.end || op.organization.name === GENTLE_MATES) continue
+    for (const op of orgs) {
+        if (op.organization.name === GENTLE_MATES) continue
 
-        // `.toString()` car la date peut arriver sérialisée en chaîne depuis l'API.
-        const endTime = new Date(op.end.toString()).getTime()
-        if (endTime > latestEnd) {
-            latestEnd = endTime
+        const startTime = new Date(op.start.toString()).getTime()
+        if (startTime < joinTime && startTime > latestStart) {
+            latestStart = startTime
             previousOrganization = op.organization
         }
     }
