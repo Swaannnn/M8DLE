@@ -6,12 +6,12 @@ const GUEST_RESULT_RETENTION_DAYS = 30
 
 /**
  * Supprime les parties invité jamais rattachées à un compte au-delà du délai de rétention
- * (les Attempt suivent en cascade). Déclenché par le Cron Job Vercel défini dans vercel.json,
- * qui injecte `Authorization: Bearer ${CRON_SECRET}`.
+ * (les Attempt suivent en cascade). Déclenché quotidiennement par une Scheduled Task Coolify
+ * (ou le Cron Job Vercel défini dans vercel.json), avec l'en-tête `Authorization: Bearer ${CRON_SECRET}`.
  */
 export async function GET(req: NextRequest) {
     const authHeader = req.headers.get('authorization')
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
         return NextResponse.json({ error: ApiErrorKey.UNAUTHORIZED }, { status: 401 })
     }
 

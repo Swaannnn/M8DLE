@@ -1,0 +1,17 @@
+.git
+.github
+.next
+.vercel
+node_modules
+npm-debug.log*
+.env
+.env*.local
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+app/generated
+coverage
+Dockerfile
+.dockerignore
+README.md
+CONTRIBUTING.md
