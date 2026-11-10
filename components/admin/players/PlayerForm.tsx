@@ -11,6 +11,7 @@ import { formatDateForInput } from '@/utils/dateUtils'
 import { useCountries } from '@/utils/countries'
 import useSWR from 'swr'
 import { ImageUpload } from '@/components/ui/ImageUpload'
+import { UploadFolder } from '@/types/storage'
 import { toaster } from '@/components/ui/toaster'
 import { useShowApiErrorToast } from '@/hooks/use-api-error-toast'
 import { fetcher } from '@/utils/apiClient'
@@ -195,6 +196,7 @@ function PlayerFormContent({ onClose, player, onSuccess }: Omit<PlayerFormProps,
                             <ImageUpload
                                 value={imageUrl}
                                 onChange={setImageUrl}
+                                folder={UploadFolder.PLAYERS}
                             />
                         </Box>
 
